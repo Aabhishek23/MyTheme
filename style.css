@@ -91,8 +91,8 @@ a {
 }
 
 .main-header.scrolled .logo,
-.main-header.scrolled .nav-item>a,
-.main-header.scrolled .menu-item>a {
+.main-header.scrolled .nav-menu > .nav-item > a,
+.main-header.scrolled .nav-menu > .menu-item > a {
     color: #000000 !important;
 }
 
@@ -101,9 +101,9 @@ a {
     color: #ffffff !important;
 }
 
-.main-header.scrolled .nav-item:hover>a,
-.main-header.scrolled .menu-item:hover>a {
-    color: #555555 !important;
+.main-header.scrolled .nav-menu > .nav-item:hover > a,
+.main-header.scrolled .nav-menu > .menu-item:hover > a {
+    color: #ffffff !important;
 }
 
 .main-header.scrolled .logo {
@@ -357,7 +357,8 @@ a {
     background-size: cover;
     background-position: center;
     z-index: 1;
-    padding: 0; /* Override previous padding */
+    padding: 0;
+    /* Override previous padding */
 }
 
 .hero-slide.active {
@@ -382,7 +383,8 @@ a {
     font-size: clamp(3rem, 8vw, 5rem);
     margin-bottom: 1.5rem;
     color: #fff;
-    -webkit-text-fill-color: initial; /* Reset gradient clip */
+    -webkit-text-fill-color: initial;
+    /* Reset gradient clip */
     background: none;
 }
 
