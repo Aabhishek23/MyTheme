@@ -19,31 +19,14 @@
             ?>
         </div>
         <nav>
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="#">Why <?php echo esc_html(get_bloginfo('name') ? get_bloginfo('name') : 'Synopsys'); ?> <span style="font-size: 0.6rem;">▼</span></a>
-                    <div class="mega-menu">
-                        <div>
-                            <h4>Our Company</h4>
-                            <ul>
-                                <li><a href="#">Careers</a></li>
-                                <li><a href="#">Ecosystem Partners</a></li>
-                                <li><a href="#">Global Offices</a></li>
-                                <li><a href="#">Investors</a></li>
-                                <li><a href="#">Leadership</a></li>
-                            </ul>
-                        </div>
-                        <div class="featured-content">
-                            <h4>Why <?php echo esc_html(get_bloginfo('name') ? get_bloginfo('name') : 'Synopsys'); ?>?</h4>
-                            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Our Technology, Your Innovation™. Trusted industry leader.</p>
-                            <a href="#" style="color: var(--secondary); font-weight: 600;">Learn more &rarr;</a>
-                        </div>
-                    </div>
-                </li>
-                <li class="nav-item"><a href="#">Solutions</a></li>
-                <li class="nav-item"><a href="#">Products</a></li>
-                <li class="nav-item"><a href="#">Resources</a></li>
-            </ul>
+            <?php 
+            wp_nav_menu(array(
+                'theme_location' => 'primary-menu',
+                'container'      => false,
+                'menu_class'     => 'nav-menu',
+                'fallback_cb'    => 'mytheme_default_menu', // Use a function to show the hardcoded menu
+            )); 
+            ?>
         </nav>
         <div style="display: flex; align-items: center; gap: 1.5rem;">
             <a href="#" style="font-size: 1.2rem;">🔍</a>
