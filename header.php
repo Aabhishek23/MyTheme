@@ -10,23 +10,24 @@
 <header class="main-header">
     <div class="container header-content">
         <div class="logo">
-            <?php 
-            if ( has_custom_logo() ) {
-                the_custom_logo();
-            } else {
-                echo '<a href="' . esc_url( home_url( '/' ) ) . '" rel="home"><strong>' . (get_bloginfo('name') ? esc_html(get_bloginfo('name')) : 'SYNOPSYS') . '</strong><span style="font-weight: 300;">®</span></a>';
-            }
-            ?>
+            <?php
+if (has_custom_logo()) {
+    the_custom_logo();
+}
+else {
+    echo '<a href="' . esc_url(home_url('/')) . '" rel="home"><strong>' . (get_bloginfo('name') ? esc_html(get_bloginfo('name')) : 'SYNOPSYS') . '</strong><span style="font-weight: 300;">®</span></a>';
+}
+?>
         </div>
         <nav>
-            <?php 
-            wp_nav_menu(array(
-                'theme_location' => 'primary-menu',
-                'container'      => false,
-                'menu_class'     => 'nav-menu',
-                'fallback_cb'    => 'mytheme_default_menu', // Use a function to show the hardcoded menu
-            )); 
-            ?>
+            <?php
+wp_nav_menu(array(
+    'theme_location' => 'primary-menu',
+    'container' => false,
+    'menu_class' => 'nav-menu',
+    'fallback_cb' => 'mytheme_default_menu', // Use a function to show the hardcoded menu
+));
+?>
         </nav>
         <div style="display: flex; align-items: center; gap: 1.5rem;">
             <a href="#" style="font-size: 1.2rem;">🔍</a>

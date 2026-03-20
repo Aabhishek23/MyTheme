@@ -91,8 +91,8 @@ a {
 }
 
 .main-header.scrolled .logo,
-.main-header.scrolled .nav-menu > .nav-item > a,
-.main-header.scrolled .nav-menu > .menu-item > a {
+.main-header.scrolled .nav-menu>.nav-item>a,
+.main-header.scrolled .nav-menu>.menu-item>a {
     color: #000000 !important;
 }
 
@@ -101,8 +101,8 @@ a {
     color: #ffffff !important;
 }
 
-.main-header.scrolled .nav-menu > .nav-item:hover > a,
-.main-header.scrolled .nav-menu > .menu-item:hover > a {
+.main-header.scrolled .nav-menu>.nav-item:hover>a,
+.main-header.scrolled .nav-menu>.menu-item:hover>a {
     color: #ffffff !important;
 }
 
@@ -243,7 +243,8 @@ a {
 }
 
 .sub-menu a:hover {
-    color: #5d3fd3; /* Synopsys-like Primary */
+    color: #5d3fd3;
+    /* Synopsys-like Primary */
     background: #f9fafb;
     padding-left: 2rem;
 }
@@ -258,7 +259,8 @@ a {
     transform: translateX(-50%) translateY(15px);
     width: 95vw;
     max-width: 1100px;
-    display: flex; /* Using flex for 2-column structure */
+    display: flex;
+    /* Using flex for 2-column structure */
     padding: 0;
     overflow: hidden;
     min-height: 400px;
@@ -272,7 +274,7 @@ a {
 .menu-item.mega>.sub-menu>li {
     width: 350px;
     background: #f8fafc;
-    border-right: 1px solid rgba(0,0,0,0.05);
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
     padding: 2.5rem;
 }
 
@@ -291,7 +293,8 @@ a {
     letter-spacing: 0.1em;
     padding: 0;
     margin-bottom: 1.5rem;
-    pointer-events: none; /* Make section title non-clickable */
+    pointer-events: none;
+    /* Make section title non-clickable */
 }
 
 /* Nested sub-menu inside mega sections */
@@ -311,7 +314,8 @@ a {
 }
 
 .menu-item.mega .sub-menu .sub-menu::before {
-    display: none; /* Hide arrow for nested menus */
+    display: none;
+    /* Hide arrow for nested menus */
 }
 
 .menu-item.mega .sub-menu .sub-menu a {
@@ -331,7 +335,7 @@ a {
     border-radius: 8px;
     padding: 2rem;
     margin-top: 1.5rem;
-    border: 1px solid rgba(0,0,0,0.03);
+    border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 .featured-content h4 {
