@@ -4,9 +4,9 @@
     <!-- Hero Section -->
     <section id="hero" class="hero">
         <div class="container hero-content reveal">
-            <p style="color: var(--secondary); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem;">Innovation for the AI Era</p>
-            <h1>Introducing Hardware-Assisted <span style="color: var(--primary);">Verification</span></h1>
-            <p>Powering the era of pervasive intelligence from silicon to systems with industry-leading EDA tools.</p>
+            <p style="color: var(--secondary); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem;"><?php echo esc_html(get_theme_mod('hero_subtitle', 'Innovation for the AI Era')); ?></p>
+            <h1><?php echo wp_kses_post(get_theme_mod('hero_title', 'Introducing Hardware-Assisted <span style="color: var(--primary);">Verification</span>')); ?></h1>
+            <p><?php echo esc_html(get_theme_mod('hero_description', 'Powering the era of pervasive intelligence from silicon to systems with industry-leading EDA tools.')); ?></p>
             <div class="hero-btns">
                 <a href="#" class="btn btn-primary">Press Release &nbsp; &rarr;</a>
                 <a href="#" class="btn btn-secondary">Learn More &nbsp; &rarr;</a>

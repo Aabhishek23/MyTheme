@@ -68,4 +68,49 @@ function mytheme_default_menu() {
     </ul>
     <?php
 }
+
+/**
+ * Customizer settings for Hero Section
+ */
+function mytheme_customize_register($wp_customize) {
+    // Add Hero Section
+    $wp_customize->add_section('hero_section', array(
+        'title'    => __('Hero Section Settings', 'mytheme'),
+        'priority' => 30,
+    ));
+
+    // Hero Subtitle
+    $wp_customize->add_setting('hero_subtitle', array(
+        'default'           => 'Innovation for the AI Era',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('hero_subtitle', array(
+        'label'    => __('Hero Subtitle', 'mytheme'),
+        'section'  => 'hero_section',
+        'type'     => 'text',
+    ));
+
+    // Hero Title
+    $wp_customize->add_setting('hero_title', array(
+        'default'           => 'Introducing Hardware-Assisted Verification',
+        'sanitize_callback' => 'wp_kses_post',
+    ));
+    $wp_customize->add_control('hero_title', array(
+        'label'    => __('Hero Title', 'mytheme'),
+        'section'  => 'hero_section',
+        'type'     => 'textarea',
+    ));
+
+    // Hero Description
+    $wp_customize->add_setting('hero_description', array(
+        'default'           => 'Powering the era of pervasive intelligence from silicon to systems with industry-leading EDA tools.',
+        'sanitize_callback' => 'sanitize_textarea_field',
+    ));
+    $wp_customize->add_control('hero_description', array(
+        'label'    => __('Hero Description', 'mytheme'),
+        'section'  => 'hero_section',
+        'type'     => 'textarea',
+    ));
+}
+add_action('customize_register', 'mytheme_customize_register');
 ?>
