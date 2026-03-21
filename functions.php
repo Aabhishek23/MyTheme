@@ -39,6 +39,13 @@ function mytheme_scripts() {
 }
 add_action('wp_enqueue_scripts', 'mytheme_scripts');
 
+function mytheme_admin_scripts($hook) {
+    if ('nav-menus.php' === $hook) {
+        wp_enqueue_media();
+    }
+}
+add_action('admin_enqueue_scripts', 'mytheme_admin_scripts');
+
 function mytheme_default_menu() {
     ?>
     <ul class="nav-menu">
@@ -193,13 +200,16 @@ function mytheme_add_menu_icon_field($item_id, $item, $args, $depth) {
     <p class="field-custom-icon description-wide" style="margin: 10px 0;">
         <label for="edit-menu-item-custom-icon-<?php echo $item_id; ?>">
             <?php _e('Menu Icon (Emoji or Icon Name)', 'mytheme'); ?><br />
-            <input type="text" id="edit-menu-item-custom-icon-<?php echo $item_id; ?>" 
-                   class="widefat code edit-menu-item-custom-icon" 
-                   name="menu-item-custom-icon[<?php echo $item_id; ?>]" 
-                   value="<?php echo esc_attr(get_post_meta($item_id, '_menu_item_custom_icon', true)); ?>" 
-                   placeholder="e.g. 🧠 or ☁️" />
+            <div style="display: flex; gap: 5px; margin-top: 5px;">
+                <input type="text" id="edit-menu-item-custom-icon-<?php echo $item_id; ?>" 
+                       class="widefat code edit-menu-item-custom-icon" 
+                       name="menu-item-custom-icon[<?php echo $item_id; ?>]" 
+                       value="<?php echo esc_attr(get_post_meta($item_id, '_menu_item_custom_icon', true)); ?>" 
+                       placeholder="e.g. 🧠 or ☁️" />
+                <button type="button" class="button custom-icon-upload-button" data-id="<?php echo $item_id; ?>">Select</button>
+            </div>
         </label>
-        <span class="description" style="font-size: 11px; color: #666;">Add an icon/emoji to show next to the menu text.</span>
+        <span class="description" style="font-size: 11px; color: #666;">Add an icon/emoji or click "Select" to upload an image.</span>
     </p>
     <?php
 }
@@ -224,8 +234,16 @@ function mytheme_display_menu_icon($title, $item, $args, $depth) {
     $icon = get_post_meta($item->ID, '_menu_item_custom_icon', true);
     $description = $item->description;
     
-    // Wrap title to allow for icons and descriptions
-    $icon_html = $icon ? '<span class="menu-icon">' . $icon . '</span> ' : '';
+    $icon_html = '';
+    if (!empty($icon)) {
+        // Detect if the icon input is an image URL (PNG, SVG, etc.)
+        if (filter_var($icon, FILTER_VALIDATE_URL) || preg_match('/\.(png|svg|jpg|jpeg|webp)$/i', $icon)) {
+            $icon_html = '<span class="menu-icon img-icon"><img src="' . esc_url($icon) . '" alt="" style="width: 20px; height: 20px; object-fit: contain;"></span> ';
+        } else {
+            // Otherwise treat it as it's an emoji/text
+            $icon_html = '<span class="menu-icon">' . $icon . '</span> ';
+        }
+    }
     
     if ($depth === 2 && !empty($description)) {
         // This is a sub-subcategory link (e.g. Fusion Compiler)
@@ -233,11 +251,36 @@ function mytheme_display_menu_icon($title, $item, $args, $depth) {
     } else if ($depth === 1) {
         // This is a Column Header (e.g. EDA, System)
         $title = $icon_html . '<span class="menu-header-text">' . $title . '</span>';
-    } else if ($icon) {
+    } else if (!empty($icon)) {
         $title = $icon_html . '<span class="menu-text">' . $title . '</span>';
     }
     
     return $title;
 }
 add_filter('nav_menu_item_title', 'mytheme_display_menu_icon', 10, 4);
+
+function mytheme_menu_icon_script() {
+    $screen = get_current_screen();
+    if (!$screen || $screen->id !== 'nav-menus') return;
+    ?>
+    <script>
+    jQuery(document).ready(function($){
+        $(document).on('click', '.custom-icon-upload-button', function(e) {
+            e.preventDefault();
+            var button = $(this);
+            var id = button.data('id');
+            var custom_uploader = wp.media({
+                title: 'Select Icon',
+                button: { text: 'Use this icon' },
+                multiple: false
+            }).on('select', function() {
+                var attachment = custom_uploader.state().get('selection').first().toJSON();
+                jQuery('#edit-menu-item-custom-icon-' + id).val(attachment.url);
+            }).open();
+        });
+    });
+    </script>
+    <?php
+}
+add_action('admin_footer', 'mytheme_menu_icon_script');
 ?>
