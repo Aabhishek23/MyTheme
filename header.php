@@ -23,9 +23,9 @@ else {
             <?php
 wp_nav_menu(array(
     'theme_location' => 'primary-menu',
-    'container' => false,
-    'menu_class' => 'nav-menu',
-    'fallback_cb' => 'mytheme_default_menu', // Use a function to show the hardcoded menu
+    'container'      => false,
+    'menu_class'     => 'nav-menu',
+    'fallback_cb'    => 'mytheme_default_menu',
 ));
 ?>
         </nav>

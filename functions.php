@@ -109,10 +109,10 @@ function mytheme_default_menu() {
 }
 
 /**
- * Add Hero Section Settings to Customizer
+ * Add Hero Section + Mega Menu Featured Panel Settings to Customizer
  */
 function mytheme_customize_register($wp_customize) {
-    // Add Hero Section
+    // ── Hero Section ──────────────────────────────────────────────────────────
     $wp_customize->add_section('hero_section', array(
         'title'    => __('Hero Section Settings', 'mytheme'),
         'priority' => 30,
@@ -149,6 +149,67 @@ function mytheme_customize_register($wp_customize) {
         'label'    => __('Hero Description', 'mytheme'),
         'section'  => 'hero_section',
         'type'     => 'textarea',
+    ));
+
+    // ── Mega Menu Featured Panel ──────────────────────────────────────────────
+    $wp_customize->add_section('mega_featured_panel', array(
+        'title'       => __('🗂️ Mega Menu Featured Panel', 'mytheme'),
+        'description' => __('This content appears on the RIGHT side of any menu item that has "Enable Mega Featured Panel" checked (Appearance > Menus).', 'mytheme'),
+        'priority'    => 35,
+    ));
+
+    // Featured Image
+    $wp_customize->add_setting('mega_featured_image', array(
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+    $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, 'mega_featured_image', array(
+        'label'   => __('Featured Image', 'mytheme'),
+        'section' => 'mega_featured_panel',
+    )));
+
+    // Featured Title
+    $wp_customize->add_setting('mega_featured_title', array(
+        'default'           => 'Navigating Software-Defined Vehicle Development',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('mega_featured_title', array(
+        'label'   => __('Featured Title', 'mytheme'),
+        'section' => 'mega_featured_panel',
+        'type'    => 'text',
+    ));
+
+    // Featured Description
+    $wp_customize->add_setting('mega_featured_desc', array(
+        'default'           => 'Discover strategies to boost SDV innovation, reduce costs, and enhance reliability.',
+        'sanitize_callback' => 'sanitize_textarea_field',
+    ));
+    $wp_customize->add_control('mega_featured_desc', array(
+        'label'   => __('Featured Description', 'mytheme'),
+        'section' => 'mega_featured_panel',
+        'type'    => 'textarea',
+    ));
+
+    // Featured Button Text
+    $wp_customize->add_setting('mega_featured_btn_text', array(
+        'default'           => 'Download',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('mega_featured_btn_text', array(
+        'label'   => __('Button Text', 'mytheme'),
+        'section' => 'mega_featured_panel',
+        'type'    => 'text',
+    ));
+
+    // Featured Button Link
+    $wp_customize->add_setting('mega_featured_btn_link', array(
+        'default'           => '#',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+    $wp_customize->add_control('mega_featured_btn_link', array(
+        'label'   => __('Button Link (URL)', 'mytheme'),
+        'section' => 'mega_featured_panel',
+        'type'    => 'url',
     ));
 }
 add_action('customize_register', 'mytheme_customize_register');
@@ -193,9 +254,16 @@ function mytheme_register_hero_cpt() {
 add_action('init', 'mytheme_register_hero_cpt');
 
 /**
- * Add custom "Menu Icon" field to the Menu editor (Appearance > Menus)
+ * Add custom "Menu Icon" field AND "Enable Mega Featured Panel" checkbox
+ * to the Menu editor (Appearance > Menus)
  */
 function mytheme_add_menu_icon_field($item_id, $item, $args, $depth) {
+    $featured_enabled  = get_post_meta($item_id, '_menu_item_featured_panel', true);
+    $feat_image        = get_post_meta($item_id, '_menu_item_feat_image', true);
+    $feat_title        = get_post_meta($item_id, '_menu_item_feat_title', true);
+    $feat_desc         = get_post_meta($item_id, '_menu_item_feat_desc', true);
+    $feat_btn_text     = get_post_meta($item_id, '_menu_item_feat_btn_text', true);
+    $feat_btn_link     = get_post_meta($item_id, '_menu_item_feat_btn_link', true);
     ?>
     <p class="field-custom-icon description-wide" style="margin: 10px 0;">
         <label for="edit-menu-item-custom-icon-<?php echo $item_id; ?>">
@@ -211,21 +279,234 @@ function mytheme_add_menu_icon_field($item_id, $item, $args, $depth) {
         </label>
         <span class="description" style="font-size: 11px; color: #666;">Add an icon/emoji or click "Select" to upload an image.</span>
     </p>
+
+    <?php /* ── Featured Panel Section ─────────────────────────────────────── */ ?>
+    <div class="field-featured-panel description-wide" style="margin: 10px 0; padding: 12px; background: #f0f6fc; border-left: 4px solid #2271b1; border-radius: 4px;">
+
+        <p style="margin: 0 0 8px;">
+            <label for="edit-menu-item-featured-panel-<?php echo $item_id; ?>" style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 700; color: #2271b1;">
+                <input type="checkbox" 
+                       id="edit-menu-item-featured-panel-<?php echo $item_id; ?>" 
+                       name="menu-item-featured-panel[<?php echo $item_id; ?>]" 
+                       value="1" 
+                       <?php checked($featured_enabled, '1'); ?>
+                       class="mega-panel-toggle" data-target="mega-fields-<?php echo $item_id; ?>" />
+                <?php _e('✨ Enable Mega Featured Panel (right-side card)', 'mytheme'); ?>
+            </label>
+        </p>
+
+        <div id="mega-fields-<?php echo $item_id; ?>" style="<?php echo ($featured_enabled === '1') ? '' : 'display:none;'; ?> margin-top: 10px; border-top: 1px dashed #b4c9e3; padding-top: 10px;">
+
+            <?php /* Image */ ?>
+            <p style="margin: 0 0 8px;">
+                <label style="display:block; font-weight:600; margin-bottom:4px; font-size:12px;">📷 <?php _e('Featured Image', 'mytheme'); ?></label>
+                <div style="display: flex; gap: 5px;">
+                    <input type="text"
+                           id="edit-menu-item-feat-image-<?php echo $item_id; ?>"
+                           name="menu-item-feat-image[<?php echo $item_id; ?>]"
+                           class="widefat"
+                           value="<?php echo esc_attr($feat_image); ?>"
+                           placeholder="https://..." />
+                    <button type="button" class="button feat-image-upload-button" data-id="<?php echo $item_id; ?>">Select</button>
+                </div>
+            </p>
+
+            <?php /* Title */ ?>
+            <p style="margin: 0 0 8px;">
+                <label style="display:block; font-weight:600; margin-bottom:4px; font-size:12px;">📝 <?php _e('Featured Title', 'mytheme'); ?></label>
+                <input type="text"
+                       name="menu-item-feat-title[<?php echo $item_id; ?>]"
+                       class="widefat"
+                       value="<?php echo esc_attr($feat_title); ?>"
+                       placeholder="<?php _e('e.g. Navigating Software-Defined Vehicle…', 'mytheme'); ?>" />
+            </p>
+
+            <?php /* Description */ ?>
+            <p style="margin: 0 0 8px;">
+                <label style="display:block; font-weight:600; margin-bottom:4px; font-size:12px;">📄 <?php _e('Featured Description', 'mytheme'); ?></label>
+                <textarea name="menu-item-feat-desc[<?php echo $item_id; ?>]" class="widefat" rows="2"
+                          placeholder="<?php _e('Short description…', 'mytheme'); ?>"><?php echo esc_textarea($feat_desc); ?></textarea>
+            </p>
+
+            <?php /* Button Text */ ?>
+            <p style="margin: 0 0 8px;">
+                <label style="display:block; font-weight:600; margin-bottom:4px; font-size:12px;">🔘 <?php _e('Button Text', 'mytheme'); ?></label>
+                <input type="text"
+                       name="menu-item-feat-btn-text[<?php echo $item_id; ?>]"
+                       class="widefat"
+                       value="<?php echo esc_attr($feat_btn_text); ?>"
+                       placeholder="<?php _e('e.g. Download', 'mytheme'); ?>" />
+            </p>
+
+            <?php /* Button Link */ ?>
+            <p style="margin: 0 0 0;">
+                <label style="display:block; font-weight:600; margin-bottom:4px; font-size:12px;">🔗 <?php _e('Button Link (URL)', 'mytheme'); ?></label>
+                <input type="url"
+                       name="menu-item-feat-btn-link[<?php echo $item_id; ?>]"
+                       class="widefat"
+                       value="<?php echo esc_attr($feat_btn_link); ?>"
+                       placeholder="https://" />
+            </p>
+
+        </div><!-- #mega-fields -->
+    </div><!-- .field-featured-panel -->
     <?php
 }
 add_action('wp_nav_menu_item_custom_fields', 'mytheme_add_menu_icon_field', 10, 4);
 
 /**
- * Save the "Menu Icon" custom field value
+ * Save the "Menu Icon", "Featured Panel" toggle, and all per-item featured fields
  */
 function mytheme_update_menu_icon_meta($menu_id, $menu_item_db_id, $args) {
+    // ── Menu Icon ─────────────────────────────────────────────────────────────
     if (isset($_POST['menu-item-custom-icon'][$menu_item_db_id])) {
         update_post_meta($menu_item_db_id, '_menu_item_custom_icon', $_POST['menu-item-custom-icon'][$menu_item_db_id]);
     } else {
         delete_post_meta($menu_item_db_id, '_menu_item_custom_icon');
     }
+
+    // ── Featured Panel toggle ──────────────────────────────────────────────────
+    update_post_meta(
+        $menu_item_db_id,
+        '_menu_item_featured_panel',
+        isset($_POST['menu-item-featured-panel'][$menu_item_db_id]) ? '1' : '0'
+    );
+
+    // ── Per-item featured content fields ──────────────────────────────────────
+    $fields = array(
+        'menu-item-feat-image'    => '_menu_item_feat_image',
+        'menu-item-feat-title'    => '_menu_item_feat_title',
+        'menu-item-feat-desc'     => '_menu_item_feat_desc',
+        'menu-item-feat-btn-text' => '_menu_item_feat_btn_text',
+        'menu-item-feat-btn-link' => '_menu_item_feat_btn_link',
+    );
+    foreach ($fields as $post_key => $meta_key) {
+        if (isset($_POST[$post_key][$menu_item_db_id])) {
+            update_post_meta($menu_item_db_id, $meta_key, sanitize_text_field($_POST[$post_key][$menu_item_db_id]));
+        } else {
+            delete_post_meta($menu_item_db_id, $meta_key);
+        }
+    }
 }
 add_action('wp_update_nav_menu_item', 'mytheme_update_menu_icon_meta', 10, 3);
+
+/**
+ * Add 'mega' class to any top-level menu item that has featured panel enabled
+ */
+function mytheme_add_mega_class($classes, $item, $args, $depth) {
+    if ($depth === 0 && get_post_meta($item->ID, '_menu_item_featured_panel', true) === '1') {
+        $classes[] = 'mega';
+    }
+    return $classes;
+}
+add_filter('nav_menu_css_class', 'mytheme_add_mega_class', 10, 4);
+
+/**
+ * Inject featured-content panel into the sub-menu of enabled top-level items.
+ * Hooks into 'wp_nav_menu' to get the full HTML output including the outer <ul>.
+ */
+function mytheme_inject_featured_panel($nav_menu, $args) {
+    // Only run for the primary-menu
+    if (!isset($args->theme_location) || $args->theme_location !== 'primary-menu') {
+        return $nav_menu;
+    }
+
+    // Get all top-level menu items for the primary menu
+    $menu_locations = get_nav_menu_locations();
+    if (empty($menu_locations['primary-menu'])) return $nav_menu;
+
+    $menu_obj = wp_get_nav_menu_object($menu_locations['primary-menu']);
+    if (!$menu_obj) return $nav_menu;
+
+    $menu_items = wp_get_nav_menu_items($menu_obj->term_id);
+    if (!$menu_items) return $nav_menu;
+
+    foreach ($menu_items as $menu_item) {
+        // Only process top-level items
+        if ($menu_item->menu_item_parent != 0) continue;
+
+        $featured_enabled = get_post_meta($menu_item->ID, '_menu_item_featured_panel', true);
+        if ($featured_enabled !== '1') continue;
+
+        // Read per-item content
+        $feat_image    = get_post_meta($menu_item->ID, '_menu_item_feat_image',    true);
+        $feat_title    = get_post_meta($menu_item->ID, '_menu_item_feat_title',    true);
+        $feat_desc     = get_post_meta($menu_item->ID, '_menu_item_feat_desc',     true);
+        $feat_btn_text = get_post_meta($menu_item->ID, '_menu_item_feat_btn_text', true);
+        $feat_btn_link = get_post_meta($menu_item->ID, '_menu_item_feat_btn_link', true);
+
+        if (empty($feat_title))    $feat_title    = 'Featured Content';
+        if (empty($feat_btn_text)) $feat_btn_text = 'Learn More';
+        if (empty($feat_btn_link)) $feat_btn_link = '#';
+
+        $img_html = '';
+        if (!empty($feat_image)) {
+            $img_html = '<img src="' . esc_url($feat_image) . '" alt="' . esc_attr($feat_title) . '">';
+        }
+
+        // Build the featured-content <li> to inject inside the sub-menu
+        $featured_li  = '<li class="featured-content">' . "\n";
+        $featured_li .= '  <div class="featured-content-inner">' . "\n";
+        $featured_li .= $img_html . "\n";
+        $featured_li .= '  <h4>' . esc_html($feat_title) . '</h4>' . "\n";
+        if (!empty($feat_desc)) {
+            $featured_li .= '  <p>' . esc_html($feat_desc) . '</p>' . "\n";
+        }
+        $featured_li .= '  <a href="' . esc_url($feat_btn_link) . '">' . esc_html($feat_btn_text) . ' &rarr;</a>' . "\n";
+        $featured_li .= '  </div>' . "\n";
+        $featured_li .= '</li>' . "\n";
+
+        $item_id = $menu_item->ID;
+
+        // ── Balanced UL-tag counting to find the DIRECT sub-menu's closing </ul> ──
+        // This ensures we inject as a sibling column, NOT inside a nested sub-menu.
+        $search      = 'id="menu-item-' . $item_id . '"';
+        $li_pos      = strpos($nav_menu, $search);
+
+        if ($li_pos !== false) {
+            // Find the first <ul after this <li> — that is the direct sub-menu
+            $first_ul = strpos($nav_menu, '<ul', $li_pos);
+
+            if ($first_ul !== false) {
+                $depth       = 0;
+                $scan        = $first_ul;
+                $html_len    = strlen($nav_menu);
+                $inject_pos  = false;
+
+                while ($scan < $html_len) {
+                    $pos_open  = strpos($nav_menu, '<ul',  $scan);
+                    $pos_close = strpos($nav_menu, '</ul>', $scan);
+
+                    if ($pos_close === false) break;
+
+                    if ($pos_open !== false && $pos_open < $pos_close) {
+                        // Found another opening <ul> — go deeper
+                        $depth++;
+                        $scan = $pos_open + 3; // move past '<ul'
+                    } else {
+                        // Found </ul>
+                        $depth--;
+                        if ($depth === 0) {
+                            // This </ul> closes our DIRECT sub-menu → inject here
+                            $inject_pos = $pos_close;
+                            break;
+                        }
+                        $scan = $pos_close + 5; // move past '</ul>'
+                    }
+                }
+
+                if ($inject_pos !== false) {
+                    // Insert featured_li just BEFORE the direct sub-menu's closing </ul>
+                    $nav_menu = substr_replace($nav_menu, $featured_li, $inject_pos, 0);
+                }
+            }
+        }
+    }
+
+    return $nav_menu;
+}
+add_filter('wp_nav_menu', 'mytheme_inject_featured_panel', 10, 2);
+
 
 /**
  * Filter the menu item title to prepend the saved icon
@@ -265,19 +546,45 @@ function mytheme_menu_icon_script() {
     ?>
     <script>
     jQuery(document).ready(function($){
+
+        // ── Toggle featured fields visibility when checkbox changes ──────────
+        $(document).on('change', '.mega-panel-toggle', function() {
+            var target = $(this).data('target');
+            if ($(this).is(':checked')) {
+                $('#' + target).slideDown(200);
+            } else {
+                $('#' + target).slideUp(200);
+            }
+        });
+
+        // ── Menu Icon upload button ─────────────────────────────────────────
         $(document).on('click', '.custom-icon-upload-button', function(e) {
             e.preventDefault();
-            var button = $(this);
-            var id = button.data('id');
-            var custom_uploader = wp.media({
+            var id = $(this).data('id');
+            wp.media({
                 title: 'Select Icon',
                 button: { text: 'Use this icon' },
                 multiple: false
             }).on('select', function() {
-                var attachment = custom_uploader.state().get('selection').first().toJSON();
-                jQuery('#edit-menu-item-custom-icon-' + id).val(attachment.url);
+                var attachment = this.state().get('selection').first().toJSON();
+                $('#edit-menu-item-custom-icon-' + id).val(attachment.url);
+            }.bind(wp.media())).open();
+        });
+
+        // ── Featured Panel image upload button ─────────────────────────────
+        $(document).on('click', '.feat-image-upload-button', function(e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            var uploader = wp.media({
+                title: 'Select Featured Image',
+                button: { text: 'Use this image' },
+                multiple: false
+            }).on('select', function() {
+                var attachment = uploader.state().get('selection').first().toJSON();
+                $('#edit-menu-item-feat-image-' + id).val(attachment.url);
             }).open();
         });
+
     });
     </script>
     <?php
