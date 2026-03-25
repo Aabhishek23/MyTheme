@@ -217,6 +217,99 @@ function mytheme_customize_register($wp_customize) {
         ));
     }
 
+    // ── Design the Future Section ───────────────────────────────────────────────
+    $wp_customize->add_section('design_future_section', array(
+        'title'       => __('Design the Future Section', 'mytheme'),
+        'description' => __('Settings for the two-column features section.', 'mytheme'),
+        'priority'    => 33,
+    ));
+
+    $wp_customize->add_setting('design_future_title', array(
+        'default'           => 'Design the Future Today with Synopsys',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('design_future_title', array(
+        'label'    => __('Main Title', 'mytheme'),
+        'section'  => 'design_future_section',
+        'type'     => 'text',
+    ));
+
+    $wp_customize->add_setting('design_future_col1_title', array(
+        'default'           => 'Industry',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('design_future_col1_title', array(
+        'label'    => __('Column 1 Title', 'mytheme'),
+        'section'  => 'design_future_section',
+        'type'     => 'text',
+    ));
+
+    $wp_customize->add_setting('design_future_col2_title', array(
+        'default'           => 'Technology',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('design_future_col2_title', array(
+        'label'    => __('Column 2 Title', 'mytheme'),
+        'section'  => 'design_future_section',
+        'type'     => 'text',
+    ));
+
+    // Items for Design the Future
+    $df_defaults = array(
+        array('title' => 'AI Chip Development', 'desc' => 'Achieve first-pass silicon success in your AI chip development journey.'),
+        array('title' => 'HPC & Data Center', 'desc' => 'Accelerate development of AI, server, edge, networking & storage SoCs.'),
+        array('title' => 'Mobile/5G', 'desc' => 'Unleash bandwidth and harness security for a 5G world.'),
+        array('title' => 'Automotive', 'desc' => 'Drive the future of software-defined vehicles.'),
+        array('title' => 'Artificial Intelligence (AI)', 'desc' => 'Increase silicon performance & accelerate innovation.'),
+        array('title' => 'Multi-Die', 'desc' => 'A comprehensive solution for fast heterogeneous integration.'),
+        array('title' => 'Energy-Efficient Design', 'desc' => 'End-to-end solution for low power design, verification & IP.'),
+        array('title' => 'Memory', 'desc' => 'Next-generation memory solutions.')
+    );
+
+    for ($i = 1; $i <= 8; $i++) {
+        $col = ($i <= 4) ? 1 : 2;
+        $num = ($i <= 4) ? $i : $i - 4;
+        
+        $wp_customize->add_setting("df_icon_$i", array(
+            'default'           => '',
+            'sanitize_callback' => 'esc_url_raw',
+        ));
+        $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, "df_icon_$i", array(
+            'label'   => sprintf(__('Col %d - Item %d Icon', 'mytheme'), $col, $num),
+            'section' => 'design_future_section',
+        )));
+
+        $wp_customize->add_setting("df_title_$i", array(
+            'default'           => $df_defaults[$i-1]['title'],
+            'sanitize_callback' => 'sanitize_text_field',
+        ));
+        $wp_customize->add_control("df_title_$i", array(
+            'label'   => sprintf(__('Col %d - Item %d Title', 'mytheme'), $col, $num),
+            'section' => 'design_future_section',
+            'type'    => 'text',
+        ));
+
+        $wp_customize->add_setting("df_desc_$i", array(
+            'default'           => $df_defaults[$i-1]['desc'],
+            'sanitize_callback' => 'sanitize_textarea_field',
+        ));
+        $wp_customize->add_control("df_desc_$i", array(
+            'label'   => sprintf(__('Col %d - Item %d Description', 'mytheme'), $col, $num),
+            'section' => 'design_future_section',
+            'type'    => 'textarea',
+        ));
+        
+        $wp_customize->add_setting("df_link_$i", array(
+            'default'           => '#',
+            'sanitize_callback' => 'esc_url_raw',
+        ));
+        $wp_customize->add_control("df_link_$i", array(
+            'label'   => sprintf(__('Col %d - Item %d Link', 'mytheme'), $col, $num),
+            'section' => 'design_future_section',
+            'type'    => 'url',
+        ));
+    }
+
     // ── Mega Menu Featured Panel ──────────────────────────────────────────────
     $wp_customize->add_section('mega_featured_panel', array(
         'title'       => __('🗂️ Mega Menu Featured Panel', 'mytheme'),

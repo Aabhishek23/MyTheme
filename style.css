@@ -836,3 +836,79 @@ a {
 .card-item:hover .card-item-title {
     transform: translateY(-2px);
 }
+
+/* --- Design the Future Section --- */
+.df-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+@media (min-width: 768px) {
+    .df-grid {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 6rem;
+    }
+    .df-col {
+        flex: 1;
+    }
+}
+
+.df-col-title {
+    font-size: 1.6rem;
+    font-weight: 300;
+    color: #374151;
+    margin-bottom: 2.5rem;
+}
+
+.df-items {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.df-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: -1.5rem; /* Negative margin offsets padding so it visually aligns with header */
+}
+
+.df-item:hover {
+    background-color: #f9fafb;
+    transform: translateX(10px);
+}
+
+.df-item-header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.df-item-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.df-item-title {
+    font-size: 1.15rem;
+    font-weight: 300;
+    color: #1f2937;
+    margin: 0;
+}
+
+.df-item-desc {
+    font-size: 0.95rem;
+    color: #6b7280;
+    line-height: 1.5;
+    margin: 0;
+    font-weight: 400;
+}

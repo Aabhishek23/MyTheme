@@ -124,6 +124,81 @@
         </div>
     </section>
 
+    <!-- Design the Future Section -->
+    <section style="background: #ffffff; padding: 6rem 0;" class="reveal">
+        <div class="container">
+            <h2 style="font-size: 2.5rem; text-align: center; margin-bottom: 4rem; font-weight: 300; color: #1f2937;">
+                <?php echo esc_html(get_theme_mod('design_future_title', 'Design the Future Today with Synopsys')); ?>
+            </h2>
+
+            <div class="df-grid">
+                <?php
+                // Provide the exact same fallback defaults array so live site matches Customizer preview
+                $df_defaults = array(
+                    array('title' => 'AI Chip Development', 'desc' => 'Achieve first-pass silicon success in your AI chip development journey.'),
+                    array('title' => 'HPC & Data Center', 'desc' => 'Accelerate development of AI, server, edge, networking & storage SoCs.'),
+                    array('title' => 'Mobile/5G', 'desc' => 'Unleash bandwidth and harness security for a 5G world.'),
+                    array('title' => 'Automotive', 'desc' => 'Drive the future of software-defined vehicles.'),
+                    array('title' => 'Artificial Intelligence (AI)', 'desc' => 'Increase silicon performance & accelerate innovation.'),
+                    array('title' => 'Multi-Die', 'desc' => 'A comprehensive solution for fast heterogeneous integration.'),
+                    array('title' => 'Energy-Efficient Design', 'desc' => 'End-to-end solution for low power design, verification & IP.'),
+                    array('title' => 'Memory', 'desc' => 'Next-generation memory solutions.')
+                );
+                ?>
+
+                <!-- Column 1 -->
+                <div class="df-col">
+                    <h3 class="df-col-title"><?php echo esc_html(get_theme_mod('design_future_col1_title', 'Industry')); ?></h3>
+                    <div class="df-items">
+                        <?php for ($i = 1; $i <= 4; $i++) : 
+                            $icon = get_theme_mod("df_icon_$i", '');
+                            $title = get_theme_mod("df_title_$i", $df_defaults[$i-1]['title']);
+                            $desc = get_theme_mod("df_desc_$i", $df_defaults[$i-1]['desc']);
+                            $link = get_theme_mod("df_link_$i", '#');
+                            // Exclude layout if title and desc are entirely empty, to allow user to easily remove rows
+                            if (empty($title) && empty($desc)) continue;
+                            
+                            $icon_src = $icon ? esc_url($icon) : 'https://via.placeholder.com/48x48?text=Icon';
+                        ?>
+                        <a href="<?php echo esc_url($link); ?>" class="df-item">
+                            <div class="df-item-header">
+                                <img src="<?php echo $icon_src; ?>" alt="Icon" class="df-item-icon">
+                                <h4 class="df-item-title"><?php echo esc_html($title); ?></h4>
+                            </div>
+                            <p class="df-item-desc"><?php echo esc_html($desc); ?></p>
+                        </a>
+                        <?php endfor; ?>
+                    </div>
+                </div>
+
+                <!-- Column 2 -->
+                <div class="df-col">
+                    <h3 class="df-col-title"><?php echo esc_html(get_theme_mod('design_future_col2_title', 'Technology')); ?></h3>
+                    <div class="df-items">
+                        <?php for ($i = 5; $i <= 8; $i++) : 
+                            $icon = get_theme_mod("df_icon_$i", '');
+                            $title = get_theme_mod("df_title_$i", $df_defaults[$i-1]['title']);
+                            $desc = get_theme_mod("df_desc_$i", $df_defaults[$i-1]['desc']);
+                            $link = get_theme_mod("df_link_$i", '#');
+
+                            if (empty($title) && empty($desc)) continue;
+
+                            $icon_src = $icon ? esc_url($icon) : 'https://via.placeholder.com/48x48?text=Icon';
+                        ?>
+                        <a href="<?php echo esc_url($link); ?>" class="df-item">
+                            <div class="df-item-header">
+                                <img src="<?php echo $icon_src; ?>" alt="Icon" class="df-item-icon">
+                                <h4 class="df-item-title"><?php echo esc_html($title); ?></h4>
+                            </div>
+                            <p class="df-item-desc"><?php echo esc_html($desc); ?></p>
+                        </a>
+                        <?php endfor; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Connect with Us Section -->
     <section style="background: var(--primary); padding: 6rem 0; text-align: center;" class="reveal">
         <div class="container">
