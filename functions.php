@@ -181,6 +181,42 @@ function mytheme_customize_register($wp_customize) {
         'type'     => 'text',
     ));
 
+    // Pervasive Image Cards
+    $default_titles = ['Synopsys.ai', 'EDA', 'Systems', 'Silicon IP'];
+    for ($i = 1; $i <= 4; $i++) {
+        // Card Image
+        $wp_customize->add_setting("pervasive_card_image_$i", array(
+            'default'           => '',
+            'sanitize_callback' => 'esc_url_raw',
+        ));
+        $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, "pervasive_card_image_$i", array(
+            'label'   => sprintf(__('Card %d Image', 'mytheme'), $i),
+            'section' => 'pervasive_section',
+        )));
+
+        // Card Title
+        $wp_customize->add_setting("pervasive_card_title_$i", array(
+            'default'           => $default_titles[$i-1],
+            'sanitize_callback' => 'sanitize_text_field',
+        ));
+        $wp_customize->add_control("pervasive_card_title_$i", array(
+            'label'   => sprintf(__('Card %d Title', 'mytheme'), $i),
+            'section' => 'pervasive_section',
+            'type'    => 'text',
+        ));
+
+        // Card Link
+        $wp_customize->add_setting("pervasive_card_link_$i", array(
+            'default'           => '#',
+            'sanitize_callback' => 'esc_url_raw',
+        ));
+        $wp_customize->add_control("pervasive_card_link_$i", array(
+            'label'   => sprintf(__('Card %d Link', 'mytheme'), $i),
+            'section' => 'pervasive_section',
+            'type'    => 'url',
+        ));
+    }
+
     // ── Mega Menu Featured Panel ──────────────────────────────────────────────
     $wp_customize->add_section('mega_featured_panel', array(
         'title'       => __('🗂️ Mega Menu Featured Panel', 'mytheme'),

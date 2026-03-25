@@ -104,6 +104,23 @@
                 }
                 ?>
             </div>
+
+            <!-- Image Grid Added Below Text -->
+            <div class="card-grid">
+                <?php
+                $default_titles_arr = array('Synopsys.ai', 'EDA', 'Systems', 'Silicon IP');
+                for ($i = 1; $i <= 4; $i++) :
+                    $img = get_theme_mod("pervasive_card_image_$i", '');
+                    $title = get_theme_mod("pervasive_card_title_$i", $default_titles_arr[$i-1]);
+                    $link = get_theme_mod("pervasive_card_link_$i", '#');
+                    $bg = $img ? "background-image: url('" . esc_url($img) . "');" : "background: #18181b;";
+                ?>
+                <a href="<?php echo esc_url($link); ?>" class="card-item" style="<?php echo $bg; ?>">
+                    <div class="card-item-title"><?php echo esc_html($title); ?></div>
+                </a>
+                <?php endfor; ?>
+            </div>
+
         </div>
     </section>
 

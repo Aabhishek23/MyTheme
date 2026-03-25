@@ -764,3 +764,75 @@ a {
     pointer-events: all !important;
     transform: translateX(-50%) translateY(0px) !important;
 }
+
+/* --- Added For Pervasive Section Cards --- */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+    margin-top: 4rem;
+}
+
+@media (min-width: 768px) {
+    .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .card-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.card-item {
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    aspect-ratio: 0.75; /* tall portrait aspect roughly matching the visual */
+    background-size: cover;
+    background-position: center;
+    color: #ffffff;
+    text-decoration: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.card-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+}
+
+/* Gradient overlay so the text is always legible */
+.card-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    background: linear-gradient(to top, rgba(9, 9, 11, 0.9) 0%, rgba(9, 9, 11, 0.5) 40%, transparent 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.card-item-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    font-size: 1.35rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    z-index: 2;
+    color: #ffffff;
+    transition: transform 0.3s;
+}
+
+.card-item:hover .card-item-title {
+    transform: translateY(-2px);
+}
