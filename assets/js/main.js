@@ -136,12 +136,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // --- Interaction Logic: Pure Hover ---
 
-                // Hover: Add class immediately on enter
+                // Hover: Add class on enter
                 item.addEventListener('mouseenter', () => {
+                    // Clear the timeout for this specific item if it exists
+                    if (item.hoverCloseTimeout) {
+                        clearTimeout(item.hoverCloseTimeout);
+                        item.hoverCloseTimeout = null;
+                    }
+
                     // Close others immediately
                     document.querySelectorAll('.nav-menu > li.is-open').forEach(openItem => {
                         if (openItem !== item) {
                             openItem.classList.remove('is-open');
+                            if (openItem.hoverCloseTimeout) {
+                                clearTimeout(openItem.hoverCloseTimeout);
+                                openItem.hoverCloseTimeout = null;
+                            }
                         }
                     });
                     
@@ -165,9 +175,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
 
-                // Hover: Remove class immediately on leave
+                // Hover: Remove class with a slight delay on leave
                 item.addEventListener('mouseleave', () => {
-                    item.classList.remove('is-open');
+                    // Small delay so the user has time to move their mouse from the menu item to the dropdown content
+                    item.hoverCloseTimeout = setTimeout(() => {
+                        item.classList.remove('is-open');
+                        item.hoverCloseTimeout = null;
+                    }, 300); // 300ms delay provides a smooth bridging gap
                 });
             }
         });
