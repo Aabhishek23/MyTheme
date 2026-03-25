@@ -90,13 +90,19 @@
     <!-- Pervasive Intelligence Section -->
     <section style="padding: 8rem 0; text-align: center;" class="reveal">
         <div class="container">
-            <h2 style="font-size: 3rem; margin-bottom: 2rem;">Powering the Era of Pervasive Intelligence from Silicon to Systems</h2>
+            <h2 style="font-size: 3rem; margin-bottom: 2rem;"><?php echo esc_html(get_theme_mod('pervasive_title', 'Powering the Era of Pervasive Intelligence from Silicon to Systems')); ?></h2>
             <div style="display: flex; justify-content: center; gap: 2rem; color: var(--text-muted); font-size: 1.1rem; font-weight: 500;">
-                <span>Supercharge Productivity</span>
-                <span>•</span>
-                <span>Conquer Complexity</span>
-                <span>•</span>
-                <span>Accelerate Time-to-Market</span>
+                <?php
+                $points_str = get_theme_mod('pervasive_points', 'Supercharge Productivity • Conquer Complexity • Accelerate Time-to-Market');
+                $points = explode('•', $points_str);
+                $count = count($points);
+                foreach ($points as $index => $point) {
+                    echo '<span>' . esc_html(trim($point)) . '</span>';
+                    if ($index < $count - 1) {
+                        echo '<span>•</span>';
+                    }
+                }
+                ?>
             </div>
         </div>
     </section>

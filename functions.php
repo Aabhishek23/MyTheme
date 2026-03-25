@@ -151,6 +151,36 @@ function mytheme_customize_register($wp_customize) {
         'type'     => 'textarea',
     ));
 
+    // ── Pervasive Intelligence Section ─────────────────────────────────────────
+    $wp_customize->add_section('pervasive_section', array(
+        'title'       => __('Pervasive Intelligence Section', 'mytheme'),
+        'description' => __('Settings for the section right below the hero banner.', 'mytheme'),
+        'priority'    => 32,
+    ));
+
+    // Section Title
+    $wp_customize->add_setting('pervasive_title', array(
+        'default'           => 'Powering the Era of Pervasive Intelligence from Silicon to Systems',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('pervasive_title', array(
+        'label'    => __('Section Title', 'mytheme'),
+        'section'  => 'pervasive_section',
+        'type'     => 'text',
+    ));
+
+    // Bullet Points
+    $wp_customize->add_setting('pervasive_points', array(
+        'default'           => 'Supercharge Productivity • Conquer Complexity • Accelerate Time-to-Market',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('pervasive_points', array(
+        'label'    => __('Bullet Points (Separate with the bullet dot •)', 'mytheme'),
+        'description' => __('Write your points and separate them using the dot character (•)', 'mytheme'),
+        'section'  => 'pervasive_section',
+        'type'     => 'text',
+    ));
+
     // ── Mega Menu Featured Panel ──────────────────────────────────────────────
     $wp_customize->add_section('mega_featured_panel', array(
         'title'       => __('🗂️ Mega Menu Featured Panel', 'mytheme'),
