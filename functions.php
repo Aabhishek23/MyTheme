@@ -310,11 +310,28 @@ function mytheme_customize_register($wp_customize) {
         ));
     }
 
+    // ── What's New Section ──────────────────────────────────────────────
+    $wp_customize->add_section('whats_new_section', array(
+        'title'       => __('What\'s New Section (Posts Slider)', 'mytheme'),
+        'description' => __('This section automatically pulls your latest published Posts.', 'mytheme'),
+        'priority'    => 34,
+    ));
+
+    $wp_customize->add_setting('whats_new_title', array(
+        'default'           => 'What\'s New',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('whats_new_title', array(
+        'label'    => __('Section Title', 'mytheme'),
+        'section'  => 'whats_new_section',
+        'type'     => 'text',
+    ));
+
     // ── Ecosystem Partners Section ──────────────────────────────────────────────
     $wp_customize->add_section('ecosystem_section', array(
         'title'       => __('Ecosystem Partners Section', 'mytheme'),
         'description' => __('Settings for the partner logos section.', 'mytheme'),
-        'priority'    => 34,
+        'priority'    => 35,
     ));
 
     $wp_customize->add_setting('ecosystem_title', array(

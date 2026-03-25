@@ -244,6 +244,83 @@
         </div>
     </section>
 
+    <!-- What's New Section -->
+    <section style="background: #ffffff; padding: 6rem 0; text-align: center;" class="reveal">
+        <div class="container relative">
+            <h2 style="font-size: 2.5rem; text-align: center; margin-bottom: 3rem; font-weight: 300; color: #1f2937;">
+                <?php echo esc_html(get_theme_mod('whats_new_title', 'What\'s New')); ?>
+            </h2>
+            
+            <div class="news-carousel-wrapper">
+                <button class="news-nav news-prev" aria-label="Previous">&lt;</button>
+                
+                <div class="news-carousel">
+                    <?php
+                    $news_args = array(
+                        'post_type'           => 'post',
+                        'posts_per_page'      => 6,
+                        'ignore_sticky_posts' => true,
+                    );
+                    $news_query = new WP_Query($news_args);
+
+                    if ($news_query->have_posts()) :
+                        while ($news_query->have_posts()) : $news_query->the_post();
+                            $cats = get_the_category();
+                            $cat_name = !empty($cats) ? $cats[0]->name : 'News Release';
+                    ?>
+                    <div class="news-card">
+                        <a href="<?php the_permalink(); ?>" class="news-img-link">
+                            <?php if (has_post_thumbnail()) : ?>
+                                <?php the_post_thumbnail('medium_large', ['class' => 'news-img', 'loading' => 'lazy']); ?>
+                            <?php else : ?>
+                                <img src="https://via.placeholder.com/600x350?text=News" alt="Placeholder" class="news-img" loading="lazy">
+                            <?php endif; ?>
+                        </a>
+                        <div class="news-content">
+                            <div class="news-meta">
+                                <span class="news-badge"><?php echo esc_html($cat_name); ?></span>
+                                <span class="news-date"><?php echo get_the_date('F j, Y'); ?></span>
+                            </div>
+                            <h3 class="news-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+                            <a href="<?php the_permalink(); ?>" class="news-readmore">Learn more &gt;</a>
+                        </div>
+                    </div>
+                    <?php
+                        endwhile;
+                        wp_reset_postdata();
+                    else :
+                        // Dummy cards if no posts exist
+                        $dummy_data = array(
+                            array('title' => 'Synopsys Supports New Arm AGI CPU with Full-Stack Design Solutions', 'date' => 'March 24, 2026'),
+                            array('title' => 'Synopsys Introduces Software-Defined Hardware-Assisted Verification to Enable AI Proliferation', 'date' => 'March 11, 2026'),
+                            array('title' => 'Synopsys Launches Electronics Digital Twin Platform to Accelerate Physical AI System Development', 'date' => 'March 10, 2026'),
+                        );
+                        foreach ($dummy_data as $i => $data) :
+                    ?>
+                    <div class="news-card">
+                        <a href="#" class="news-img-link">
+                            <img src="https://via.placeholder.com/600x350?text=Published+Post+Demo+<?php echo $i+1; ?>" alt="Placeholder" class="news-img" loading="lazy">
+                        </a>
+                        <div class="news-content">
+                            <div class="news-meta">
+                                <span class="news-badge">NEWS RELEASE</span>
+                                <span class="news-date"><?php echo esc_html($data['date']); ?></span>
+                            </div>
+                            <h3 class="news-title"><a href="#"><?php echo esc_html($data['title']); ?></a></h3>
+                            <a href="#" class="news-readmore">Learn more &gt;</a>
+                        </div>
+                    </div>
+                    <?php
+                        endforeach;
+                    endif;
+                    ?>
+                </div>
+
+                <button class="news-nav news-next" aria-label="Next">&gt;</button>
+            </div>
+        </div>
+    </section>
+
     <!-- Connect with Us Section -->
     <section style="background: var(--primary); padding: 6rem 0; text-align: center;" class="reveal">
         <div class="container">

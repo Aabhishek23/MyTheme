@@ -197,4 +197,27 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     initAdvancedMenus();
+
+    // --- News Carousel Script ---
+    const initNewsCarousel = () => {
+        const carousel = document.querySelector('.news-carousel');
+        const btnPrev = document.querySelector('.news-prev');
+        const btnNext = document.querySelector('.news-next');
+
+        if (!carousel || !btnPrev || !btnNext) return;
+
+        btnNext.addEventListener('click', () => {
+            const cardWidth = carousel.querySelector('.news-card').offsetWidth;
+            const gap = parseFloat(getComputedStyle(carousel).gap) || 0;
+            carousel.scrollBy({ left: cardWidth + gap, behavior: 'smooth' });
+        });
+
+        btnPrev.addEventListener('click', () => {
+            const cardWidth = carousel.querySelector('.news-card').offsetWidth;
+            const gap = parseFloat(getComputedStyle(carousel).gap) || 0;
+            carousel.scrollBy({ left: -(cardWidth + gap), behavior: 'smooth' });
+        });
+    };
+
+    initNewsCarousel();
 });
