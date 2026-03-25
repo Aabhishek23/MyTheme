@@ -205,7 +205,7 @@ a {
     z-index: 1000;
 }
 
-/* Caret/Arrow for dropdown */
+/* Caret/Arrow for dropdown (Only on top-level submenus) */
 .sub-menu::before {
     content: '';
     position: absolute;
@@ -217,6 +217,17 @@ a {
     transform: rotate(45deg);
     border-top: 1px solid rgba(0, 0, 0, 0.08);
     border-left: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Dynamically align Mega Menu caret under hovered item */
+.menu-item.mega > .sub-menu::before {
+    left: var(--caret-pos, 20px);
+    transition: left 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Remove Caret from nested sub-menus so they don't produce double carets */
+.sub-menu .sub-menu::before {
+    display: none;
 }
 
 .menu-item:hover>.sub-menu,
@@ -271,7 +282,7 @@ a {
     border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 12px;
     padding: 0 !important;
-    overflow: hidden;
+    /* overflow: hidden removed to allow caret to show */
     box-shadow: 0 40px 60px -15px rgba(0, 0, 0, 0.25);
     z-index: 1010;
     opacity: 0;
@@ -281,9 +292,9 @@ a {
     list-style: none;
 }
 
-/* Show on hover */
-.menu-item.mega:hover > .sub-menu,
-.nav-item.mega:hover > .sub-menu {
+/* Show via JS class (handles hover delay & click toggle) */
+.menu-item.mega.is-open > .sub-menu,
+.nav-item.mega.is-open > .sub-menu {
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: all !important;
@@ -301,6 +312,11 @@ a {
     list-style: none;
 }
 
+.menu-item.mega > .sub-menu > li:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
 /* Featured Content column (last li with .featured-content class) */
 .menu-item.mega > .sub-menu > li.featured-content {
     background: #f9fafb;
@@ -311,8 +327,14 @@ a {
     justify-content: flex-start;
     width: 300px;
     flex-shrink: 0;
-    pointer-events: auto !important;
+    pointer-events: none;
     list-style: none;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.menu-item.mega.is-open > .sub-menu > li.featured-content {
+    pointer-events: auto !important;
 }
 
 .featured-content-inner {
@@ -340,7 +362,7 @@ a {
 .menu-item.mega > .sub-menu > li:not(.featured-content) > .sub-menu {
     position: static !important;
     opacity: 1 !important;
-    visibility: visible !important;
+    visibility: hidden;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
@@ -351,7 +373,13 @@ a {
     flex-direction: column !important;
     gap: 0.5rem;
     list-style: none;
-    pointer-events: auto;
+    pointer-events: none;
+}
+
+/* Show them only when the mega menu is open */
+.menu-item.mega.is-open > .sub-menu > li:not(.featured-content) > .sub-menu {
+    visibility: visible !important;
+    pointer-events: auto !important;
 }
 
 /* Nested sub-menu links (depth-2) */
@@ -365,9 +393,13 @@ a {
     gap: 0.85rem;
     background: none !important;
     text-transform: none;
-    pointer-events: auto !important;
+    pointer-events: none;
     transition: var(--transition);
     line-height: 1.2;
+}
+
+.menu-item.mega.is-open > .sub-menu > li > .sub-menu a {
+    pointer-events: auto !important;
 }
 
 .menu-item.mega > .sub-menu > li > .sub-menu a:hover {
@@ -450,8 +482,13 @@ a {
     font-weight: 700;
     font-size: 0.95rem;
     text-decoration: none;
-    pointer-events: auto !important;
+    pointer-events: none;
     display: inline-block;
+}
+
+.menu-item.mega.is-open .featured-content a,
+.menu-item.mega.is-open .featured-content-inner a {
+    pointer-events: auto !important;
 }
 
 .featured-content a:hover,
@@ -480,8 +517,8 @@ a {
     z-index: 1000;
 }
 
-.menu-item:not(.mega):hover > .sub-menu,
-.nav-item:not(.mega):hover > .sub-menu {
+.menu-item:not(.mega).is-open > .sub-menu,
+.nav-item:not(.mega).is-open > .sub-menu {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);

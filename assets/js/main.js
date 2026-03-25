@@ -113,61 +113,69 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Mega Menu Controller (Automatic wide-menu for all sub-items)
+    // Mega Menu Controller (Automatic wide-menu for all sub-items + Interaction Logic)
     const initAdvancedMenus = () => {
-        const allNavItems = document.querySelectorAll('.nav-menu > li, .nav-item');
+        // ONLY target top-level items! Selecting sub-items causes nested hover conflicts.
+        const topNavItems = document.querySelectorAll('.nav-menu > li');
         
-        allNavItems.forEach(item => {
+        topNavItems.forEach(item => {
             const subMenu = item.querySelector('.sub-menu, .mega-menu');
             if (subMenu) {
                 // Determine if this should be a Mega Menu
                 // 1. If it already has the .mega class from WordPress Admin
-                // 2. OR If it's a 3-level menu (has grandchildren)
+                // 2. OR If it has grandchildren
                 const hasGrandchildren = subMenu.querySelector('li .sub-menu, li ul');
-                const isSolutions = item.querySelector('a')?.textContent.trim().toLowerCase().includes('solutions');
 
-                if (item.classList.contains('mega') || hasGrandchildren || isSolutions) {
+                if (item.classList.contains('mega') || hasGrandchildren) {
                     item.classList.add('mega');
                     item.style.position = 'static';
                     subMenu.style.display = 'flex';
                     subMenu.style.width = 'max-content';
-                    subMenu.style.maxWidth = '90vw';
-                    
-                    // Specialized: Add Featured Section ONLY to Solutions if it's missing
-                    if (isSolutions && !subMenu.querySelector('.featured-content')) {
-                        const featuredHtml = `
-                            <li class="featured-content">
-                                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800" alt="Featured">
-                                <h4>Navigating Software-Defined Vehicle Development</h4>
-                                <p>Discover strategies to boost SDV innovation, reduce costs, and enhance reliability.</p>
-                                <a href="#">Download &rarr;</a>
-                            </li>
-                        `;
-                        subMenu.insertAdjacentHTML('beforeend', featuredHtml);
-                    }
+                    subMenu.style.maxWidth = '92vw';
                 }
 
-                // --- Click-to-Open Logic (Global for all dropdowns) ---
-                const link = item.querySelector('a');
-                link.addEventListener('click', function(e) {
-                    if (!item.classList.contains('is-open')) {
-                        e.preventDefault();
-                        // Close other open menus
-                        document.querySelectorAll('.is-open').forEach(openItem => {
-                            if (openItem !== item) openItem.classList.remove('is-open');
+                // --- Interaction Logic: Pure Hover ---
+
+                // Hover: Add class immediately on enter
+                item.addEventListener('mouseenter', () => {
+                    // Close others immediately
+                    document.querySelectorAll('.nav-menu > li.is-open').forEach(openItem => {
+                        if (openItem !== item) {
+                            openItem.classList.remove('is-open');
+                        }
+                    });
+                    
+                    item.classList.add('is-open');
+                    
+                    // Dynamically position the caret to align under hovered item text
+                    if (item.classList.contains('mega')) {
+                        // Request animation frame ensures the element's positioning has updated in DOM before reading rects
+                        requestAnimationFrame(() => {
+                            const itemRect = item.getBoundingClientRect();
+                            const subRect = subMenu.getBoundingClientRect();
+                            // If the mega menu has an active transition, the subRect position might be slightly off.
+                            // But since the mega menu is simply centered and opacity transitioned, rect should be stable.
+                            const caretPos = (itemRect.left + itemRect.width / 2) - subRect.left - 6; // -6 for half of 12px caret width
+                            
+                            // Prevent negative or miscalculated values if it goes off edge
+                            if (caretPos > 10) {
+                                subMenu.style.setProperty('--caret-pos', `${caretPos}px`);
+                            }
                         });
-                        item.classList.add('is-open');
-                    } else {
-                        // Logic if the link is clicked again? Usually close on second click or navigate.
                     }
+                });
+
+                // Hover: Remove class immediately on leave
+                item.addEventListener('mouseleave', () => {
+                    item.classList.remove('is-open');
                 });
             }
         });
 
-        // Close when clicking outside
+        // Close when clicking outside (fallback for touch devices)
         document.addEventListener('click', function(e) {
-            if (!e.target.closest('.mega') && !e.target.closest('.is-open')) {
-                document.querySelectorAll('.is-open').forEach(item => {
+            if (!e.target.closest('.nav-menu')) {
+                document.querySelectorAll('.nav-menu > li.is-open').forEach(item => {
                     item.classList.remove('is-open');
                 });
             }
