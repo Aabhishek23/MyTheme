@@ -912,3 +912,75 @@ a {
     margin: 0;
     font-weight: 400;
 }
+
+/* --- Ecosystem Partners Section --- */
+.partner-logos-wrapper {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    padding: 1rem 0; /* extra padding to not cut off shadows */
+}
+
+.partner-logos {
+    display: flex;
+    align-items: center;
+}
+
+/* When Marquee is DISABLED */
+.partner-logos-wrapper:not(.marquee-enabled) .partner-logos {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3.5rem;
+}
+
+@media (min-width: 768px) {
+    .partner-logos-wrapper:not(.marquee-enabled) .partner-logos {
+        justify-content: space-between;
+        gap: 2rem;
+    }
+}
+
+/* When Marquee is ENABLED */
+.partner-logos-wrapper.marquee-enabled .partner-logos {
+    flex-wrap: nowrap;
+    width: max-content;
+    animation: marquee-scroll 35s linear infinite;
+    gap: 0;
+}
+
+.partner-logos-wrapper.marquee-enabled:hover .partner-logos {
+    animation-play-state: paused;
+}
+
+.partner-logos-wrapper.marquee-enabled .partner-logo {
+    margin-right: 5rem;
+}
+
+@keyframes marquee-scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-25%); /* Translating 1 out of 4 duplicated blocks */
+    }
+}
+
+.partner-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+}
+
+.partner-logo:hover {
+    transform: scale(1.05);
+}
+
+.partner-logo img {
+    max-width: 150px;
+    max-height: 45px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}

@@ -199,6 +199,51 @@
         </div>
     </section>
 
+    <!-- Ecosystem Partners Section -->
+    <section style="background: #f8f9fa; padding: 5rem 0; text-align: center;" class="reveal">
+        <div class="container">
+            <h2 style="font-size: 2rem; font-weight: 300; color: #374151; margin-bottom: 4rem;">
+                <?php echo esc_html(get_theme_mod('ecosystem_title', 'Ecosystem Partners')); ?>
+            </h2>
+            <?php $enable_marquee = get_theme_mod('ecosystem_marquee', true); ?>
+            <div class="partner-logos-wrapper <?php echo $enable_marquee ? 'marquee-enabled' : ''; ?>">
+                <div class="partner-logos">
+                    <?php 
+                    // To make a seamless marquee, we run 4 loops so the track is exceptionally wide. 
+                    // This creates an infinite scrolling illusion.
+                    $loops = $enable_marquee ? 4 : 1;
+                    $has_logos = false;
+
+                    for ($loop = 1; $loop <= $loops; $loop++) :
+                        for ($i = 1; $i <= 6; $i++) :
+                            $logo = get_theme_mod("ecosystem_logo_$i", '');
+                            $link = get_theme_mod("ecosystem_link_$i", '#');
+                            
+                            if (empty($logo)) {
+                                if (is_customize_preview()) {
+                                    $logo = "https://via.placeholder.com/150x50?text=Logo+$i";
+                                } else {
+                                    continue;
+                                }
+                            }
+                            $has_logos = true;
+                    ?>
+                    <a href="<?php echo esc_url($link); ?>" class="partner-logo" target="_blank" <?php echo ($loop > 1) ? 'aria-hidden="true"' : ''; ?>>
+                        <img src="<?php echo esc_url($logo); ?>" alt="Ecosystem Partner <?php echo $i; ?>" loading="lazy">
+                    </a>
+                    <?php 
+                        endfor; 
+                    endfor; 
+                    
+                    if (!$has_logos && !is_customize_preview()) {
+                        echo '<p style="color: #6b7280; font-size: 0.9rem;">No partners added yet.</p>';
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Connect with Us Section -->
     <section style="background: var(--primary); padding: 6rem 0; text-align: center;" class="reveal">
         <div class="container">

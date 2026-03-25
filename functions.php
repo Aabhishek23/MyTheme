@@ -310,6 +310,57 @@ function mytheme_customize_register($wp_customize) {
         ));
     }
 
+    // ── Ecosystem Partners Section ──────────────────────────────────────────────
+    $wp_customize->add_section('ecosystem_section', array(
+        'title'       => __('Ecosystem Partners Section', 'mytheme'),
+        'description' => __('Settings for the partner logos section.', 'mytheme'),
+        'priority'    => 34,
+    ));
+
+    $wp_customize->add_setting('ecosystem_title', array(
+        'default'           => 'Ecosystem Partners',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('ecosystem_title', array(
+        'label'    => __('Section Title', 'mytheme'),
+        'section'  => 'ecosystem_section',
+        'type'     => 'text',
+    ));
+
+    $wp_customize->add_setting('ecosystem_marquee', array(
+        'default'           => true,
+        'sanitize_callback' => 'wp_validate_boolean',
+    ));
+    $wp_customize->add_control('ecosystem_marquee', array(
+        'label'    => __('Enable Running Banner (Marquee Animation)', 'mytheme'),
+        'description' => __('Uncheck this to stop the running banner and show logos normally.', 'mytheme'),
+        'section'  => 'ecosystem_section',
+        'type'     => 'checkbox',
+    ));
+
+    for ($i = 1; $i <= 6; $i++) {
+        // Logo Image
+        $wp_customize->add_setting("ecosystem_logo_$i", array(
+            'default'           => '',
+            'sanitize_callback' => 'esc_url_raw',
+        ));
+        $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, "ecosystem_logo_$i", array(
+            'label'   => sprintf(__('Partner Logo %d', 'mytheme'), $i),
+            'section' => 'ecosystem_section',
+        )));
+        
+        // Logo Link
+        $wp_customize->add_setting("ecosystem_link_$i", array(
+            'default'           => '#',
+            'sanitize_callback' => 'esc_url_raw',
+        ));
+        $wp_customize->add_control("ecosystem_link_$i", array(
+            'label'   => sprintf(__('Partner Link %d (Optional)', 'mytheme'), $i),
+            'section' => 'ecosystem_section',
+            'type'    => 'url',
+        ));
+    }
+
     // ── Mega Menu Featured Panel ──────────────────────────────────────────────
     $wp_customize->add_section('mega_featured_panel', array(
         'title'       => __('🗂️ Mega Menu Featured Panel', 'mytheme'),
