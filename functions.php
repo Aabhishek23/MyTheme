@@ -27,7 +27,7 @@ add_filter('nav_menu_css_class', 'mytheme_add_menu_class', 1, 3);
 
 function mytheme_styles() {
     // Google Fonts
-    wp_enqueue_style('google-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@700&family=Roboto:wght@400;500;700&display=swap', array(), null);
+    wp_enqueue_style('google-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@200;300;400;700&family=Roboto:wght@400;500;700&display=swap', array(), null);
     
     // Main Styles
     wp_enqueue_style('style', get_stylesheet_uri());
@@ -438,6 +438,178 @@ function mytheme_customize_register($wp_customize) {
         'section' => 'mega_featured_panel',
         'type'    => 'url',
     ));
+    // ── Support & Careers Section ──────────────────────────────────────────────
+    $wp_customize->add_section('support_careers_section', array(
+        'title'       => __('Support & Careers Section', 'mytheme'),
+        'description' => __('Settings for the two-column support and careers section.', 'mytheme'),
+        'priority'    => 36,
+    ));
+
+    // Column 1: Support
+    $wp_customize->add_setting('sc_col1_title', array(
+        'default'           => 'Support & Services',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('sc_col1_title', array(
+        'label'    => __('Column 1 Title', 'mytheme'),
+        'section'  => 'support_careers_section',
+        'type'     => 'text',
+    ));
+
+    $wp_customize->add_setting('sc_col1_desc', array(
+        'default'           => 'Explore the Synopsys Support Community! Login is required. View our service offerings as well.',
+        'sanitize_callback' => 'sanitize_textarea_field',
+    ));
+    $wp_customize->add_control('sc_col1_desc', array(
+        'label'    => __('Column 1 Description', 'mytheme'),
+        'section'  => 'support_careers_section',
+        'type'     => 'textarea',
+    ));
+
+    $wp_customize->add_setting('sc_col1_link_text', array(
+        'default'           => 'View Support & Services',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('sc_col1_link_text', array(
+        'label'    => __('Column 1 Link Text', 'mytheme'),
+        'section'  => 'support_careers_section',
+        'type'     => 'text',
+    ));
+
+    $wp_customize->add_setting('sc_col1_link_url', array(
+        'default'           => '#',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+    $wp_customize->add_control('sc_col1_link_url', array(
+        'label'    => __('Column 1 Link URL', 'mytheme'),
+        'section'  => 'support_careers_section',
+        'type'     => 'url',
+    ));
+
+    // Column 2: Careers
+    $wp_customize->add_setting('sc_col2_title', array(
+        'default'           => 'Careers',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('sc_col2_title', array(
+        'label'    => __('Column 2 Title', 'mytheme'),
+        'section'  => 'support_careers_section',
+        'type'     => 'text',
+    ));
+
+    $wp_customize->add_setting('sc_col2_desc', array(
+        'default'           => 'Work at Synopsys and join a first-in-class team of technology professionals. Apply for a position today.',
+        'sanitize_callback' => 'sanitize_textarea_field',
+    ));
+    $wp_customize->add_control('sc_col2_desc', array(
+        'label'    => __('Column 2 Description', 'mytheme'),
+        'section'  => 'support_careers_section',
+        'type'     => 'textarea',
+    ));
+
+    $wp_customize->add_setting('sc_col2_link_text', array(
+        'default'           => 'View Careers',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('sc_col2_link_text', array(
+        'label'    => __('Column 2 Link Text', 'mytheme'),
+        'section'  => 'support_careers_section',
+        'type'     => 'text',
+    ));
+
+    $wp_customize->add_setting('sc_col2_link_url', array(
+        'default'           => '#',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+    $wp_customize->add_control('sc_col2_link_url', array(
+        'label'    => __('Column 2 Link URL', 'mytheme'),
+        'section'  => 'support_careers_section',
+        'type'     => 'url',
+    ));
+
+    // Support & Careers Colors
+    $wp_customize->add_setting('sc_bg_color', array(
+        'default'           => '#f7f7fa',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'sc_bg_color', array(
+        'label'    => __('Background Color', 'mytheme'),
+        'section'  => 'support_careers_section',
+    )));
+
+    $wp_customize->add_setting('sc_title_color', array(
+        'default'           => '#1f2937',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'sc_title_color', array(
+        'label'    => __('Title Color', 'mytheme'),
+        'section'  => 'support_careers_section',
+    )));
+
+    $wp_customize->add_setting('sc_desc_color', array(
+        'default'           => '#4b5563',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'sc_desc_color', array(
+        'label'    => __('Description Color', 'mytheme'),
+        'section'  => 'support_careers_section',
+    )));
+
+    // ── Connect with Us Section ──────────────────────────────────────────────
+    $wp_customize->add_section('connect_us_section', array(
+        'title'       => __('Connect with Us Section', 'mytheme'),
+        'description' => __('Settings for the bottom CTA section.', 'mytheme'),
+        'priority'    => 37,
+    ));
+
+    $wp_customize->add_setting('connect_title', array(
+        'default'           => 'Connect with Us',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('connect_title', array(
+        'label'    => __('Section Title', 'mytheme'),
+        'section'  => 'connect_us_section',
+        'type'     => 'text',
+    ));
+
+    $wp_customize->add_setting('connect_btn_text', array(
+        'default'           => 'Contact Sales',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('connect_btn_text', array(
+        'label'    => __('Button Text', 'mytheme'),
+        'section'  => 'connect_us_section',
+        'type'     => 'text',
+    ));
+
+    $wp_customize->add_setting('connect_btn_link', array(
+        'default'           => '#',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+    $wp_customize->add_control('connect_btn_link', array(
+        'label'    => __('Button Link URL', 'mytheme'),
+        'section'  => 'connect_us_section',
+        'type'     => 'url',
+    ));
+
+    // Gradient Colors
+    $wp_customize->add_setting('connect_grad_start', array(
+        'default'           => '#2d1a47',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'connect_grad_start', array(
+        'label'    => __('Gradient Start Color', 'mytheme'),
+        'section'  => 'connect_us_section',
+    )));
+
+    $wp_customize->add_setting('connect_grad_end', array(
+        'default'           => '#7c3aed',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'connect_grad_end', array(
+        'label'    => __('Gradient End Color', 'mytheme'),
+        'section'  => 'connect_us_section',
+    )));
 }
 add_action('customize_register', 'mytheme_customize_register');
 

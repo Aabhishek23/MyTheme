@@ -321,11 +321,45 @@
         </div>
     </section>
 
-    <!-- Connect with Us Section -->
-    <section style="background: var(--primary); padding: 6rem 0; text-align: center;" class="reveal">
+    <!-- Support & Careers Section -->
+    <?php
+    $sc_bg = get_theme_mod('sc_bg_color', '#f7f7fa');
+    $sc_title_c = get_theme_mod('sc_title_color', '#1f2937');
+    $sc_desc_c = get_theme_mod('sc_desc_color', '#4b5563');
+    ?>
+    <section class="support-careers-section reveal" style="background: <?php echo esc_attr($sc_bg); ?>; padding: 4rem 0;">
         <div class="container">
-            <h2 style="font-size: 3.5rem; margin-bottom: 2.5rem; letter-spacing: -0.04em;">Connect with Us</h2>
-            <a href="#" class="btn btn-primary" style="background: #fff; color: var(--primary); padding: 1rem 3rem;">Contact Sales</a>
+            <div class="sc-grid">
+                <div class="sc-col">
+                    <h2 class="sc-title" style="color: <?php echo esc_attr($sc_title_c); ?>; font-weight: 300;"><?php echo esc_html(get_theme_mod('sc_col1_title', 'Support & Services')); ?></h2>
+                    <p class="sc-desc" style="color: <?php echo esc_attr($sc_desc_c); ?>; font-weight: 300;"><?php echo esc_html(get_theme_mod('sc_col1_desc', 'Explore the Synopsys Support Community! Login is required. View our service offerings as well.')); ?></p>
+                    <a href="<?php echo esc_url(get_theme_mod('sc_col1_link_url', '#')); ?>" class="sc-link" style="color: <?php echo esc_attr($sc_title_c); ?>; font-weight: 600;"><?php echo esc_html(get_theme_mod('sc_col1_link_text', 'View Support & Services')); ?> &nbsp; &gt;</a>
+                </div>
+                <!-- Vertical Divider -->
+                <div class="sc-divider" style="background: #e5e7eb;"></div>
+                <div class="sc-col">
+                    <h2 class="sc-title" style="color: <?php echo esc_attr($sc_title_c); ?>; font-weight: 300;"><?php echo esc_html(get_theme_mod('sc_col2_title', 'Careers')); ?></h2>
+                    <p class="sc-desc" style="color: <?php echo esc_attr($sc_desc_c); ?>; font-weight: 300;"><?php echo esc_html(get_theme_mod('sc_col2_desc', 'Work at Synopsys and join a first-in-class team of technology professionals. Apply for a position today.')); ?></p>
+                    <a href="<?php echo esc_url(get_theme_mod('sc_col2_link_url', '#')); ?>" class="sc-link" style="color: <?php echo esc_attr($sc_title_c); ?>; font-weight: 600;"><?php echo esc_html(get_theme_mod('sc_col2_link_text', 'View Careers')); ?> &nbsp; &gt;</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Connect with Us Section -->
+    <?php
+    $grad_start = get_theme_mod('connect_grad_start', '#2d1a47');
+    $grad_end = get_theme_mod('connect_grad_end', '#7c3aed');
+    $connect_bg = "background: linear-gradient(to right, $grad_start, $grad_end);";
+    ?>
+    <section style="<?php echo $connect_bg; ?> padding: 4rem 0; text-align: center; color: #fff;" class="reveal">
+        <div class="container">
+            <h2 style="font-size: 2.8rem; margin-bottom: 2.5rem; letter-spacing: -0.04em; color: #fff; font-weight: 700;">
+                <?php echo esc_html(get_theme_mod('connect_title', 'Connect with Us')); ?>
+            </h2>
+            <a href="<?php echo esc_url(get_theme_mod('connect_btn_link', '#')); ?>" class="btn btn-primary" style="background: #fff; color: <?php echo esc_attr($grad_start); ?>; padding: 1rem 3rem; border: none; font-weight: 600; border-radius: 4px;">
+                <?php echo esc_html(get_theme_mod('connect_btn_text', 'Contact Sales')); ?>
+            </a>
         </div>
     </section>
 </main>

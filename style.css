@@ -1140,3 +1140,70 @@ a {
     height: auto;
     object-fit: contain;
 }
+/* --- Support & Careers Section --- */
+.support-careers-section {
+    position: relative;
+    z-index: 5;
+}
+.sc-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: flex-start;
+    gap: 8rem;
+    padding: 3rem 0;
+}
+.sc-col {
+    text-align: left;
+}
+.sc-divider {
+    width: 1px;
+    height: auto;
+    align-self: stretch;
+    background: #e5e7eb;
+    margin: 1.5rem 0;
+}
+.sc-title {
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: #1f2937;
+    margin-bottom: 2rem;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: -0.02em;
+}
+.sc-desc {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    max-width: 95%;
+    font-weight: 300;
+}
+.sc-link {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #1f2937;
+    display: inline-flex;
+    align-items: center;
+    transition: var(--transition);
+}
+.sc-link:hover {
+    color: #5d3fd3;
+    transform: translateX(5px);
+}
+@media (max-width: 991px) {
+    .sc-grid {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+        text-align: center;
+    }
+    .sc-col {
+        text-align: center;
+    }
+    .sc-divider {
+        display: none;
+    }
+    .sc-desc {
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
