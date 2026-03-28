@@ -1207,3 +1207,932 @@ a {
         margin-right: auto;
     }
 }
+
+/* --- boAt Style Tabbed Product Grid --- */
+.boat-tabbed-section {
+    padding: 80px 0;
+    background-color: #fcfcfc;
+    color: #1a1a1a;
+    font-family: 'Inter', sans-serif;
+}
+
+.boat-tabbed-section .container {
+    max-width: 1600px;
+}
+
+
+.boat-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding: 0 5%;
+}
+
+.boat-section-title {
+    font-size: 1.85rem;
+    font-weight: 600;
+    color: #000;
+    margin: 0;
+}
+
+.boat-section-title .underlined {
+    position: relative;
+    display: inline-block;
+}
+
+.boat-section-title .underlined::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #ff0000;
+    border-radius: 2px;
+}
+
+.boat-view-all {
+    color: #007bff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+}
+
+.boat-view-all:hover {
+    text-decoration: underline;
+}
+
+/* Tabs Navigation */
+.boat-tabs-nav {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 35px;
+    padding: 0 5%;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.boat-tab-btn {
+    background: none;
+    border: none;
+    padding: 12px 0;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #888;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.boat-tab-btn.active {
+    color: #000;
+    font-weight: 700;
+}
+
+.boat-tab-btn::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: #ff0000;
+    transition: width 0.3s ease;
+}
+
+.boat-tab-btn.active::after {
+    width: 30px; /* Small dash under active tab in image */
+}
+
+/* Tab Content Panels */
+.boat-tab-panel {
+    display: none;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.boat-tab-panel.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.boat-product-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 20px;
+    padding: 0 5%;
+}
+
+@media (min-width: 640px) {
+    .boat-product-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+    .boat-product-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1280px) {
+    .boat-product-grid { 
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    }
+}
+
+
+.boat-product-card {
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08); /* Deeper shadow */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #ddd; /* Darker border for visibility */
+    display: flex;
+    flex-direction: column;
+}
+
+
+.boat-product-card:hover {
+    transform: translateY(-10px); /* Slightly more lift */
+    box-shadow: 0 15px 35px rgba(0,0,0,0.12); /* Stronger hover shadow */
+    border-color: #000; /* Darker border on hover for focus */
+}
+
+
+.boat-card-image-wrapper {
+    position: relative;
+    aspect-ratio: 1/1;
+    background: #f8f8f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.boat-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.boat-badges-top {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.boat-badge {
+    padding: 3px 8px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.boat-badge-extra {
+    background: #000;
+    color: #fff;
+}
+
+.boat-badge-main {
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    backdrop-filter: blur(4px);
+}
+
+.boat-feature-strip {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #facc15; /* Yellow banner */
+    color: #000;
+    padding: 6px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    z-index: 4;
+}
+
+.boat-rating {
+    background: #fff;
+    padding: 1px 6px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.7rem;
+}
+
+.boat-star {
+    color: #000;
+}
+
+.boat-card-content {
+    padding: 15px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.boat-product-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+    color: #1a1a1a;
+    line-height: 1.25;
+}
+
+.boat-product-title a { color: inherit; }
+
+.boat-price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: auto;
+}
+
+.boat-prices .price-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.boat-current-price {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #000;
+}
+
+.boat-discount {
+    font-size: 0.75rem;
+    color: #10b981;
+    font-weight: 700;
+}
+
+.boat-old-price {
+    font-size: 0.75rem;
+    text-decoration: line-through;
+    color: #9ca3af;
+    display: block;
+    margin-top: -2px;
+}
+
+.boat-colors {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.boat-dots {
+    display: flex;
+    gap: -4px;
+}
+
+.boat-dots .dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    background: #000;
+    box-shadow: 0 0 0 1px #eee;
+}
+
+.boat-dots .dot.darker {
+    background: #2b2b2b;
+    margin-left: -5px;
+}
+
+.boat-color-count {
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+/* --- Shop Page Specifics --- */
+.boat-shop-page {
+    background-color: #ffffff;
+    min-height: 100vh;
+}
+
+.boat-shop-page .container {
+    max-width: 1600px;
+    width: 95%;
+}
+
+.boat-shop-page .boat-section-header {
+    border-bottom: 1px solid #f1f1f1;
+    padding-bottom: 1.5rem;
+    margin-bottom: 4rem;
+    padding-top: 100px; /* Offset for sticky header */
+}
+
+
+.boat-shop-page .woocommerce-ordering {
+    margin: 0;
+}
+
+.boat-shop-page .woocommerce-result-count {
+    margin: 0;
+    color: #888;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.boat-shop-page .woocommerce-pagination {
+    margin-top: 60px;
+    margin-bottom: 100px;
+    text-align: center;
+    width: 100%;
+}
+
+.boat-shop-page .woocommerce-pagination ul {
+    display: inline-flex;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    justify-content: center;
+}
+
+.boat-shop-page .woocommerce-pagination ul li {
+    padding: 0;
+}
+
+.boat-shop-page .woocommerce-pagination ul li span.current {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+}
+
+.boat-shop-page .woocommerce-pagination ul li a,
+.boat-shop-page .woocommerce-pagination ul li span {
+    display: block;
+    padding: 10px 18px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    color: #000;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.boat-shop-page .woocommerce-pagination ul li a:hover {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+}
+
+/* --- Single Product Page Styling --- */
+.boat-single-product-page {
+    padding-top: 120px;
+    padding-bottom: 80px;
+    background-color: #09090b; /* Dark theme as per theme root */
+    color: #ffffff;
+}
+
+.boat-product-breadcrumb {
+    margin-bottom: 30px;
+    font-size: 0.9rem;
+    color: #a1a1aa;
+}
+
+.boat-product-breadcrumb a {
+    color: #ffffff;
+    opacity: 0.7;
+}
+
+.boat-product-breadcrumb a:hover {
+    opacity: 1;
+}
+
+.boat-single-main-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 60px;
+    margin-bottom: 80px;
+}
+
+@media (min-width: 1024px) {
+    .boat-single-main-grid {
+        grid-template-columns: 1.1fr 0.9fr;
+    }
+}
+
+/* Gallery Styling */
+.boat-single-gallery {
+    position: relative;
+    background: #18181b;
+    border-radius: 12px;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.boat-single-gallery img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Summary Styling */
+.boat-summary-header {
+    margin-bottom: 25px;
+}
+
+.boat-single-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #27272a;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.boat-single-rating .boat-star {
+    color: #facc15;
+}
+
+.boat-single-rating .review-count {
+    color: #a1a1aa;
+    font-weight: 400;
+}
+
+.boat-single-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    line-height: 1.1;
+    color: #ffffff;
+}
+
+.boat-single-price-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.boat-single-price-row .price {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #ffffff;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.boat-single-price-row .price del {
+    font-size: 1.25rem;
+    color: #a1a1aa;
+    font-weight: 400;
+}
+
+.boat-single-price-row .price ins {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.boat-single-discount {
+    background: #10b981;
+    color: #ffffff;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.boat-single-short-desc {
+    color: #a1a1aa;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 35px;
+}
+
+/* Add to Cart Section */
+.boat-single-add-to-cart {
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #27272a;
+}
+
+.boat-single-add-to-cart form.cart {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+}
+
+.boat-single-add-to-cart .quantity {
+    display: flex;
+    align-items: center;
+    border: 1px solid #3f3f46;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.boat-single-add-to-cart .quantity input {
+    background: transparent;
+    color: #fff;
+    border: none;
+    width: 60px;
+    height: 44px;
+    text-align: center;
+    font-size: 1.1rem;
+    padding: 0;
+}
+
+.boat-single-add-to-cart .single_add_to_cart_button {
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    padding: 12px 35px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-grow: 1;
+}
+
+.boat-single-add-to-cart .single_add_to_cart_button:hover {
+    background: #e4e4e7;
+    transform: translateY(-2px);
+}
+
+/* Meta Section */
+.boat-single-meta {
+    font-size: 0.9rem;
+    color: #71717a;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.boat-single-meta span {
+    display: block;
+}
+
+.boat-single-meta strong, 
+.boat-single-meta span.sku_wrapper, 
+.boat-single-meta span.posted_in {
+    color: #a1a1aa;
+}
+
+.boat-single-meta a {
+    color: #ffffff;
+}
+
+/* Tabs Section */
+.boat-single-tabs-section {
+    margin-top: 80px;
+}
+
+.woocommerce-tabs ul.tabs {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 40px 0;
+    border-bottom: 1px solid #27272a;
+}
+
+.woocommerce-tabs ul.tabs li {
+    padding: 0;
+}
+
+.woocommerce-tabs ul.tabs li a {
+    display: block;
+    padding: 15px 0;
+    color: #a1a1aa;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s;
+}
+
+.woocommerce-tabs ul.tabs li.active a {
+    color: #ffffff;
+}
+
+.woocommerce-tabs ul.tabs li.active a::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #ff0000;
+    border-radius: 2px;
+}
+
+.woocommerce-Tabs-panel {
+    background: #18181b;
+    padding: 40px;
+    border-radius: 12px;
+    color: #a1a1aa;
+    line-height: 1.8;
+}
+
+.woocommerce-Tabs-panel h2 {
+    color: #ffffff;
+    margin-bottom: 25px;
+    font-size: 1.75rem;
+}
+
+/* Related Products */
+.related.products, .upsells.products {
+    margin-top: 100px;
+}
+
+.related.products h2, .upsells.products h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 40px;
+    color: #ffffff;
+    text-align: left;
+}
+
+/* --- Shubham Style (Mobile Shop) --- */
+.boat-single-product-page.shubham-style {
+    background-color: #f4f7f6;
+    color: #333;
+    padding-top: 100px;
+}
+
+.shubham-style .boat-product-breadcrumb {
+    color: #666;
+}
+
+.shubham-style .boat-product-breadcrumb a {
+    color: #333;
+    opacity: 1;
+}
+
+.shubham-style .boat-single-main-grid {
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.shubham-style .boat-single-gallery {
+    background: #fff;
+    padding: 0;
+}
+
+.shubham-style .shubham-rating-wishlist {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.shubham-style .shubham-rating {
+    font-size: 1.2rem;
+    color: #facc15;
+}
+
+.shubham-style .wishlist-btn {
+    background: none;
+    border: 1px solid #ddd;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #3b82f6;
+    transition: all 0.2s;
+}
+
+.shubham-style .shubham-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.shubham-style .shubham-price-section label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #666;
+}
+
+.shubham-style .shubham-price-box {
+    display: inline-block;
+    border: 2px solid #10b981;
+    padding: 8px 20px;
+    border-radius: 4px;
+    background: #f0fdf4;
+}
+
+.shubham-style .shubham-price-box .price {
+    color: #10b981 !important;
+    font-size: 1.4rem !important;
+    font-weight: 700 !important;
+}
+
+.shubham-style .shubham-price-box ins { color: #10b981 !important; text-decoration: none; }
+.shubham-style .shubham-price-box del { font-size: 0.9rem; color: #999; margin-left: 10px; }
+
+.shubham-style .shubham-add-to-cart {
+    margin: 25px 0;
+}
+
+.shubham-style .single_add_to_cart_button {
+    background: #10b981 !important;
+    color: #fff !important;
+    padding: 10px 30px !important;
+    font-size: 1rem !important;
+    border-radius: 4px !important;
+    text-transform: none !important;
+}
+
+/* Why Shop Section */
+.shubham-style .why-shop-section {
+    margin: 30px 0;
+}
+
+.shubham-style .why-shop-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #111;
+}
+
+.shubham-style .why-shop-item {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    align-items: flex-start;
+}
+
+.shubham-style .why-shop-item .icon {
+    width: 40px;
+    height: 40px;
+    background: #f3f4f6;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.shubham-style .why-shop-item strong {
+    display: block;
+    font-size: 0.95rem;
+    color: #111;
+}
+
+.shubham-style .why-shop-item p {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 0;
+}
+
+/* Description & Meta */
+.shubham-style .shubham-description h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.shubham-style .shubham-description .content {
+    font-size: 0.95rem;
+    color: #444;
+}
+
+.shubham-style .shubham-meta {
+    margin-top: 20px;
+    font-size: 0.95rem;
+}
+
+/* Tabs & Bottom */
+.shubham-style .boat-single-tabs-section {
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    margin-top: 40px;
+}
+
+.shubham-style .woocommerce-tabs ul.tabs {
+    border-bottom: 2px solid #eee;
+}
+
+.shubham-style .woocommerce-tabs ul.tabs li.active a {
+    color: #10b981;
+}
+
+.shubham-style .woocommerce-tabs ul.tabs li.active a::after {
+    background: #10b981;
+}
+
+.shubham-style .woocommerce-Tabs-panel {
+    background: #fff;
+    color: #444;
+}
+
+/* --- Shopping Cart Visuals --- */
+.header-cart {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.2s;
+    margin: 0 5px;
+}
+
+.header-cart:hover {
+    transform: scale(1.1);
+}
+
+.cart-count {
+    position: absolute;
+    top: -10px;
+    right: -12px;
+    background: #ff0000;
+    color: #fff !important;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 50%;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.main-header.scrolled .header-cart {
+    color: #000;
+}
+
+/* Single Product Cart Notice Styling */
+.shubham-style .added_to_cart {
+    display: inline-block !important;
+    margin-left: 15px !important;
+    background: #ffffff !important;
+    color: #10b981 !important;
+    padding: 8px 15px !important;
+    border: 2px solid #10b981 !important;
+    border-radius: 4px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    font-size: 0.95rem !important;
+    vertical-align: middle;
+}
+
+.shubham-style .added_to_cart:hover {
+    background: #f0fdf4 !important;
+}
+
+.woocommerce-message {
+    padding: 1.5rem !important;
+    margin-bottom: 30px !important;
+    background-color: #f0fdf4 !important;
+    border-left: 5px solid #10b981 !important;
+    color: #166534 !important;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+}
+
+.woocommerce-message .button.wc-forward {
+    background: #10b981 !important;
+    color: #fff !important;
+    padding: 8px 20px !important;
+    border-radius: 4px !important;
+    text-decoration: none !important;
+    font-weight: 700 !important;
+}
+
+
+
+
+

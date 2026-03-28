@@ -199,6 +199,13 @@
         </div>
     </section>
 
+    <!-- boAt Style Products Section -->
+    <?php if (class_exists('WooCommerce')) : ?>
+        <section class="reveal">
+            <?php echo do_shortcode('[boat_products limit="4" title="Top Picks For You"]'); ?>
+        </section>
+    <?php endif; ?>
+
     <!-- Ecosystem Partners Section -->
     <section style="background: #f8f9fa; padding: 5rem 0; text-align: center;" class="reveal">
         <div class="container">

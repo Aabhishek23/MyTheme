@@ -9,6 +9,7 @@ function mytheme_setup() {
         'flex-width'  => true,
     ));
     add_theme_support('html5', array('search-form', 'comment-form', 'comment-list', 'gallery', 'caption'));
+    add_theme_support('woocommerce');
     
     register_nav_menus(array(
         'primary-menu' => __('Primary Menu', 'mytheme'),
@@ -801,6 +802,167 @@ function mytheme_add_mega_class($classes, $item, $args, $depth) {
 add_filter('nav_menu_css_class', 'mytheme_add_mega_class', 10, 4);
 
 /**
+ * Custom Shortcode for boAt-style Tabbed Product Grid
+ */
+function mytheme_boat_product_tabs($atts) {
+    if (!class_exists('WooCommerce')) return '';
+    
+    $atts = shortcode_atts(array(
+        'limit' => 6,
+        'tabs' => 'New Launches:new-launches, Personalisation:personalisation',
+        'title' => 'Top Picks For You'
+    ), $atts);
+
+    $tabs_data = explode(',', $atts['tabs']);
+    $first_tab_slug = '';
+    
+    ob_start();
+    ?>
+    <section class="boat-tabbed-section">
+        <div class="boat-section-header">
+            <h2 class="boat-section-title">
+                <?php 
+                $title_parts = explode(' ', $atts['title']);
+                $last_word = array_pop($title_parts);
+                echo implode(' ', $title_parts) . ' <span class="underlined">' . esc_html($last_word) . '</span>';
+                ?>
+            </h2>
+            <div class="boat-header-actions">
+                <a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>" class="boat-view-all">View All</a>
+            </div>
+        </div>
+
+        <div class="boat-tabs-nav">
+            <?php foreach ($tabs_data as $index => $tab_str) : 
+                list($label, $slug) = explode(':', trim($tab_str));
+                if ($index === 0) $first_tab_slug = $slug;
+            ?>
+                <button class="boat-tab-btn <?php echo ($index === 0) ? 'active' : ''; ?>" data-tab="<?php echo esc_attr($slug); ?>">
+                    <?php echo esc_html($label); ?>
+                </button>
+            <?php endforeach; ?>
+        </div>
+        
+        <div class="boat-tabs-content">
+            <?php foreach ($tabs_data as $index => $tab_str) : 
+                list($label, $slug) = explode(':', trim($tab_str));
+            ?>
+                <div class="boat-tab-panel <?php echo ($index === 0) ? 'active' : ''; ?>" id="tab-<?php echo esc_attr($slug); ?>">
+                    <div class="boat-product-grid">
+                        <?php 
+                        $args = array(
+                            'post_type' => 'product',
+                            'posts_per_page' => $atts['limit'],
+                            'tax_query' => array(
+                                array(
+                                    'taxonomy' => 'product_cat',
+                                    'field'    => 'slug',
+                                    'terms'    => $slug,
+                                ),
+                            ),
+                        );
+                        $products = new WP_Query($args);
+                        
+                        if ($products->have_posts()) : while ($products->have_posts()) : $products->the_post(); 
+                            global $product;
+                            $average_rating = $product->get_average_rating();
+                            $sale_price = $product->get_sale_price();
+                            $regular_price = $product->get_regular_price();
+                            $discount = 0;
+                            if ($regular_price > 0 && $sale_price > 0) {
+                                $discount = round((($regular_price - $sale_price) / $regular_price) * 100);
+                            }
+                            
+                            $feature_text = get_post_meta(get_the_ID(), '_boat_feature_text', true);
+                            if (!$feature_text) $feature_text = 'New Launch';
+                            
+                            $badge_text = get_post_meta(get_the_ID(), '_boat_badge_text', true);
+                            $extra_badge = get_post_meta(get_the_ID(), '_boat_extra_badge', true);
+                        ?>
+                            <div class="boat-product-card">
+                                <div class="boat-card-image-wrapper">
+                                    <div class="boat-badges-top">
+                                        <?php if ($extra_badge) : ?>
+                                            <span class="boat-badge boat-badge-extra">🏷️ <?php echo esc_html($extra_badge); ?></span>
+                                        <?php endif; ?>
+                                        <?php if ($badge_text) : ?>
+                                            <span class="boat-badge boat-badge-main">🚀 <?php echo esc_html($badge_text); ?></span>
+                                        <?php endif; ?>
+                                    </div>
+                                    
+                                    <a href="<?php the_permalink(); ?>">
+                                        <?php the_post_thumbnail('medium', array('class' => 'boat-card-image')); ?>
+                                    </a>
+                                    
+                                    <div class="boat-feature-strip">
+                                        <span class="boat-feature-text"><?php echo esc_html($feature_text); ?></span>
+                                        <div class="boat-rating">
+                                            <span class="boat-star">★</span> <?php echo number_format($average_rating, 1); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="boat-card-content">
+                                    <h3 class="boat-product-title">
+                                        <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                                    </h3>
+                                    
+                                    <div class="boat-price-row">
+                                        <div class="boat-prices">
+                                            <div class="price-main">
+                                                <span class="boat-current-price"><?php echo get_woocommerce_currency_symbol() . ($sale_price ? $sale_price : $regular_price); ?></span>
+                                                <span class="boat-discount"><?php echo ($discount > 0) ? $discount . '% off' : ''; ?></span>
+                                            </div>
+                                            <?php if ($sale_price) : ?>
+                                                <span class="boat-old-price"><?php echo get_woocommerce_currency_symbol() . $regular_price; ?></span>
+                                            <?php endif; ?>
+                                        </div>
+                                        <div class="boat-colors">
+                                            <span class="boat-dots"><span class="dot"></span><span class="dot darker"></span></span>
+                                            <span class="boat-color-count">+4</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endwhile; wp_reset_postdata(); else : ?>
+                            <p>No products found in this category.</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </section>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabs = document.querySelectorAll('.boat-tab-btn');
+        const panels = document.querySelectorAll('.boat-tab-panel');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = tab.getAttribute('data-tab');
+
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                panels.forEach(p => {
+                    p.classList.remove('active');
+                    if (p.id === 'tab-' + target) {
+                        p.classList.add('active');
+                    }
+                });
+            });
+        });
+    });
+    </script>
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('boat_products', 'mytheme_boat_product_tabs');
+
+add_filter('nav_menu_css_class', 'mytheme_add_mega_class', 10, 4);
+
+/**
  * Inject featured-content panel into the sub-menu of enabled top-level items.
  * Hooks into 'wp_nav_menu' to get the full HTML output including the outer <ul>.
  */
@@ -989,4 +1151,53 @@ function mytheme_menu_icon_script() {
     <?php
 }
 add_action('admin_footer', 'mytheme_menu_icon_script');
-?>
+
+/**
+ * Add Meta Boxes for boAt Style Product Card settings
+ */
+function mytheme_add_product_meta_boxes() {
+    add_meta_box(
+        "boat_product_settings",
+        "boAt Style Card Settings",
+        "mytheme_boat_meta_box_html",
+        "product",
+        "side",
+        "default"
+    );
+}
+add_action("add_meta_boxes", "mytheme_add_product_meta_boxes");
+
+function mytheme_boat_meta_box_html($post) {
+    if (!class_exists("WooCommerce")) return;
+    $feature_text = get_post_meta($post->ID, "_boat_feature_text", true);
+    $badge_text = get_post_meta($post->ID, "_boat_badge_text", true);
+    $extra_badge = get_post_meta($post->ID, "_boat_extra_badge", true);
+    ?>
+    <p>
+        <label for="boat_feature_text">Yellow Strip Text:</label>
+        <input type="text" id="boat_feature_text" name="boat_feature_text" value="<?php echo esc_attr($feature_text); ?>" class="widefat" placeholder="e.g. 40 Hours Playback">
+    </p>
+    <p>
+        <label for="boat_badge_text">Top Right Badge (e.g. New Launch):</label>
+        <input type="text" id="badge_text" name="boat_badge_text" value="<?php echo esc_attr($badge_text); ?>" class="widefat" placeholder="e.g. New Launch">
+    </p>
+    <p>
+        <label for="boat_extra_badge">Top Left Badge (e.g. EXTRA ₹300 OFF):</label>
+        <input type="text" id="extra_badge" name="boat_extra_badge" value="<?php echo esc_attr($extra_badge); ?>" class="widefat" placeholder="e.g. EXTRA ₹300 OFF">
+    </p>
+    <?php
+}
+
+function mytheme_save_product_meta($post_id) {
+    if (isset($_POST["boat_feature_text"])) {
+        update_post_meta($post_id, "_boat_feature_text", sanitize_text_field($_POST["boat_feature_text"]));
+    }
+    if (isset($_POST["boat_badge_text"])) {
+        update_post_meta($post_id, "_boat_badge_text", sanitize_text_field($_POST["boat_badge_text"]));
+    }
+    if (isset($_POST["boat_extra_badge"])) {
+        update_post_meta($post_id, "_boat_extra_badge", sanitize_text_field($_POST["boat_extra_badge"]));
+    }
+}
+add_action("save_post_product", "mytheme_save_product_meta");
+

@@ -31,7 +31,14 @@ wp_nav_menu(array(
         </nav>
         <div style="display: flex; align-items: center; gap: 1.5rem;">
             <a href="#" style="font-size: 1.2rem;">🔍</a>
+            <?php if (class_exists('WooCommerce')) : ?>
+                <a href="<?php echo wc_get_cart_url(); ?>" class="header-cart" title="View your shopping cart">
+                    <span style="font-size: 1.2rem;">🛒</span>
+                    <span class="cart-count"><?php echo is_object(WC()->cart) ? WC()->cart->get_cart_contents_count() : 0; ?></span>
+                </a>
+            <?php endif; ?>
             <a href="#" class="contact-btn">Contact Sales</a>
         </div>
+
     </div>
 </header>
