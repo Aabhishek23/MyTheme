@@ -1201,3 +1201,55 @@ function mytheme_save_product_meta($post_id) {
 }
 add_action("save_post_product", "mytheme_save_product_meta");
 
+/**
+ * Performance Optimization: Disable WooCommerce scripts on non-WooCommerce pages
+ */
+function mytheme_optimize_wc_scripts() {
+    if (!class_exists('WooCommerce')) return;
+    if (is_cart() || is_checkout() || is_account_page() || is_woocommerce()) return;
+    
+    wp_dequeue_script('wc-add-to-cart');
+    wp_dequeue_script('wc-cart-fragments');
+    wp_dequeue_script('woocommerce');
+    wp_dequeue_script('wc-checkout');
+    wp_dequeue_script('wc-add-to-cart-variation');
+    wp_dequeue_script('wc-single-product');
+    wp_dequeue_style('woocommerce-general');
+    wp_dequeue_style('woocommerce-layout');
+    wp_dequeue_style('woocommerce-smallscreen');
+}
+add_action('wp_enqueue_scripts', 'mytheme_optimize_wc_scripts', 99);
+
+/**
+ * Performance Optimization: Disable WordPress Heartbeat if not needed on frontend
+ */
+function mytheme_stop_heartbeat() {
+    if (!is_admin()) {
+        wp_deregister_script('heartbeat');
+    }
+}
+add_action('init', 'mytheme_stop_heartbeat', 1);
+
+/**
+ * Performance Optimization: Dequeue Emojis scripts (often unnecessary)
+ */
+function mytheme_disable_emojis() {
+    remove_action('wp_head', 'print_emoji_detection_script', 7);
+    remove_action('admin_print_scripts', 'print_emoji_detection_script');
+    remove_action('wp_print_styles', 'print_emoji_styles');
+    remove_action('admin_print_styles', 'print_emoji_styles');
+    remove_filter('the_content_feed', 'wp_staticize_emoji');
+    remove_filter('comment_text_rss', 'wp_staticize_emoji');
+    remove_filter('wp_mail', 'wp_staticize_emoji_for_email');
+    add_filter('tiny_mce_plugins', 'mytheme_disable_emojis_tinymce');
+}
+add_action('init', 'mytheme_disable_emojis');
+
+function mytheme_disable_emojis_tinymce($plugins) {
+    if (is_array($plugins)) {
+        return array_diff($plugins, array('wpemoji'));
+    } else {
+        return array();
+    }
+}
+
