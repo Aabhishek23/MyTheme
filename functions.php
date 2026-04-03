@@ -1253,3 +1253,38 @@ function mytheme_disable_emojis_tinymce($plugins) {
     }
 }
 
+
+/**
+ * WooCommerce Customization:
+ * - Removes the payment options section from the checkout page
+ * - Modifies the 'Place Order' button text to 'Confirm Order'
+ * - Displays a custom thank you message telling customers that they will be contacted for payment details
+ * - Sets the order status to 'on-hold' initially to await manual processing and payment confirmation
+ */
+
+// 1. Bypass the payment method requirement at checkout
+add_filter('woocommerce_cart_needs_payment', '__return_false');
+
+// 2. Change the button text from 'Place Order' to custom text
+add_filter('woocommerce_order_button_text', 'mytheme_custom_order_button_text');
+function mytheme_custom_order_button_text() {
+    return 'Confirm Order (सबमिट करें)'; 
+}
+
+// 3. Customize the Order Received (Thank You) greeting text
+add_filter('woocommerce_thankyou_order_received_text', 'mytheme_custom_thankyou_text', 20, 2);
+function mytheme_custom_thankyou_text($text, $order) {
+    return 'Thank you for shopping! Hum apse jald se jald sampark karenge. (शॉपिंग करने के लिए धन्यवाद! हम आपसे जल्द से जल्द संपर्क करेंगे।)';
+}
+
+// 4. Update order status to 'on-hold' so it stays pending manual review
+add_action('woocommerce_thankyou', 'mytheme_update_order_status_to_hold', 10, 1);
+function mytheme_update_order_status_to_hold($order_id) {
+    if (!$order_id) return;
+    $order = wc_get_order($order_id);
+    if ($order && ($order->get_status() === 'processing' || $order->get_status() === 'pending')) {
+        $order->update_status('on-hold', 'Awaiting manual payment confirmation as per custom offline workflow.');
+    }
+}
+
+
