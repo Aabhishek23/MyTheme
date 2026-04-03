@@ -850,18 +850,24 @@ function mytheme_boat_product_tabs($atts) {
                 <div class="boat-tab-panel <?php echo ($index === 0) ? 'active' : ''; ?>" id="tab-<?php echo esc_attr($slug); ?>">
                     <div class="boat-product-grid">
                         <?php 
-                        $args = array(
-                            'post_type' => 'product',
-                            'posts_per_page' => $atts['limit'],
-                            'tax_query' => array(
-                                array(
-                                    'taxonomy' => 'product_cat',
-                                    'field'    => 'slug',
-                                    'terms'    => $slug,
+                        $transient_key = 'boat_products_' . $slug . '_' . $atts['limit'];
+                        $products = get_transient($transient_key);
+
+                        if (false === $products) {
+                            $args = array(
+                                'post_type' => 'product',
+                                'posts_per_page' => $atts['limit'],
+                                'tax_query' => array(
+                                    array(
+                                        'taxonomy' => 'product_cat',
+                                        'field'    => 'slug',
+                                        'terms'    => $slug,
+                                    ),
                                 ),
-                            ),
-                        );
-                        $products = new WP_Query($args);
+                            );
+                            $products = new WP_Query($args);
+                            set_transient($transient_key, $products, HOUR_IN_SECONDS);
+                        }
                         
                         if ($products->have_posts()) : while ($products->have_posts()) : $products->the_post(); 
                             global $product;
@@ -1252,6 +1258,42 @@ function mytheme_disable_emojis_tinymce($plugins) {
         return array();
     }
 }
+
+/**
+ * Performance Optimization: Remove head clutter (DNS Prefetch, RSD, WLW, Shortlinks)
+ */
+function mytheme_cleanup_head() {
+    remove_action('wp_head', 'rsd_link');
+    remove_action('wp_head', 'wlwmanifest_link');
+    remove_action('wp_head', 'wp_generator');
+    remove_action('wp_head', 'wp_shortlink_wp_head');
+    remove_action('wp_head', 'rest_output_link_wp_head');
+    remove_action('wp_head', 'wp_oembed_add_discovery_links');
+    remove_action('wp_head', 'wp_resource_hints', 2);
+    
+    // Disable global styles (WordPress 5.9+)
+    remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
+    remove_action('wp_footer', 'wp_enqueue_global_styles', 1);
+}
+add_action('init', 'mytheme_cleanup_head');
+
+/**
+ * Performance Optimization: Dequeue Gutenberg Block Library CSS
+ */
+function mytheme_remove_block_library_css() {
+    wp_dequeue_style('wp-block-library');
+    wp_dequeue_style('wp-block-library-theme');
+    wp_dequeue_style('wc-blocks-style'); // WooCommerce block styles
+}
+add_action('wp_enqueue_scripts', 'mytheme_remove_block_library_css', 100);
+
+/**
+ * Performance Optimization: Dequeue Jetpack assets if not on a post/page that needs them
+ */
+function mytheme_dequeue_jetpack() {
+    wp_dequeue_script('devicepx');
+}
+add_action('wp_enqueue_scripts', 'mytheme_dequeue_jetpack', 100);
 
 
 /**

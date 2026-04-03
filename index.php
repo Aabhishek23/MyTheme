@@ -4,13 +4,17 @@
     <!-- Hero Slider Section -->
     <div class="hero-slider-wrapper">
         <?php
-        $args = array(
-            'post_type'      => 'hero_slide',
-            'posts_per_page' => 5,
-            'orderby'        => 'menu_order',
-            'order'          => 'ASC',
-        );
-        $hero_query = new WP_Query($args);
+        $hero_query = get_transient('mytheme_hero_query');
+        if (false === $hero_query) {
+            $args = array(
+                'post_type'      => 'hero_slide',
+                'posts_per_page' => 5,
+                'orderby'        => 'menu_order',
+                'order'          => 'ASC',
+            );
+            $hero_query = new WP_Query($args);
+            set_transient('mytheme_hero_query', $hero_query, HOUR_IN_SECONDS);
+        }
         $slide_count = 0;
 
         if ($hero_query->have_posts()) :
@@ -257,12 +261,16 @@
                 
                 <div class="news-carousel">
                     <?php
-                    $news_args = array(
-                        'post_type'           => 'post',
-                        'posts_per_page'      => 6,
-                        'ignore_sticky_posts' => true,
-                    );
-                    $news_query = new WP_Query($news_args);
+                    $news_query = get_transient('mytheme_news_query');
+                    if (false === $news_query) {
+                        $news_args = array(
+                            'post_type'           => 'post',
+                            'posts_per_page'      => 6,
+                            'ignore_sticky_posts' => true,
+                        );
+                        $news_query = new WP_Query($news_args);
+                        set_transient('mytheme_news_query', $news_query, HOUR_IN_SECONDS);
+                    }
 
                     if ($news_query->have_posts()) :
                         while ($news_query->have_posts()) : $news_query->the_post();
