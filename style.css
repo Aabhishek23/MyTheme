@@ -2743,3 +2743,143 @@ a.wc-block-cart__submit-button:hover {
 
 
 
+
+/* ---------------------------------------------------------------
+   WOOCOMMERCE ARCHIVE — Interactive Sorting & Results Count
+--------------------------------------------------------------- */
+.woocommerce .woocommerce-result-count {
+    color: rgba(0,0,0,0.6);
+    font-weight: 500;
+    font-size: 0.95rem;
+    margin-right: 1.5rem;
+    padding: 0.5rem 0;
+}
+
+.woocommerce .woocommerce-ordering {
+    margin-bottom: 0;
+}
+
+.woocommerce .woocommerce-ordering select {
+    appearance: none;
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 0.6rem 2.5rem 0.6rem 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1f2937;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%236b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 0.8rem center;
+    background-size: 1.2rem;
+}
+
+.woocommerce .woocommerce-ordering select:hover {
+    border-color: #7c3aed;
+    box-shadow: 0 6px 16px rgba(124, 58, 237, 0.15);
+    transform: translateY(-1px);
+}
+
+.woocommerce .woocommerce-ordering select:focus {
+    outline: none;
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+}
+
+.woocommerce-products-header .page-title {
+    display: inline-block;
+    position: relative;
+    padding-bottom: 0.3rem;
+}
+
+.woocommerce-products-header .page-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60%;
+    height: 4px;
+    background: linear-gradient(90deg, #ef4444, #7c3aed);
+    border-radius: 2px;
+}
+
+/* Align shop header items correctly */
+@media (min-width: 768px) {
+    .woocommerce-products-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    .woocommerce-products-header .page-title {
+        margin-bottom: 0;
+    }
+    .shop-header-actions {
+        display: flex;
+        align-items: center;
+    }
+}
+
+/* Interactive Shop Toolbar */
+.boat-header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    background: #f9fafb;
+    padding: 0.75rem 1.25rem;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.boat-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #f3f4f6;
+    padding-bottom: 1rem;
+}
+
+.boat-section-title {
+    margin-bottom: 0 !important;
+}
+
+/* Enhancing the dropdown & count inside the toolbar */
+.boat-header-actions .woocommerce-result-count {
+    margin: 0;
+    padding: 0 1rem 0 0;
+    border-right: 2px solid #e5e7eb;
+    color: #4b5563;
+    font-weight: 600;
+}
+
+.boat-header-actions .woocommerce-ordering {
+    margin: 0;
+}
+
+.boat-header-actions form.woocommerce-ordering select {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding-left: 0.5rem;
+    color: #7c3aed !important;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.boat-header-actions form.woocommerce-ordering select:hover {
+    color: #6d28d9 !important;
+    transform: none;
+}
+
