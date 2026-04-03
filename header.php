@@ -32,13 +32,54 @@ wp_nav_menu(array(
         <div style="display: flex; align-items: center; gap: 1.5rem;">
             <a href="#" style="font-size: 1.2rem;">🔍</a>
             <?php if (class_exists('WooCommerce')) : ?>
-                <a href="<?php echo wc_get_cart_url(); ?>" class="header-cart" title="View your shopping cart">
+                <a href="<?php echo wc_get_cart_url(); ?>" class="header-cart" title="Aapka Shopping Cart">
                     <span style="font-size: 1.2rem;">🛒</span>
                     <span class="cart-count"><?php echo is_object(WC()->cart) ? WC()->cart->get_cart_contents_count() : 0; ?></span>
                 </a>
             <?php endif; ?>
+            <?php if (is_user_logged_in()) : 
+                $current_user = wp_get_current_user();
+                $account_url  = get_permalink(get_option('mytheme_account_page_id')) ?: get_permalink(get_page_by_path('mera-account'));
+            ?>
+                <div class="header-user-menu">
+                    <button class="header-user-btn" id="userMenuToggle">
+                        <span class="user-avatar">👤</span>
+                        <span class="user-name"><?php echo esc_html($current_user->first_name ?: $current_user->display_name); ?></span>
+                        <span style="font-size:0.6rem;">▼</span>
+                    </button>
+                    <div class="header-user-dropdown" id="userDropdown">
+                        <a href="<?php echo esc_url($account_url ?: '#'); ?>">👤 Mera Account</a>
+                        <?php if (class_exists('WooCommerce')) : ?>
+                        <a href="<?php echo esc_url(wc_get_account_endpoint_url('orders')); ?>">📦 Mere Orders</a>
+                        <a href="<?php echo esc_url(wc_get_checkout_url()); ?>">🛒 Checkout</a>
+                        <?php endif; ?>
+                        <div class="user-dropdown-divider"></div>
+                        <a href="<?php echo esc_url(wp_logout_url(home_url())); ?>" class="user-logout">🚪 Logout</a>
+                    </div>
+                </div>
+            <?php else :
+                $login_url = get_permalink(get_option('mytheme_account_page_id')) ?: get_permalink(get_page_by_path('mera-account'));
+                if (!$login_url) $login_url = wp_login_url();
+            ?>
+                <a href="<?php echo esc_url($login_url); ?>" class="header-login-btn">
+                    Login
+                </a>
+            <?php endif; ?>
             <a href="#" class="contact-btn">Contact Sales</a>
         </div>
+        <script>
+        (function() {
+            var btn = document.getElementById('userMenuToggle');
+            var dd  = document.getElementById('userDropdown');
+            if (btn && dd) {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dd.classList.toggle('open');
+                });
+                document.addEventListener('click', function() { dd.classList.remove('open'); });
+            }
+        })();
+        </script>
 
     </div>
 </header>

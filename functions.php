@@ -1350,4 +1350,374 @@ function mytheme_custom_thankyou_text($text, $order) {
 }
 
 
+// ═══════════════════════════════════════════════════════════════════════════
+// USER AUTHENTICATION SYSTEM — Login, Register & Checkout Protection
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * 5. Redirect guests to login page if they try to reach checkout
+ */
+add_action('template_redirect', 'mytheme_redirect_guests_from_checkout');
+function mytheme_redirect_guests_from_checkout() {
+    if (is_checkout() && !is_user_logged_in() && !is_wc_endpoint_url()) {
+        $login_page = get_permalink(get_page_by_path('my-account'));
+        if (!$login_page) {
+            $login_page = wp_login_url(wc_get_checkout_url());
+        } else {
+            $login_page = add_query_arg('redirect_to', urlencode(wc_get_checkout_url()), $login_page);
+        }
+        wp_redirect($login_page);
+        exit;
+    }
+}
+
+/**
+ * 6. Custom Login/Register Shortcode [mytheme_auth_form]
+ * Usage: Add this shortcode to any page like My Account page.
+ */
+function mytheme_auth_form_shortcode($atts) {
+    // If already logged in, show account info
+    if (is_user_logged_in()) {
+        $user = wp_get_current_user();
+        $redirect_to = isset($_GET['redirect_to']) ? esc_url($_GET['redirect_to']) : wc_get_checkout_url();
+        ob_start();
+        ?>
+        <div class="mytheme-auth-wrapper">
+            <div class="mytheme-already-logged">
+                <div class="auth-avatar">👤</div>
+                <h2>नमस्ते, <?php echo esc_html($user->display_name); ?>!</h2>
+                <p>Aap already logged in hain.</p>
+                <div class="auth-logged-actions">
+                    <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class="auth-btn auth-btn-primary">🛒 Checkout Karein</a>
+                    <a href="<?php echo esc_url(wc_get_account_endpoint_url('orders')); ?>" class="auth-btn auth-btn-outline">📦 Mere Orders</a>
+                    <a href="<?php echo esc_url(wp_logout_url(home_url())); ?>" class="auth-btn auth-btn-danger">🚪 Logout</a>
+                </div>
+            </div>
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+
+    // Handle messages
+    $login_error = '';
+    $register_error = '';
+    $register_success = '';
+
+    // Active tab
+    $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'login';
+    $redirect_to = isset($_GET['redirect_to']) ? esc_url_raw($_GET['redirect_to']) : wc_get_checkout_url();
+
+    ob_start();
+    ?>
+    <div class="mytheme-auth-wrapper">
+        <!-- Tab Switcher -->
+        <div class="auth-tabs">
+            <button class="auth-tab <?php echo ($active_tab !== 'register') ? 'active' : ''; ?>" data-tab="login">
+                🔐 Login
+            </button>
+            <button class="auth-tab <?php echo ($active_tab === 'register') ? 'active' : ''; ?>" data-tab="register">
+                ✨ Register
+            </button>
+        </div>
+
+        <!-- Login Form -->
+        <div class="auth-panel <?php echo ($active_tab !== 'register') ? 'active' : ''; ?>" id="panel-login">
+            <div class="auth-header">
+                <div class="auth-icon">🔐</div>
+                <h2>Login to Your Account</h2>
+                <p>You must log in to place an order</p>
+            </div>
+            <?php if ($login_error) : ?>
+                <div class="auth-error"><?php echo esc_html($login_error); ?></div>
+            <?php endif; ?>
+            <form method="post" class="auth-form" id="mytheme-login-form" action="<?php echo esc_url(site_url('wp-login.php', 'login_post')); ?>">
+                <input type="hidden" name="redirect_to" value="<?php echo esc_attr($redirect_to); ?>">
+                <input type="hidden" name="action" value="wp_handle_login">
+                <div class="auth-field">
+                    <label for="auth-username">📧 Email or Username</label>
+                    <input type="text" id="auth-username" name="log" placeholder="your@email.com" required autocomplete="username">
+                </div>
+                <div class="auth-field">
+                    <label for="auth-password">🔒 Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="auth-password" name="pwd" placeholder="••••••••" required autocomplete="current-password">
+                        <button type="button" class="toggle-pwd" data-target="auth-password">👁</button>
+                    </div>
+                </div>
+                <div class="auth-options">
+                    <label class="auth-remember">
+                        <input type="checkbox" name="rememberme" value="forever"> Remember me
+                    </label>
+                    <a href="<?php echo esc_url(wp_lostpassword_url()); ?>" class="auth-forgot">Forgot password?</a>
+                </div>
+                <?php wp_nonce_field('mytheme-login-nonce', 'mytheme_login_nonce'); ?>
+                <button type="submit" class="auth-btn auth-btn-primary auth-submit">
+                    <span class="btn-text">Login →</span>
+                </button>
+                <p class="auth-switch">Don't have an account? <a href="#" class="switch-tab" data-tab="register">Register ✨</a></p>
+            </form>
+        </div>
+
+        <!-- Register Form -->
+        <div class="auth-panel <?php echo ($active_tab === 'register') ? 'active' : ''; ?>" id="panel-register">
+            <div class="auth-header">
+                <div class="auth-icon">✨</div>
+                <h2>Create a New Account</h2>
+                <p>Register now and start shopping!</p>
+            </div>
+            <?php if ($register_success) : ?>
+                <div class="auth-success"><?php echo esc_html($register_success); ?></div>
+            <?php elseif ($register_error) : ?>
+                <div class="auth-error"><?php echo esc_html($register_error); ?></div>
+            <?php endif; ?>
+            <form method="post" class="auth-form" id="mytheme-register-form">
+                <input type="hidden" name="redirect_to" value="<?php echo esc_attr($redirect_to); ?>">
+                <div class="auth-fields-row">
+                    <div class="auth-field">
+                        <label for="reg-firstname">👤 First Name *</label>
+                        <input type="text" id="reg-firstname" name="reg_firstname" placeholder="John" required>
+                    </div>
+                    <div class="auth-field">
+                        <label for="reg-lastname">👤 Last Name</label>
+                        <input type="text" id="reg-lastname" name="reg_lastname" placeholder="Doe">
+                    </div>
+                </div>
+                <div class="auth-field">
+                    <label for="reg-email">📧 Email Address *</label>
+                    <input type="email" id="reg-email" name="reg_email" placeholder="your@email.com" required autocomplete="email">
+                </div>
+                <div class="auth-field">
+                    <label for="reg-password">🔒 Password *</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="reg-password" name="reg_password" placeholder="••••••••" required autocomplete="new-password" minlength="6">
+                        <button type="button" class="toggle-pwd" data-target="reg-password">👁</button>
+                    </div>
+                    <small class="field-hint">Create a password with at least 6 characters</small>
+                </div>
+                <div class="auth-field">
+                    <label for="reg-confirm-password">🔒 Confirm Password *</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="reg-confirm-password" name="reg_confirm_password" placeholder="••••••••" required autocomplete="new-password">
+                        <button type="button" class="toggle-pwd" data-target="reg-confirm-password">👁</button>
+                    </div>
+                </div>
+                <?php wp_nonce_field('mytheme-register-nonce', 'mytheme_register_nonce'); ?>
+                <button type="submit" class="auth-btn auth-btn-primary auth-submit" name="mytheme_register">
+                    <span class="btn-text">Create Account →</span>
+                </button>
+                <p class="auth-switch">Already have an account? <a href="#" class="switch-tab" data-tab="login">Login 🔐</a></p>
+            </form>
+        </div>
+
+        <!-- Social divider (optional) -->
+        <div class="auth-footer-note">
+            <p>🔒 Your information is completely safe. We never share it.</p>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tab switching
+        document.querySelectorAll('.auth-tab, .switch-tab').forEach(function(el) {
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+                var tab = this.dataset.tab;
+                document.querySelectorAll('.auth-tab').forEach(function(t) { t.classList.remove('active'); });
+                document.querySelectorAll('.auth-panel').forEach(function(p) { p.classList.remove('active'); });
+                document.querySelector('.auth-tab[data-tab="' + tab + '"]').classList.add('active');
+                document.querySelector('#panel-' + tab).classList.add('active');
+            });
+        });
+
+        // Password toggle
+        document.querySelectorAll('.toggle-pwd').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var inp = document.getElementById(this.dataset.target);
+                if (inp.type === 'password') {
+                    inp.type = 'text';
+                    this.textContent = '🙈';
+                } else {
+                    inp.type = 'password';
+                    this.textContent = '👁';
+                }
+            });
+        });
+
+        // Register form AJAX
+        var regForm = document.getElementById('mytheme-register-form');
+        if (regForm) {
+            regForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var btn = regForm.querySelector('.auth-submit');
+                var pwd = document.getElementById('reg-password').value;
+                var cpwd = document.getElementById('reg-confirm-password').value;
+
+                // Remove old messages
+                regForm.querySelectorAll('.auth-error, .auth-success').forEach(function(el) { el.remove(); });
+
+                if (pwd !== cpwd) {
+                    showMsg(regForm, 'error', '❌ Passwords do not match!');
+                    return;
+                }
+
+                btn.querySelector('.btn-text').textContent = 'Registering...';
+                btn.disabled = true;
+
+                var data = new FormData(regForm);
+                data.append('action', 'mytheme_register_user');
+
+                fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+                    method: 'POST',
+                    body: data
+                })
+                .then(function(r) { return r.json(); })
+                .then(function(res) {
+                    if (res.success) {
+                        showMsg(regForm, 'success', '✅ ' + res.data.message);
+                        setTimeout(function() {
+                            window.location.href = res.data.redirect;
+                        }, 1500);
+                    } else {
+                        showMsg(regForm, 'error', '❌ ' + res.data.message);
+                        btn.querySelector('.btn-text').textContent = 'Create Account →';
+                        btn.disabled = false;
+                    }
+                })
+                .catch(function() {
+                    showMsg(regForm, 'error', '❌ Something went wrong. Please try again.');
+                    btn.querySelector('.btn-text').textContent = 'Create Account →';
+                    btn.disabled = false;
+                });
+            });
+        }
+
+        function showMsg(form, type, msg) {
+            var div = document.createElement('div');
+            div.className = 'auth-' + type;
+            div.textContent = msg;
+            form.querySelector('.auth-submit').before(div);
+            div.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+    });
+    </script>
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('mytheme_auth_form', 'mytheme_auth_form_shortcode');
+
+/**
+ * 7. AJAX handler for Registration
+ */
+add_action('wp_ajax_nopriv_mytheme_register_user', 'mytheme_handle_ajax_register');
+function mytheme_handle_ajax_register() {
+    // Verify nonce
+    if (!isset($_POST['mytheme_register_nonce']) || !wp_verify_nonce($_POST['mytheme_register_nonce'], 'mytheme-register-nonce')) {
+        wp_send_json_error(array('message' => 'Security check failed. Please refresh the page.'));
+    }
+
+    $firstname = sanitize_text_field($_POST['reg_firstname'] ?? '');
+    $lastname  = sanitize_text_field($_POST['reg_lastname'] ?? '');
+    $email     = sanitize_email($_POST['reg_email'] ?? '');
+    $password  = $_POST['reg_password'] ?? '';
+    $redirect  = esc_url_raw($_POST['redirect_to'] ?? wc_get_checkout_url());
+
+    if (empty($firstname)) {
+        wp_send_json_error(array('message' => 'First name is required.'));
+    }
+    if (!is_email($email)) {
+        wp_send_json_error(array('message' => 'Please enter a valid email address.'));
+    }
+    if (email_exists($email)) {
+        wp_send_json_error(array('message' => 'This email is already registered. Please log in.'));
+    }
+    if (strlen($password) < 6) {
+        wp_send_json_error(array('message' => 'Password must be at least 6 characters long.'));
+    }
+
+    // Create username from email
+    $username = sanitize_user(current(explode('@', $email)), true);
+    $username = $username ?: 'user_' . time();
+    if (username_exists($username)) {
+        $username = $username . '_' . rand(100, 999);
+    }
+
+    $user_id = wp_create_user($username, $password, $email);
+    if (is_wp_error($user_id)) {
+        wp_send_json_error(array('message' => $user_id->get_error_message()));
+    }
+
+    // Update display name
+    wp_update_user(array(
+        'ID'           => $user_id,
+        'first_name'   => $firstname,
+        'last_name'    => $lastname,
+        'display_name' => trim($firstname . ' ' . $lastname),
+        'role'         => 'customer',
+    ));
+
+    // Auto-login after registration
+    wp_set_current_user($user_id);
+    wp_set_auth_cookie($user_id, true);
+
+    // Send welcome email
+    wp_mail($email, 'Welcome to ' . get_bloginfo('name'), "Hello $firstname! Your account has been successfully created. You can now place orders.");
+
+    wp_send_json_success(array(
+        'message'  => 'Account created! A welcome email has been sent. Redirecting to checkout...',
+        'redirect' => $redirect,
+    ));
+}
+
+/**
+ * 8. Auto-create "My Account" page if it doesn't exist (for login form)
+ */
+add_action('init', 'mytheme_create_account_page');
+function mytheme_create_account_page() {
+    if (get_option('mytheme_account_page_created')) return;
+    
+    $page_exists = get_page_by_path('mera-account');
+    if (!$page_exists) {
+        $page_id = wp_insert_post(array(
+            'post_title'   => 'Mera Account',
+            'post_name'    => 'mera-account',
+            'post_status'  => 'publish',
+            'post_type'    => 'page',
+            'post_content' => '[mytheme_auth_form]',
+        ));
+        if ($page_id && !is_wp_error($page_id)) {
+            update_option('mytheme_account_page_created', true);
+            update_option('mytheme_account_page_id', $page_id);
+        }
+    } else {
+        update_option('mytheme_account_page_created', true);
+        update_option('mytheme_account_page_id', $page_exists->ID);
+    }
+}
+
+/**
+ * 9. Show notice on shop/product pages encouraging login for checkout
+ */
+add_action('wp_footer', 'mytheme_checkout_login_notice_script');
+function mytheme_checkout_login_notice_script() {
+    if (!is_user_logged_in() && (is_shop() || is_product() || is_product_category())) {
+        $account_page = get_permalink(get_option('mytheme_account_page_id'));
+        if (!$account_page) return;
+        ?>
+        <div id="mytheme-login-notice" style="display:none; position:fixed; bottom:20px; right:20px; z-index:9999; background:linear-gradient(135deg,#1a1a2e,#16213e); color:#fff; padding:1.25rem 1.5rem; border-radius:12px; max-width:320px; box-shadow:0 20px 60px rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); font-family:'Inter',sans-serif;">
+            <button onclick="document.getElementById('mytheme-login-notice').style.display='none'" style="position:absolute;top:8px;right:12px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:18px;cursor:pointer;">×</button>
+            <p style="margin:0 0 0.5rem;font-weight:700;font-size:1rem;">🔐 Please Login!</p>
+            <p style="margin:0 0 1rem;font-size:0.85rem;color:rgba(255,255,255,0.7);">You need an account to place an order.</p>
+            <a href="<?php echo esc_url($account_page); ?>" style="display:block;text-align:center;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;padding:0.6rem 1rem;border-radius:8px;font-weight:600;font-size:0.9rem;text-decoration:none;">Login / Register →</a>
+        </div>
+        <script>
+        setTimeout(function() {
+            var notice = document.getElementById('mytheme-login-notice');
+            if (notice) notice.style.display = 'block';
+        }, 3000);
+        </script>
+        <?php
+    }
+}
+
+
 
