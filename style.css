@@ -2160,5 +2160,66 @@ body.woocommerce-page .main-header .contact-btn {
     border: none !important;
 }
 
+/* --- WooCommerce Cart: Proceed to Checkout Button --- */
+/* MAX SPECIFICITY - overrides all WooCommerce & theme defaults */
+body.woocommerce-cart .woocommerce a.checkout-button,
+body.woocommerce-cart a.checkout-button,
+.wc-proceed-to-checkout a.checkout-button,
+.woocommerce .wc-proceed-to-checkout .checkout-button,
+.woocommerce .checkout-button,
+.woocommerce-cart .checkout-button,
+a.checkout-button.button.alt.wc-forward {
+    display: block !important;
+    width: 100% !important;
+    background: #22c55e !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 14px 28px !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease !important;
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35) !important;
+    margin-top: 1rem !important;
+}
+
+body.woocommerce-cart .woocommerce a.checkout-button:hover,
+body.woocommerce-cart a.checkout-button:hover,
+.wc-proceed-to-checkout a.checkout-button:hover,
+.woocommerce .checkout-button:hover,
+.woocommerce-cart .checkout-button:hover,
+a.checkout-button.button.alt.wc-forward:hover {
+    background: #16a34a !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(34, 197, 94, 0.45) !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+}
 
 
+
+/* --- WooCommerce BLOCKS Cart: Proceed to Checkout Button --- */
+.wc-block-cart__submit-button,
+.wc-block-components-button.wc-block-cart__submit-button,
+a.wc-block-cart__submit-button {
+    background-color: #22c55e !important;
+    background: #22c55e !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 18px rgba(34, 197, 94, 0.4) !important;
+}
+
+.wc-block-cart__submit-button:hover,
+a.wc-block-cart__submit-button:hover {
+    background-color: #16a34a !important;
+    background: #16a34a !important;
+    color: #ffffff !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 28px rgba(34, 197, 94, 0.55) !important;
+}
