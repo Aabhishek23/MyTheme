@@ -1298,35 +1298,56 @@ add_action('wp_enqueue_scripts', 'mytheme_dequeue_jetpack', 100);
 
 /**
  * WooCommerce Customization:
- * - Removes the payment options section from the checkout page
- * - Modifies the 'Place Order' button text to 'Confirm Order'
- * - Displays a custom thank you message telling customers that they will be contacted for payment details
- * - Sets the order status to 'on-hold' initially to await manual processing and payment confirmation
+ * Uses WooCommerce's built-in COD gateway (renamed) as "Pay Later — Contact Us"
+ * COD natively supports WooCommerce Blocks Checkout — no custom JS needed.
+ * Orders are placed immediately and set to 'on-hold' for manual payment.
  */
 
-// 1. Bypass the payment method requirement at checkout
-add_filter('woocommerce_cart_needs_payment', '__return_false');
-
-// 2. Change the button text from 'Place Order' to custom text
-add_filter('woocommerce_order_button_text', 'mytheme_custom_order_button_text');
-function mytheme_custom_order_button_text() {
-    return 'Confirm Order (सबमिट करें)'; 
-}
-
-// 3. Customize the Order Received (Thank You) greeting text
-add_filter('woocommerce_thankyou_order_received_text', 'mytheme_custom_thankyou_text', 20, 2);
-function mytheme_custom_thankyou_text($text, $order) {
-    return 'Thank you for shopping! Hum apse jald se jald sampark karenge. (शॉपिंग करने के लिए धन्यवाद! हम आपसे जल्द से जल्द संपर्क करेंगे।)';
-}
-
-// 4. Update order status to 'on-hold' so it stays pending manual review
-add_action('woocommerce_thankyou', 'mytheme_update_order_status_to_hold', 10, 1);
-function mytheme_update_order_status_to_hold($order_id) {
-    if (!$order_id) return;
-    $order = wc_get_order($order_id);
-    if ($order && ($order->get_status() === 'processing' || $order->get_status() === 'pending')) {
-        $order->update_status('on-hold', 'Awaiting manual payment confirmation as per custom offline workflow.');
+// ── 1. Force-enable COD gateway via database option ───────────────────────
+add_action('init', 'mytheme_enable_cod_gateway');
+function mytheme_enable_cod_gateway() {
+    $cod_settings = get_option('woocommerce_cod_settings', []);
+    if (empty($cod_settings) || ($cod_settings['enabled'] ?? '') !== 'yes') {
+        $cod_settings['enabled']     = 'yes';
+        $cod_settings['title']       = 'Pay Later — We Will Contact You';
+        $cod_settings['description'] = 'हम आपसे जल्द ही भुगतान के लिए संपर्क करेंगे। (We will contact you shortly for payment details via Bank Transfer / UPI / Cash.)';
+        $cod_settings['instructions'] = 'Hum aapse jald sampark karenge. Thank you!';
+        update_option('woocommerce_cod_settings', $cod_settings);
     }
 }
+
+// ── 2. Rename COD labels on the frontend ──────────────────────────────────
+add_filter('woocommerce_gateway_title', 'mytheme_rename_cod_title', 10, 2);
+function mytheme_rename_cod_title($title, $id) {
+    if ($id === 'cod') {
+        return 'Pay Later — We Will Contact You';
+    }
+    return $title;
+}
+
+add_filter('woocommerce_gateway_description', 'mytheme_rename_cod_desc', 10, 2);
+function mytheme_rename_cod_desc($desc, $id) {
+    if ($id === 'cod') {
+        return 'हम आपसे जल्द ही भुगतान के लिए संपर्क करेंगे। <br><small>(We will contact you for payment via Bank Transfer / UPI / Cash.)</small>';
+    }
+    return $desc;
+}
+
+// ── 3. After order placed via COD, set status to on-hold ──────────────────
+add_action('woocommerce_thankyou_cod', 'mytheme_cod_order_to_hold', 10, 1);
+function mytheme_cod_order_to_hold($order_id) {
+    if (!$order_id) return;
+    $order = wc_get_order($order_id);
+    if ($order) {
+        $order->update_status('on-hold', 'Awaiting manual payment confirmation — customer to be contacted.');
+    }
+}
+
+// ── 4. Custom Thank You message ────────────────────────────────────────────
+add_filter('woocommerce_thankyou_order_received_text', 'mytheme_custom_thankyou_text', 20, 2);
+function mytheme_custom_thankyou_text($text, $order) {
+    return '🎉 <strong>Order placed successfully!</strong> Hum aapse jald se jald sampark karenge payment ke liye.<br><em>(शॉपिंग करने के लिए धन्यवाद! हम आपसे जल्द से जल्द संपर्क करेंगे।)</em>';
+}
+
 
 
