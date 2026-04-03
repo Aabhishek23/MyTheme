@@ -1430,9 +1430,8 @@ function mytheme_auth_form_shortcode($atts) {
             <?php if ($login_error) : ?>
                 <div class="auth-error"><?php echo esc_html($login_error); ?></div>
             <?php endif; ?>
-            <form method="post" class="auth-form" id="mytheme-login-form" action="<?php echo esc_url(site_url('wp-login.php', 'login_post')); ?>">
+            <form method="post" class="auth-form" id="mytheme-login-form" action="#">
                 <input type="hidden" name="redirect_to" value="<?php echo esc_attr($redirect_to); ?>">
-                <input type="hidden" name="action" value="wp_handle_login">
                 <div class="auth-field">
                     <label for="auth-username">📧 Email or Username</label>
                     <input type="text" id="auth-username" name="log" placeholder="your@email.com" required autocomplete="username">
@@ -1591,6 +1590,46 @@ function mytheme_auth_form_shortcode($atts) {
             });
         }
 
+        // Login form AJAX
+        var loginForm = document.getElementById('mytheme-login-form');
+        if (loginForm) {
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var btn = loginForm.querySelector('.auth-submit');
+                
+                loginForm.querySelectorAll('.auth-error, .auth-success').forEach(function(el) { el.remove(); });
+                
+                btn.querySelector('.btn-text').textContent = 'Logging in...';
+                btn.disabled = true;
+
+                var data = new FormData(loginForm);
+                data.append('action', 'mytheme_login_user');
+
+                fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+                    method: 'POST',
+                    body: data
+                })
+                .then(function(r) { return r.json(); })
+                .then(function(res) {
+                    if (res.success) {
+                        showMsg(loginForm, 'success', '✅ ' + res.data.message);
+                        setTimeout(function() {
+                            window.location.href = res.data.redirect;
+                        }, 1000);
+                    } else {
+                        showMsg(loginForm, 'error', '❌ ' + res.data.message);
+                        btn.querySelector('.btn-text').textContent = 'Login →';
+                        btn.disabled = false;
+                    }
+                })
+                .catch(function() {
+                    showMsg(loginForm, 'error', '❌ Something went wrong. Please try again.');
+                    btn.querySelector('.btn-text').textContent = 'Login →';
+                    btn.disabled = false;
+                });
+            });
+        }
+
         function showMsg(form, type, msg) {
             var div = document.createElement('div');
             div.className = 'auth-' + type;
@@ -1666,6 +1705,41 @@ function mytheme_handle_ajax_register() {
         'message'  => 'Account created! A welcome email has been sent. Redirecting to checkout...',
         'redirect' => $redirect,
     ));
+}
+
+/**
+ * 7b. AJAX handler for Login
+ */
+add_action('wp_ajax_nopriv_mytheme_login_user', 'mytheme_handle_ajax_login');
+add_action('wp_ajax_mytheme_login_user', 'mytheme_handle_ajax_login');
+function mytheme_handle_ajax_login() {
+    if (!isset($_POST['mytheme_login_nonce']) || !wp_verify_nonce($_POST['mytheme_login_nonce'], 'mytheme-login-nonce')) {
+        wp_send_json_error(array('message' => 'Security check failed. Please refresh the page.'));
+    }
+
+    $creds = array();
+    $creds['user_login']    = sanitize_user($_POST['log'] ?? '');
+    $creds['user_password'] = $_POST['pwd'] ?? '';
+    $creds['remember']      = isset($_POST['rememberme']) ? true : false;
+    
+    $redirect = esc_url_raw($_POST['redirect_to'] ?? wc_get_checkout_url());
+
+    if (empty($creds['user_login']) || empty($creds['user_password'])) {
+        wp_send_json_error(array('message' => 'Username and password are required.'));
+    }
+
+    $user = wp_signon($creds, is_ssl() ? true : false);
+
+    if (is_wp_error($user)) {
+        // Remove HTML tags from default WordPress HTML error responses
+        $error_msg = strip_tags($user->get_error_message());
+        wp_send_json_error(array('message' => $error_msg));
+    } else {
+        wp_send_json_success(array(
+            'message'  => 'Login successful! Redirecting...',
+            'redirect' => $redirect,
+        ));
+    }
 }
 
 /**
