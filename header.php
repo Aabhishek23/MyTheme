@@ -38,7 +38,7 @@ wp_nav_menu(array(
             <?php endif; ?>
             <?php if (is_user_logged_in()) : 
                 $current_user = wp_get_current_user();
-                $account_url  = get_permalink(get_option('mytheme_account_page_id')) ?: get_permalink(get_page_by_path('mera-account'));
+                $account_url  = get_permalink(get_option('mytheme_account_page_id')) ?: get_permalink(get_page_by_path('my-account'));
             ?>
                 <div class="header-user-menu">
                     <button class="header-user-btn" id="userMenuToggle">
@@ -47,7 +47,7 @@ wp_nav_menu(array(
                         <span style="font-size:0.6rem;">▼</span>
                     </button>
                     <div class="header-user-dropdown" id="userDropdown">
-                        <a href="<?php echo esc_url($account_url ?: '#'); ?>">👤 Mera Account</a>
+                        <a href="<?php echo esc_url($account_url ?: '#'); ?>">👤 My Account</a>
                         <?php if (class_exists('WooCommerce')) : ?>
                         <a href="<?php echo esc_url(wc_get_account_endpoint_url('orders')); ?>">📦 Mere Orders</a>
                         <a href="<?php echo esc_url(wc_get_checkout_url()); ?>">🛒 Checkout</a>
@@ -57,7 +57,7 @@ wp_nav_menu(array(
                     </div>
                 </div>
             <?php else :
-                $login_url = get_permalink(get_option('mytheme_account_page_id')) ?: get_permalink(get_page_by_path('mera-account'));
+                $login_url = get_permalink(get_option('mytheme_account_page_id')) ?: get_permalink(get_page_by_path('my-account'));
                 if (!$login_url) $login_url = wp_login_url();
             ?>
                 <a href="<?php echo esc_url($login_url); ?>" class="header-login-btn">

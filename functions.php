@@ -1378,6 +1378,11 @@ function mytheme_redirect_guests_from_checkout() {
 function mytheme_auth_form_shortcode($atts) {
     // If already logged in, show account info
     if (is_user_logged_in()) {
+        // If viewing an endpoint (like Orders, Address, etc.), render WooCommerce native dashboard
+        if (class_exists('WooCommerce') && is_wc_endpoint_url()) {
+            return '<div class="woocommerce">' . do_shortcode('[woocommerce_my_account]') . '</div>';
+        }
+
         $user = wp_get_current_user();
         $redirect_to = isset($_GET['redirect_to']) ? esc_url($_GET['redirect_to']) : wc_get_checkout_url();
         ob_start();
@@ -1747,25 +1752,42 @@ function mytheme_handle_ajax_login() {
  */
 add_action('init', 'mytheme_create_account_page');
 function mytheme_create_account_page() {
-    if (get_option('mytheme_account_page_created')) return;
+    if (get_option('mytheme_account_page_created_v3')) return;
     
-    $page_exists = get_page_by_path('mera-account');
-    if (!$page_exists) {
+    // Clean up old or duplicate pages
+    $mera   = get_page_by_path('mera-account');
+    $page_2 = get_page_by_path('my-account-2');
+    $page_1 = get_page_by_path('my-account');
+    
+    if ($mera) wp_delete_post($mera->ID, true);
+    if ($page_2) wp_delete_post($page_2->ID, true);
+
+    if (!$page_1) {
         $page_id = wp_insert_post(array(
-            'post_title'   => 'Mera Account',
-            'post_name'    => 'mera-account',
+            'post_title'   => 'My Account',
+            'post_name'    => 'my-account',
             'post_status'  => 'publish',
             'post_type'    => 'page',
             'post_content' => '[mytheme_auth_form]',
         ));
-        if ($page_id && !is_wp_error($page_id)) {
-            update_option('mytheme_account_page_created', true);
-            update_option('mytheme_account_page_id', $page_id);
+        update_option('mytheme_account_page_id', $page_id);
+        if (class_exists('WooCommerce')) {
+            update_option('woocommerce_myaccount_page_id', $page_id);
         }
     } else {
-        update_option('mytheme_account_page_created', true);
-        update_option('mytheme_account_page_id', $page_exists->ID);
+        wp_update_post(array(
+            'ID' => $page_1->ID,
+            'post_title' => 'My Account',
+            'post_content' => '[mytheme_auth_form]',
+            'post_status' => 'publish'
+        ));
+        update_option('mytheme_account_page_id', $page_1->ID);
+        if (class_exists('WooCommerce')) {
+            update_option('woocommerce_myaccount_page_id', $page_1->ID);
+        }
     }
+    
+    update_option('mytheme_account_page_created_v3', true);
 }
 
 /**
