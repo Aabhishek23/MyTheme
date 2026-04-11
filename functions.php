@@ -2101,3 +2101,65 @@ function mytheme_add_tracking_to_email($order, $sent_to_admin, $plain_text) {
         echo $html;
     }
 }
+
+/**
+ * 4. Add "Track" button to My Account > Orders List
+ */
+add_filter('woocommerce_my_account_my_orders_actions', 'mytheme_my_account_track_button', 10, 2);
+function mytheme_my_account_track_button($actions, $order) {
+    if (!$order) return $actions;
+    
+    $tracking_provider = $order->get_meta('_tracking_provider');
+    $tracking_number   = $order->get_meta('_tracking_number');
+
+    if ($tracking_provider && $tracking_number) {
+        $parsed_couriers = mytheme_get_parsed_couriers();
+        $tracking_link = '';
+        
+        if (isset($parsed_couriers[$tracking_provider])) {
+            $base_url = $parsed_couriers[$tracking_provider]['url'];
+            if (strpos($base_url, '[BASE64_SPEEDPOST]') !== false) {
+                $b64_payload = base64_encode('{"t":"' . $tracking_number . '","c":"speedpost"}');
+                $tracking_link = str_replace('[BASE64_SPEEDPOST]', $b64_payload, $base_url);
+            } else {
+                $tracking_link = str_replace('[NUMBER]', urlencode($tracking_number), $base_url);
+            }
+        }
+        
+        if ($tracking_link) {
+            // Insert it before other actions or just append it
+            $actions['track-order'] = array(
+                'url'  => $tracking_link,
+                'name' => '📦 Track',
+            );
+        }
+    }
+    return $actions;
+}
+
+/**
+ * 5. Style the Track Order button on My Account page
+ */
+add_action('wp_head', function() {
+    // Only load this CSS on WooCommerce account pages
+    if (function_exists('is_account_page') && is_account_page()) {
+        echo '<style>
+            a.button.track-order {
+                background: #8b5cf6 !important;
+                color: #ffffff !important;
+                border: 1px solid #7c3aed !important;
+                margin-left: 12px !important;
+                border-radius: 6px !important;
+                font-weight: 600 !important;
+                transition: all 0.3s ease !important;
+                padding: 8px 16px !important;
+            }
+            a.button.track-order:hover {
+                background: #7c3aed !important;
+                border-color: #6d28d9 !important;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4) !important;
+            }
+        </style>';
+    }
+});
