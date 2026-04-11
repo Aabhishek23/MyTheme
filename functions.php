@@ -1376,7 +1376,28 @@ function mytheme_redirect_guests_from_checkout() {
  * Usage: Add this shortcode to any page like My Account page.
  */
 function mytheme_auth_form_shortcode($atts) {
-    // If already logged in, show account info
+    // 1. Completely hand off the route to WooCommerce for the Lost Password reset process
+    if (class_exists('WooCommerce') && is_wc_endpoint_url('lost-password')) {
+        return '<div class="mytheme-auth-wrapper" style="padding: 2rem; max-width: 600px; margin: 4rem auto; border-radius: 12px; background: rgba(30, 30, 40, 0.9); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            <style>
+                .woocommerce form { background: none; box-shadow: none; padding: 0; border: none; } 
+                .woocommerce-Button { width: 100%; border-radius: 8px !important; background: #8b5cf6 !important; color: white !important; font-weight: 600 !important; cursor: pointer; border: none !important; padding: 12px; margin-top: 15px; } 
+                .woocommerce-Button { transition: all 0.3s ease; } .woocommerce-Button:hover { background: #7c3aed !important; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4); }
+                .woocommerce-Input, input.input-text, input[type="text"], input[type="email"], input[type="password"] { width: 100%; padding: 12px 15px !important; border-radius: 8px !important; border: 1px solid rgba(255,255,255,0.3) !important; background: rgba(255,255,255,0.05) !important; color: white !important; margin-bottom:15px !important; transition: all 0.3s ease; outline:none; } 
+                .woocommerce-Input:focus, input.input-text:focus, input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus { border-color: #8b5cf6 !important; box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3) !important; background: rgba(0,0,0,0.3) !important; }
+                label, p { color: white; display: block; line-height:1.5; }
+                .woocommerce-message, .woocommerce-error { background: rgba(255,255,255,0.1) !important; color: white; border-top-color: #8b5cf6; }
+            </style>
+            <div class="auth-header">
+                <div class="auth-icon" style="font-size:3rem; text-align:center; margin-bottom:1rem;">🔑</div>
+                <h2 style="text-align:center; color:white; margin-bottom: 0.5rem;">Reset Password</h2>
+                <p style="text-align:center; color:rgba(255,255,255,0.7); margin-bottom:2rem;">Forgot your password? We will send you an email to reset it.</p>
+            </div>
+            ' . do_shortcode('[woocommerce_my_account]') . '
+        </div>';
+    }
+
+    // 2. If already logged in, show account info
     if (is_user_logged_in()) {
         // If viewing an endpoint (like Orders, Address, etc.), render WooCommerce native dashboard
         if (class_exists('WooCommerce') && is_wc_endpoint_url()) {
