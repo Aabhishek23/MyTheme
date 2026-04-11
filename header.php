@@ -30,7 +30,7 @@ wp_nav_menu(array(
 ?>
         </nav>
         <div style="display: flex; align-items: center; gap: 1.5rem;">
-            <?php if (class_exists('WooCommerce')) : ?>
+            <?php if (class_exists('WooCommerce') && (is_woocommerce() || is_cart() || is_checkout())) : ?>
                 <a href="<?php echo wc_get_cart_url(); ?>" class="header-cart" title="Aapka Shopping Cart">
                     <span style="font-size: 1.2rem;">🛒</span>
                     <span class="cart-count"><?php echo is_object(WC()->cart) ? WC()->cart->get_cart_contents_count() : 0; ?></span>
