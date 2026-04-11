@@ -1390,11 +1390,11 @@ function mytheme_auth_form_shortcode($atts) {
         <div class="mytheme-auth-wrapper">
             <div class="mytheme-already-logged">
                 <div class="auth-avatar">👤</div>
-                <h2>नमस्ते, <?php echo esc_html($user->display_name); ?>!</h2>
-                <p>Aap already logged in hain.</p>
+                <h2>Hello, <?php echo esc_html($user->display_name); ?>!</h2>
+                <p>You are already logged in.</p>
                 <div class="auth-logged-actions">
-                    <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class="auth-btn auth-btn-primary">🛒 Checkout Karein</a>
-                    <a href="<?php echo esc_url(wc_get_account_endpoint_url('orders')); ?>" class="auth-btn auth-btn-outline">📦 Mere Orders</a>
+                    <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class="auth-btn auth-btn-primary">🛒 Checkout</a>
+                    <a href="<?php echo esc_url(wc_get_account_endpoint_url('orders')); ?>" class="auth-btn auth-btn-outline">📦 My Orders</a>
                     <a href="<?php echo esc_url(wp_logout_url(home_url())); ?>" class="auth-btn auth-btn-danger">🚪 Logout</a>
                 </div>
             </div>
