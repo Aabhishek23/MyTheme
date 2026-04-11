@@ -1899,3 +1899,87 @@ add_action('template_redirect', function() {
         exit;
     }
 });
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CUSTOM ORDER SHIPMENT TRACKING SYSTEM
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * 1. Add fields to the WooCommerce Admin Order Edit Page
+ */
+add_action('woocommerce_admin_order_data_after_shipping_address', 'mytheme_add_tracking_fields');
+function mytheme_add_tracking_fields($order) {
+    if (!$order) return;
+    $tracking_number = $order->get_meta('_tracking_number');
+    $tracking_link   = $order->get_meta('_tracking_link');
+    
+    echo '<div style="clear:both; margin-top:20px; padding:10px; background:#f5f5f5; border:1px solid #ddd; border-radius:4px;">';
+    echo '<h4>📦 Shipment Tracking (Custom)</h4>';
+    
+    woocommerce_wp_text_input(array(
+        'id'            => '_tracking_number',
+        'label'         => 'Tracking Number',
+        'value'         => $tracking_number,
+        'wrapper_class' => 'form-field-wide',
+        'placeholder'   => 'e.g. AWB123456789'
+    ));
+    
+    woocommerce_wp_text_input(array(
+        'id'            => '_tracking_link',
+        'label'         => 'Tracking Link (URL)',
+        'value'         => $tracking_link,
+        'wrapper_class' => 'form-field-wide',
+        'placeholder'   => 'https://...'
+    ));
+    echo '<p style="color:#666; font-size:12px;">Ye details Customer ko order "Completed" hone wali email me automatically bhej di jayengi.</p>';
+    echo '</div>';
+}
+
+/**
+ * 2. Save the metadata when Admin saves the order
+ */
+add_action('woocommerce_process_shop_order_meta', 'mytheme_save_tracking_fields', 10, 2);
+function mytheme_save_tracking_fields($order_id, $post) {
+    if (!$order_id) return;
+    $order = wc_get_order($order_id);
+    if (!$order) return;
+    
+    if (isset($_POST['_tracking_number'])) {
+        $order->update_meta_data('_tracking_number', sanitize_text_field($_POST['_tracking_number']));
+    }
+    if (isset($_POST['_tracking_link'])) {
+        $order->update_meta_data('_tracking_link', esc_url_raw($_POST['_tracking_link']));
+    }
+    
+    $order->save();
+}
+
+/**
+ * 3. Add Tracking Details to WooCommerce Emails sent to Customer
+ */
+add_action('woocommerce_email_order_meta', 'mytheme_add_tracking_to_email', 20, 3);
+function mytheme_add_tracking_to_email($order, $sent_to_admin, $plain_text) {
+    if ($sent_to_admin || $plain_text) return;
+
+    $tracking_number = $order->get_meta('_tracking_number');
+    $tracking_link   = $order->get_meta('_tracking_link');
+
+    if ($tracking_number) {
+        $html  = '<div style="background: linear-gradient(135deg, #1e1e2f, #1a1a2e); padding: 25px; border-radius: 12px; margin: 30px 0; border: 1px solid rgba(139, 92, 246, 0.3); text-align: center; color: #fff; font-family: Helvetica, Arial, sans-serif;">';
+        $html .= '<h2 style="color: #fff; margin-top: 0; display:flex; align-items:center; justify-content:center; gap:10px;">📦 Shipment Dispatched!</h2>';
+        $html .= '<p style="font-size: 16px; color: #cbd5e1; margin-bottom: 20px;">Your order has been shipped. You can track it using the details below:</p>';
+        
+        $html .= '<div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); display: inline-block; margin-bottom: 25px;">';
+        $html .= '<span style="font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">Tracking Number</span>';
+        $html .= '<strong style="font-size: 22px; color: #8b5cf6; letter-spacing: 2px;">' . esc_html($tracking_number) . '</strong>';
+        $html .= '</div><br>';
+
+        if ($tracking_link) {
+            $html .= '<a href="' . esc_url($tracking_link) . '" style="background: #8b5cf6; color: #ffffff; font-weight: bold; font-size: 16px; text-decoration: none; padding: 14px 30px; border-radius: 8px; display: inline-block; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);">Track Your Package &rarr;</a>';
+        }
+        
+        $html .= '</div>';
+        
+        echo $html;
+    }
+}
