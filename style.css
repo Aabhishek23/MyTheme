@@ -2883,3 +2883,225 @@ a.wc-block-cart__submit-button:hover {
     transform: none;
 }
 
+
+/* ---------------------------------------------------------------
+   WOOCOMMERCE CART — Interactive & Modern Styling
+--------------------------------------------------------------- */
+.woocommerce-cart .woocommerce {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* Empty Cart View */
+.woocommerce-cart .cart-empty {
+    text-align: center;
+    background: linear-gradient(135deg, #1f2937, #111827);
+    padding: 4rem 2rem;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.05);
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.woocommerce-cart .cart-empty::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(124,58,237,0.1) 0%, rgba(0,0,0,0) 70%);
+    pointer-events: none;
+}
+
+.woocommerce-cart .cart-empty {
+    color: #f9fafb !important;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.woocommerce-cart .return-to-shop {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.woocommerce-cart .return-to-shop .button {
+    background: linear-gradient(135deg, #7c3aed, #a855f7) !important;
+    color: #fff !important;
+    padding: 0.75rem 2rem !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    transition: all 0.3s ease !important;
+    display: inline-block !important;
+    border: none !important;
+    box-shadow: 0 10px 20px rgba(124,58,237,0.3) !important;
+}
+
+.woocommerce-cart .return-to-shop .button:hover {
+    transform: translateY(-3px) scale(1.02) !important;
+    box-shadow: 0 15px 25px rgba(124,58,237,0.5) !important;
+}
+
+/* Fix weird sad face if it's an img or icon */
+.woocommerce-cart .cart-empty::before {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1.5rem;
+}
+
+/* Dark mode fix for cart page overall text */
+.woocommerce-cart h1.page-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    text-align: center;
+    background: -webkit-linear-gradient(45deg, #a855f7, #ef4444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+/* ---------------------------------------------------------------
+   PREMIUM INTERACTIVE WOOCOMMERCE CART (BLOCKS & SHORTCODE)
+--------------------------------------------------------------- */
+
+/* Remove default dark block background on the cart page if any */
+.wp-block-woocommerce-cart {
+    background: transparent !important;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* WOOCOMMERCE BLOCKS - Empty State Container */
+.wc-block-components-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(20,20,30,0.8), rgba(10,10,15,0.95));
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 5rem 2rem;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    margin: 3rem auto 4rem auto !important;
+    position: relative;
+    overflow: hidden;
+    animation: cartFadeIn 0.8s ease-out forwards;
+}
+
+@keyframes cartFadeIn {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Add an animated premium floating background orb */
+.wc-block-components-empty-state::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.4) 0%, rgba(0, 0, 0, 0) 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: orbPulse 6s infinite alternate ease-in-out;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes orbPulse {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    100% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
+}
+
+/* Hide the ugly default SVG sad face */
+.wc-block-components-empty-state .wc-block-components-empty-state__icon,
+.wc-block-components-empty-state svg {
+    display: none !important;
+}
+
+/* Create a new premium glowing Cart Icon / Emoji */
+.wc-block-components-empty-state::after {
+    content: '??';
+    font-size: 5rem;
+    line-height: 1;
+    display: block;
+    margin-bottom: 2rem;
+    z-index: 1;
+    position: relative;
+    text-shadow: 0 0 30px rgba(124, 58, 237, 0.8), 0 0 60px rgba(168, 85, 247, 0.5);
+    animation: floatCart 3s infinite ease-in-out;
+}
+
+@keyframes floatCart {
+    0% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(-5deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+
+/* Typography Enhancements */
+.wc-block-components-empty-state p,
+.wc-block-components-empty-state span {
+    color: rgba(255,255,255,0.8);
+    font-size: 1.25rem;
+    z-index: 1;
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+/* The Empty Cart Heading (if any) */
+.wc-block-components-empty-state h1,
+.wc-block-components-empty-state h2,
+.wc-block-components-empty-state h3 {
+    color: #fff !important;
+    font-size: 2.2rem !important;
+    font-weight: 800 !important;
+    background: -webkit-linear-gradient(45deg, #a855f7, #ef4444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    z-index: 1;
+    position: relative;
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+}
+
+/* Modern Animated Button Return to Shop */
+.wc-block-components-empty-state a.wp-block-button__link,
+.wc-block-components-empty-state .wc-block-components-button {
+    background: linear-gradient(135deg, #7c3aed, #ec4899) !important;
+    color: #fff !important;
+    border-radius: 999px !important;
+    padding: 1rem 2.5rem !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    border: none !important;
+    z-index: 1;
+    position: relative;
+    display: inline-block !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4) !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.wc-block-components-empty-state a.wp-block-button__link:hover,
+.wc-block-components-empty-state .wc-block-components-button:hover {
+    transform: translateY(-5px) scale(1.05) !important;
+    box-shadow: 0 20px 35px rgba(236, 72, 153, 0.5) !important;
+}
+
+/* Title 'Cart' Alignment fix for Blocks */
+.wp-block-woocommerce-cart h1 {
+    text-align: center;
+    font-size: 3rem !important;
+    margin-bottom: 3rem !important;
+    font-weight: 900;
+}
+
