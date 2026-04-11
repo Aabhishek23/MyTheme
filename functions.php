@@ -1901,8 +1901,79 @@ add_action('template_redirect', function() {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
-// CUSTOM ORDER SHIPMENT TRACKING SYSTEM
+// CUSTOM ORDER SHIPMENT TRACKING SYSTEM WITH DYNAMIC COURIERS
 // ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * 0. Create Courier Settings Page under WooCommerce Menu
+ */
+add_action('admin_menu', 'mytheme_courier_settings_menu');
+function mytheme_courier_settings_menu() {
+    add_submenu_page(
+        'woocommerce',
+        'Courier Settings',
+        'Courier Settings',
+        'manage_woocommerce',
+        'mytheme-courier-settings',
+        'mytheme_courier_settings_page'
+    );
+}
+
+function mytheme_courier_settings_page() {
+    // Handle Save
+    if (isset($_POST['mytheme_couriers_nonce']) && wp_verify_nonce($_POST['mytheme_couriers_nonce'], 'mytheme_save_couriers')) {
+        // Sanitize deeply without removing URLs
+        $couriers_data = sanitize_textarea_field(wp_unslash($_POST['mytheme_couriers_data']));
+        update_option('mytheme_custom_couriers', $_POST['mytheme_couriers_data']); // wp_unslash already handled by WP magic, so raw save is fine
+        echo '<div class="notice notice-success is-dismissible"><p>Courier URLs saved successfully!</p></div>';
+    }
+    
+    $default_couriers = "DHL | https://www.dhl.com/in-en/home/tracking/tracking-express.html?submit=1&tracking-id=[NUMBER]\nBlueDart | https://www.bluedart.com/web/guest/trackdartresult?trackFor=0&trackNo=[NUMBER]\nDelhivery | https://www.delhivery.com/track/package/[NUMBER]\nTrackon | https://trackon.in/Tracking/Result?tracking_number=[NUMBER]";
+    $current_couriers = get_option('mytheme_custom_couriers', $default_couriers);
+    ?>
+    <div class="wrap">
+        <h1>📦 Store Courier Settings</h1>
+        <p>Define your courier companies and their tracking URL structure below.</p>
+        <div style="background:#fff; border:1px solid #ccc; padding:15px; margin-bottom:20px;">
+            <strong>Format Rule:</strong> <code>Courier Name | Tracking URL containing [NUMBER]</code><br>
+            <em>* Please separate the name and URL using the <strong>|</strong> symbol. Put each courier on a new line.</em><br>
+            <em>* Ensure you write <strong>[NUMBER]</strong> exactly where the AWB tracking parameter should go.</em>
+        </div>
+        
+        <form method="post" action="">
+            <?php wp_nonce_field('mytheme_save_couriers', 'mytheme_couriers_nonce'); ?>
+            <textarea name="mytheme_couriers_data" rows="12" style="font-family: monospace; width:100%; max-width:900px; padding:15px; line-height:1.5; font-size:14px; background:#f9f9f9; border:1px solid #999;"><?php echo esc_textarea(stripslashes($current_couriers)); ?></textarea>
+            <br><br>
+            <input type="submit" class="button button-primary button-hero" value="Save Courier List">
+        </form>
+    </div>
+    <?php
+}
+
+// Utility function to get couriers as Array
+function mytheme_get_parsed_couriers() {
+    $default_couriers = "DHL | https://www.dhl.com/in-en/home/tracking/tracking-express.html?submit=1&tracking-id=[NUMBER]\nBlueDart | https://www.bluedart.com/web/guest/trackdartresult?trackFor=0&trackNo=[NUMBER]\nDelhivery | https://www.delhivery.com/track/package/[NUMBER]\nTrackon | https://trackon.in/Tracking/Result?tracking_number=[NUMBER]";
+    $raw = get_option('mytheme_custom_couriers', $default_couriers);
+    
+    $couriers = array();
+    $lines = explode("\n", str_replace("\r", "", stripslashes($raw)));
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if (empty($line)) continue;
+        
+        $parts = explode('|', $line, 2);
+        if (count($parts) == 2) {
+            $name = trim($parts[0]);
+            $url = trim($parts[1]);
+            $slug = sanitize_title($name);
+            $couriers[$slug] = array(
+                'name' => $name,
+                'url'  => $url
+            );
+        }
+    }
+    return $couriers;
+}
 
 /**
  * 1. Add fields to the WooCommerce Admin Order Edit Page
@@ -1910,28 +1981,54 @@ add_action('template_redirect', function() {
 add_action('woocommerce_admin_order_data_after_shipping_address', 'mytheme_add_tracking_fields');
 function mytheme_add_tracking_fields($order) {
     if (!$order) return;
-    $tracking_number = $order->get_meta('_tracking_number');
-    $tracking_link   = $order->get_meta('_tracking_link');
+    $tracking_provider = $order->get_meta('_tracking_provider');
+    $tracking_number   = $order->get_meta('_tracking_number');
     
+    // Construct options from settings
+    $parsed_couriers = mytheme_get_parsed_couriers();
+    $dropdown_options = array('' => '-- Select Courier --');
+    foreach ($parsed_couriers as $slug => $data) {
+        $dropdown_options[$slug] = $data['name'];
+    }
+
     echo '<div style="clear:both; margin-top:20px; padding:10px; background:#f5f5f5; border:1px solid #ddd; border-radius:4px;">';
     echo '<h4>📦 Shipment Tracking (Custom)</h4>';
+    
+    woocommerce_wp_select(array(
+        'id'            => '_tracking_provider',
+        'label'         => 'Courier Company',
+        'wrapper_class' => 'form-field-wide',
+        'value'         => $tracking_provider,
+        'options'       => $dropdown_options
+    ));
     
     woocommerce_wp_text_input(array(
         'id'            => '_tracking_number',
         'label'         => 'Tracking Number',
         'value'         => $tracking_number,
         'wrapper_class' => 'form-field-wide',
-        'placeholder'   => 'e.g. AWB123456789'
-    ));
-    
-    woocommerce_wp_text_input(array(
-        'id'            => '_tracking_link',
-        'label'         => 'Tracking Link (URL)',
-        'value'         => $tracking_link,
-        'wrapper_class' => 'form-field-wide',
-        'placeholder'   => 'https://...'
+        'placeholder'   => 'e.g. 123456789'
     ));
     echo '<p style="color:#666; font-size:12px;">Ye details Customer ko order "Completed" hone wali email me automatically bhej di jayengi.</p>';
+    
+    // Add Admin Track Verification Button if data exists
+    if ($tracking_provider && $tracking_number && isset($parsed_couriers[$tracking_provider])) {
+        $base_url = $parsed_couriers[$tracking_provider]['url'];
+        $tracking_link = '';
+        if (strpos($base_url, '[BASE64_SPEEDPOST]') !== false) {
+            $b64_payload = base64_encode('{"t":"' . $tracking_number . '","c":"speedpost"}');
+            $tracking_link = str_replace('[BASE64_SPEEDPOST]', $b64_payload, $base_url);
+        } else {
+            $tracking_link = str_replace('[NUMBER]', urlencode($tracking_number), $base_url);
+        }
+        
+        if ($tracking_link) {
+            echo '<div style="margin-top:15px; padding-top:15px; border-top:1px dashed #ccc;">';
+            echo '<a href="' . esc_url($tracking_link) . '" target="_blank" class="button button-secondary" style="display:inline-flex; align-items:center; gap:5px;"><span class="dashicons dashicons-external"></span> 🔍 Test Tracking Link (Admin View)</a>';
+            echo '</div>';
+        }
+    }
+    
     echo '</div>';
 }
 
@@ -1944,11 +2041,11 @@ function mytheme_save_tracking_fields($order_id, $post) {
     $order = wc_get_order($order_id);
     if (!$order) return;
     
+    if (isset($_POST['_tracking_provider'])) {
+        $order->update_meta_data('_tracking_provider', sanitize_text_field($_POST['_tracking_provider']));
+    }
     if (isset($_POST['_tracking_number'])) {
         $order->update_meta_data('_tracking_number', sanitize_text_field($_POST['_tracking_number']));
-    }
-    if (isset($_POST['_tracking_link'])) {
-        $order->update_meta_data('_tracking_link', esc_url_raw($_POST['_tracking_link']));
     }
     
     $order->save();
@@ -1961,13 +2058,34 @@ add_action('woocommerce_email_order_meta', 'mytheme_add_tracking_to_email', 20, 
 function mytheme_add_tracking_to_email($order, $sent_to_admin, $plain_text) {
     if ($sent_to_admin || $plain_text) return;
 
-    $tracking_number = $order->get_meta('_tracking_number');
-    $tracking_link   = $order->get_meta('_tracking_link');
+    $tracking_provider = $order->get_meta('_tracking_provider');
+    $tracking_number   = $order->get_meta('_tracking_number');
 
     if ($tracking_number) {
+        $parsed_couriers = mytheme_get_parsed_couriers();
+        
+        $tracking_link = '';
+        $c_name = 'Courier';
+        
+        // Match the saved provider slug to construct dynamic URL
+        if (isset($parsed_couriers[$tracking_provider])) {
+            $c_name = $parsed_couriers[$tracking_provider]['name'];
+            $base_url = $parsed_couriers[$tracking_provider]['url'];
+            
+            // Support for advanced base64 encrypted endpoints (like speedposttrack.io)
+            if (strpos($base_url, '[BASE64_SPEEDPOST]') !== false) {
+                // Prepares JSON: {"t":"AWB...","c":"speedpost"} automatically and base64 encodes it
+                $b64_payload = base64_encode('{"t":"' . $tracking_number . '","c":"speedpost"}');
+                $tracking_link = str_replace('[BASE64_SPEEDPOST]', $b64_payload, $base_url);
+            } else {
+                // Inject the tracking number dynamically where [NUMBER] is found
+                $tracking_link = str_replace('[NUMBER]', urlencode($tracking_number), $base_url);
+            }
+        }
+
         $html  = '<div style="background: linear-gradient(135deg, #1e1e2f, #1a1a2e); padding: 25px; border-radius: 12px; margin: 30px 0; border: 1px solid rgba(139, 92, 246, 0.3); text-align: center; color: #fff; font-family: Helvetica, Arial, sans-serif;">';
         $html .= '<h2 style="color: #fff; margin-top: 0; display:flex; align-items:center; justify-content:center; gap:10px;">📦 Shipment Dispatched!</h2>';
-        $html .= '<p style="font-size: 16px; color: #cbd5e1; margin-bottom: 20px;">Your order has been shipped. You can track it using the details below:</p>';
+        $html .= '<p style="font-size: 16px; color: #cbd5e1; margin-bottom: 20px;">Your order has been shipped via <strong>' . esc_html($c_name) . '</strong>. You can track it using the details below:</p>';
         
         $html .= '<div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); display: inline-block; margin-bottom: 25px;">';
         $html .= '<span style="font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">Tracking Number</span>';
