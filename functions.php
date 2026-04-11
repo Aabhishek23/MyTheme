@@ -1815,5 +1815,66 @@ function mytheme_checkout_login_notice_script() {
     }
 }
 
+/**
+ * Integrate Resend SMTP for WordPress Emails
+ */
+add_action('phpmailer_init', 'mytheme_resend_smtp_integration');
+function mytheme_resend_smtp_integration($phpmailer) {
+    $phpmailer->isSMTP();
+    $phpmailer->Host       = 'smtp.resend.com';
+    $phpmailer->SMTPAuth   = true;
+    $phpmailer->Port       = 465; // Or 587
+    $phpmailer->SMTPSecure = 'ssl'; // Or 'tls'
+    $phpmailer->Username   = 'resend'; 
+    $phpmailer->Password   = 're_jZNfFbhq_NZp3T1FPdLP5ZBKCKdKzp1kJ'; 
+    
+    // Default testing email from Resend. Change this once you have a verified domain.
+    $phpmailer->setFrom('onboarding@resend.dev', 'AIPL Store'); 
+}
 
+// Force WordPress & WooCommerce to always use Resend's testing email as sender 
+add_filter('wp_mail_from', function($original_email_address) {
+    return 'onboarding@resend.dev';
+}, 999);
 
+add_filter('wp_mail_from_name', function($original_email_from) {
+    return 'AIPL Store';
+}, 999);
+
+// Add a test tool to immediately check why mail is failing
+add_action('template_redirect', function() {
+    if (false && isset($_GET['test_email'])) {
+        $to = 'tanayaparochi@gmail.com'; 
+        
+        global $phpmailer;
+        if (!is_object($phpmailer) || !is_a($phpmailer, 'PHPMailer\\PHPMailer\\PHPMailer')) {
+            require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
+            require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
+            require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
+            $phpmailer = new \PHPMailer\PHPMailer\PHPMailer(true);
+        }
+        
+        add_action('phpmailer_init', function($mailer) {
+            $mailer->SMTPDebug = 3; 
+        });
+
+        add_action('wp_mail_failed', function($error) {
+            echo '<h2 style="color:red;">Error Details:</h2><pre>';
+            print_r($error);
+            echo '</pre>';
+        });
+
+        echo "<h2>Testing Resend Email Connection...</h2><hr><pre>";
+        $sent = wp_mail($to, 'Test Email from AIPL Store', 'Ye ek test email hai. Agar ye dikh raha hai, to API kaam kar rahi hai!');
+        echo "</pre><hr>";
+        
+        if ($sent) {
+            echo "<h1 style='color:green;'>SUCCESS!</h1>";
+            echo "<p>Email $to par bhej diya gaya hai! kripya apna Gmail Inbiox/Spam check karein.</p>";
+        } else {
+            echo "<h1 style='color:red;'>FAILED!</h1>";
+            echo "<p>Mail nahi gaya. Upar diye gaye Error ko Check karein.</p>";
+        }
+        exit;
+    }
+});
