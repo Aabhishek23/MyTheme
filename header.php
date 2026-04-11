@@ -30,7 +30,6 @@ wp_nav_menu(array(
 ?>
         </nav>
         <div style="display: flex; align-items: center; gap: 1.5rem;">
-            <a href="#" style="font-size: 1.2rem;">🔍</a>
             <?php if (class_exists('WooCommerce')) : ?>
                 <a href="<?php echo wc_get_cart_url(); ?>" class="header-cart" title="Aapka Shopping Cart">
                     <span style="font-size: 1.2rem;">🛒</span>
