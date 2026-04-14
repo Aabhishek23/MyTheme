@@ -4,17 +4,13 @@
     <!-- Hero Slider Section -->
     <div class="hero-slider-wrapper">
         <?php
-        $hero_query = get_transient('mytheme_hero_query');
-        if (false === $hero_query) {
-            $args = array(
-                'post_type'      => 'hero_slide',
-                'posts_per_page' => 5,
-                'orderby'        => 'menu_order',
-                'order'          => 'ASC',
-            );
-            $hero_query = new WP_Query($args);
-            set_transient('mytheme_hero_query', $hero_query, HOUR_IN_SECONDS);
-        }
+        $args = array(
+            'post_type'      => 'hero_slide',
+            'posts_per_page' => 5,
+            'orderby'        => 'menu_order',
+            'order'          => 'ASC',
+        );
+        $hero_query = new WP_Query($args);
         $slide_count = 0;
 
         if ($hero_query->have_posts()) :
@@ -33,10 +29,16 @@
                         <?php endif; ?>
                         <h1 class="hero-title"><?php the_title(); ?></h1>
                         <p><?php echo get_the_content(); ?></p>
+                        <?php if ($btn_text || $btn2_text) : ?>
                         <div class="hero-btns">
-                            <a href="<?php echo esc_url($btn_link ? $btn_link : '#'); ?>" class="btn btn-primary"><?php echo esc_html($btn_text ? $btn_text : 'Press Release'); ?> &nbsp; &rarr;</a>
-                            <a href="<?php echo esc_url($btn2_link ? $btn2_link : '#'); ?>" class="btn btn-secondary"><?php echo esc_html($btn2_text ? $btn2_text : 'Learn More'); ?> &nbsp; &rarr;</a>
+                            <?php if ($btn_text): ?>
+                            <a href="<?php echo esc_url($btn_link ? $btn_link : '#'); ?>" class="btn btn-primary"><?php echo esc_html($btn_text); ?> &nbsp; &rarr;</a>
+                            <?php endif; ?>
+                            <?php if ($btn2_text): ?>
+                            <a href="<?php echo esc_url($btn2_link ? $btn2_link : '#'); ?>" class="btn btn-secondary"><?php echo esc_html($btn2_text); ?> &nbsp; &rarr;</a>
+                            <?php endif; ?>
                         </div>
+                        <?php endif; ?>
                     </div>
                 </section>
                 <?php
@@ -261,16 +263,12 @@
                 
                 <div class="news-carousel">
                     <?php
-                    $news_query = get_transient('mytheme_news_query');
-                    if (false === $news_query) {
-                        $news_args = array(
-                            'post_type'           => 'post',
-                            'posts_per_page'      => 6,
-                            'ignore_sticky_posts' => true,
-                        );
-                        $news_query = new WP_Query($news_args);
-                        set_transient('mytheme_news_query', $news_query, HOUR_IN_SECONDS);
-                    }
+                    $news_args = array(
+                        'post_type'           => 'post',
+                        'posts_per_page'      => 6,
+                        'ignore_sticky_posts' => true,
+                    );
+                    $news_query = new WP_Query($news_args);
 
                     if ($news_query->have_posts()) :
                         while ($news_query->have_posts()) : $news_query->the_post();

@@ -2163,3 +2163,82 @@ add_action('wp_head', function() {
         </style>';
     }
 });
+
+/**
+ * Add Meta Box for Hero Slide Options
+ */
+function mytheme_add_hero_slide_metabox() {
+    add_meta_box(
+        'hero_slide_options',
+        'Hero Slide Options',
+        'mytheme_hero_slide_metabox_html',
+        'hero_slide',
+        'normal',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'mytheme_add_hero_slide_metabox');
+
+function mytheme_hero_slide_metabox_html($post) {
+    wp_nonce_field('mytheme_save_hero_slide_metabox_data', 'mytheme_hero_slide_meta_nonce');
+
+    $subtitle = get_post_meta($post->ID, 'hero_subtitle', true);
+    $btn_text = get_post_meta($post->ID, 'hero_btn_text', true);
+    $btn_link = get_post_meta($post->ID, 'hero_btn_link', true);
+    $btn2_text = get_post_meta($post->ID, 'hero_btn2_text', true);
+    $btn2_link = get_post_meta($post->ID, 'hero_btn2_link', true);
+    ?>
+    <style>
+        .hero-mb-item { margin-bottom: 1em; }
+        .hero-mb-item label { display: inline-block; width: 120px; font-weight: bold; }
+        .hero-mb-item input { width: 100%; max-width: 400px; }
+    </style>
+    <div class="hero-mb-item">
+        <label for="hero_subtitle">Subtitle</label>
+        <input type="text" id="hero_subtitle" name="hero_subtitle" value="<?php echo esc_attr($subtitle); ?>">
+    </div>
+    <hr>
+    <div class="hero-mb-item">
+        <label for="hero_btn_text">Button 1 Text</label>
+        <input type="text" id="hero_btn_text" name="hero_btn_text" value="<?php echo esc_attr($btn_text); ?>" placeholder="Press Release">
+    </div>
+    <div class="hero-mb-item">
+        <label for="hero_btn_link">Button 1 Link</label>
+        <input type="url" id="hero_btn_link" name="hero_btn_link" value="<?php echo esc_attr($btn_link); ?>">
+    </div>
+    <hr>
+    <div class="hero-mb-item">
+        <label for="hero_btn2_text">Button 2 Text</label>
+        <input type="text" id="hero_btn2_text" name="hero_btn2_text" value="<?php echo esc_attr($btn2_text); ?>" placeholder="Learn More">
+    </div>
+    <div class="hero-mb-item">
+        <label for="hero_btn2_link">Button 2 Link</label>
+        <input type="url" id="hero_btn2_link" name="hero_btn2_link" value="<?php echo esc_attr($btn2_link); ?>">
+    </div>
+    <?php
+}
+
+function mytheme_save_hero_slide_metabox_data($post_id) {
+    if (!isset($_POST['mytheme_hero_slide_meta_nonce'])) {
+        return;
+    }
+    if (!wp_verify_nonce($_POST['mytheme_hero_slide_meta_nonce'], 'mytheme_save_hero_slide_metabox_data')) {
+        return;
+    }
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    $fields = ['hero_subtitle', 'hero_btn_text', 'hero_btn_link', 'hero_btn2_text', 'hero_btn2_link'];
+    foreach ($fields as $field) {
+        if (isset($_POST[$field])) {
+            update_post_meta($post_id, $field, sanitize_text_field($_POST[$field]));
+        } else {
+            delete_post_meta($post_id, $field);
+        }
+    }
+}
+add_action('save_post_hero_slide', 'mytheme_save_hero_slide_metabox_data');
