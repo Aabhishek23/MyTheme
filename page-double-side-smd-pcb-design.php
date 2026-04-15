@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Single Side PCB Design
+ * Template Name: Single Side SMD PCB Design
  */
 get_header(); ?>
 
@@ -9,9 +9,9 @@ get_header(); ?>
     <section class="pcb-hero reveal" style="background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('<?php echo get_template_directory_uri(); ?>/assets/images/pcb_hero_bg.png');">
         <div class="container">
             <div class="hero-content">
-                <span class="badge">Industrial Solutions</span>
-                <h1>Single-Sided PCB <br>Design & Manufacturing</h1>
-                <p>High-reliability, cost-effective solutions for high-volume consumer electronics and industrial applications.</p>
+                <span class="badge">Advanced SMD Solutions</span>
+                <h1>Double-Sided SMD PCB <br>Design & Manufacturing</h1>
+                <p>Specialized double-sided PCB design optimized for Surface Mount Device (SMD) components, balancing performance and production efficiency.</p>
                 <div class="hero-btns">
                     <a href="#quote" class="btn btn-primary">Request a Quote</a>
                     <a href="#specs" class="btn btn-outline">Technical Specs</a>
@@ -25,18 +25,18 @@ get_header(); ?>
         <div class="container">
             <div class="grid-2">
                 <div class="overview-text">
-                    <h2 class="section-title">The Foundation of Modern Electronics</h2>
-                    <p>Single-sided printed circuit boards are the most common choice for high-volume, cost-sensitive electronic products. By placing components on one side and the conductive pattern on the other, we achieve maximum efficiency and reliability for less complex circuits.</p>
+                    <h2 class="section-title">SMD Optimization for Single-Sided Boards</h2>
+                    <p>Our Single-Sided SMD PCB design process focuses on maximizing land pattern accuracy and solder mask precision. By leveraging SMD technology on a single conductive layer, we provide lightweight and compact solutions for modern electronics.</p>
                     <ul class="feature-list">
-                        <li><strong>Fast Turnaround:</strong> Simplified manufacturing process for rapid delivery.</li>
-                        <li><strong>Cost Efficient:</strong> Ideally suited for high-volume production runs.</li>
-                        <li><strong>High Durability:</strong> Robust construction for long-term industrial use.</li>
+                        <li><strong>SMD Compatibility:</strong> Precision-engineered for 0402, 0603, and fine-pitch ICs.</li>
+                        <li><strong>Automated Assembly:</strong> Optimized for pick-and-place manufacturing.</li>
+                        <li><strong>Thermal Management:</strong> Enhanced layouts for heat dissipation in SMD components.</li>
                     </ul>
                 </div>
                 <div class="overview-image">
-                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/redpcb.png" alt="Single Sided PCB Feature">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/double-side-smd-pcb-design.png" alt="Single Sided SMD PCB Feature">
                     <div class="glass-card-overlay">
-                        <span>ISO 9001:2015 Certified</span>
+                        <span>High-Precision SMD Layout</span>
                     </div>
                 </div>
             </div>
@@ -47,8 +47,8 @@ get_header(); ?>
     <section id="specs" class="pcb-specs reveal">
         <div class="container">
             <div class="text-center">
-                <h2 class="section-title">Technical Specifications</h2>
-                <p class="section-subtitle">Our manufacturing capabilities for single-sided boards</p>
+                <h2 class="section-title">SMD Technical Specifications</h2>
+                <p class="section-subtitle">Engineered for Surface Mount Technology</p>
             </div>
             
             <div class="specs-grid">
@@ -56,40 +56,40 @@ get_header(); ?>
                     <div class="spec-icon">🔬</div>
                     <h3>Materials</h3>
                     <ul>
-                        <li>FR-4 Standard / High TG</li>
-                        <li>CEM-1 / CEM-3</li>
-                        <li>Aluminum / Metal Core</li>
-                        <li>Paper Phenolic (FR-1/FR-2)</li>
+                        <li>FR-4 High TG (Recommended for Reflow)</li>
+                        <li>CEM-3 / Aluminum Base</li>
+                        <li>Metal Core PCB (MCPCB)</li>
+                        <li>Polyimide (Flexible)</li>
                     </ul>
                 </div>
                 <div class="spec-card">
                     <div class="spec-icon">📏</div>
-                    <h3>Dimensions</h3>
+                    <h3>SMD Precision</h3>
                     <ul>
-                        <li>Max Board Size: 500mm x 600mm</li>
-                        <li>Thickness: 0.4mm - 3.2mm</li>
-                        <li>Copper Weight: 0.5oz - 3oz</li>
-                        <li>Tolerance: ±0.1mm</li>
+                        <li>Min Pad Pitch: 0.4mm</li>
+                        <li>Solder Mask Clearance: 2 mil</li>
+                        <li>Copper Weight: 1oz - 2oz</li>
+                        <li>Profile: V-Cut / Routing</li>
                     </ul>
                 </div>
                 <div class="spec-card">
                     <div class="spec-icon">🎨</div>
-                    <h3>Finishes</h3>
+                    <h3>Surface Finishes</h3>
                     <ul>
-                        <li>HASL (Lead-Free)</li>
-                        <li>ENIG (Electroless Nickel)</li>
-                        <li>OSP (Organic Solderability)</li>
-                        <li>Immersion Silver/Tin</li>
+                        <li>ENIG (Highly Recommended for SMD)</li>
+                        <li>Immersion Silver / Tin</li>
+                        <li>Lead-Free HASL</li>
+                        <li>Hard Gold / ENEPIG</li>
                     </ul>
                 </div>
                 <div class="spec-card">
                     <div class="spec-icon">⚡</div>
-                    <h3>Design Rules</h3>
+                    <h3>SMD Design Rules</h3>
                     <ul>
-                        <li>Min Trace/Space: 4/4 mil</li>
-                        <li>Min Drill Size: 0.2mm</li>
-                        <li>Solder Mask Colors: Green, Blue, Red, Black, White</li>
-                        <li>Silkscreen Colors: White, Black, Yellow</li>
+                        <li>Min Trace/Space: 3/3 mil</li>
+                        <li>Via-in-Pad capable</li>
+                        <li>Solder Mask: Matte/Glossy Green, Black</li>
+                        <li>Silkscreen: High-Resolution White</li>
                     </ul>
                 </div>
             </div>
@@ -99,32 +99,32 @@ get_header(); ?>
     <!-- Process Section -->
     <section class="pcb-process reveal">
         <div class="container">
-            <h2 class="section-title text-center">Manufacturing Process</h2>
+            <h2 class="section-title text-center">SMD Focused Process</h2>
             <div class="process-timeline">
                 <div class="process-step">
                     <div class="step-num">01</div>
-                    <h4>Gerber Opti</h4>
-                    <p>Design validation and optimization for production.</p>
+                    <h4>DFM Analysis</h4>
+                    <p>Design for Manufacturing review for SMD layout.</p>
                 </div>
                 <div class="process-step">
                     <div class="step-num">02</div>
-                    <h4>Drilling</h4>
-                    <p>Precision CNC drilling for mounting holes.</p>
+                    <h4>Stencil Fab</h4>
+                    <p>Laser-cut stainless steel stencils for paste.</p>
                 </div>
                 <div class="process-step">
                     <div class="step-num">03</div>
-                    <h4>Etching</h4>
-                    <p>Chemical removal of excess copper patterns.</p>
+                    <h4>Reflow Soldering</h4>
+                    <p>Controlled thermal profiles for SMD pads.</p>
                 </div>
                 <div class="process-step">
                     <div class="step-num">04</div>
-                    <h4>Masking</h4>
-                    <p>LPI Solder Mask application for protection.</p>
+                    <h4>Automated AOI</h4>
+                    <p>Camera-based inspection of component solder.</p>
                 </div>
                 <div class="process-step">
                     <div class="step-num">05</div>
-                    <h4>Inspection</h4>
-                    <p>Automated Optical Inspection (AOI) & Testing.</p>
+                    <h4>X-Ray Test</h4>
+                    <p>Verification of BGA and hidden SMD joints.</p>
                 </div>
             </div>
         </div>
@@ -134,11 +134,11 @@ get_header(); ?>
     <section id="quote" class="pcb-cta reveal">
         <div class="container">
             <div class="cta-card">
-                <h2>Ready to Start Your Project?</h2>
-                <p>Get a precise manufacturing quote within 24 hours. Our engineers are ready to assist with your single-sided PCB requirements.</p>
+                <h2>Start Your SMD Project Today</h2>
+                <p>Get a specialized quote for your Single-Sided SMD PCB requirements. Experience precision manufacturing tailored for modern surface-mount technology.</p>
                 <div class="cta-btns">
-                    <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-primary btn-large">Request a Quote</a>
-                    <a href="tel:+123456789" class="btn btn-outline-white">Call an Expert</a>
+                    <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-primary btn-large">Request SMD Quote</a>
+                    <a href="tel:+123456789" class="btn btn-outline-white">Consult an Engineer</a>
                 </div>
             </div>
         </div>
@@ -184,7 +184,7 @@ get_header(); ?>
 .feature-list li { margin-bottom: 1rem; padding-left: 2rem; position: relative; }
 .feature-list li::before { content: "✓"; position: absolute; left: 0; color: var(--secondary); font-weight: 900; }
 .overview-image { position: relative; border-radius: 1rem; overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.1); }
-.glass-card-overlay { position: absolute; bottom: 2rem; right: 2rem; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); padding: 1rem 1.5rem; border-radius: 0.5rem; font-weight: 700; border: 1px solid rgba(255,255,255,0.3);color:rgba(65, 67, 70, 1); }
+.glass-card-overlay { position: absolute; bottom: 2rem; right: 2rem; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); padding: 1rem 1.5rem; border-radius: 0.5rem; font-weight: 700; border: 1px solid rgba(255,255,255,0.3);color:rgba(49, 49, 49, 1); }
 
 /* Specs Grid */
 .specs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 4rem; }
@@ -199,7 +199,7 @@ get_header(); ?>
 .process-timeline { display: flex; justify-content: space-between; margin-top: 4rem; position: relative; }
 .process-timeline::before { content: ""; position: absolute; top: 1.5rem; left: 5%; right: 5%; height: 2px; background: #e2e8f0; z-index: 0; }
 .process-step { flex: 1; text-align: center; position: relative; z-index: 1; padding: 0 1rem; }
-.step-num { width: 3rem; height: 3rem; background: #fff; border: 2px solid var(--secondary); color: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-weight: 800;color:rgba(34, 33, 33, 1) }
+.step-num { width: 3rem; height: 3rem; background: #fff; border: 2px solid var(--secondary); color: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-weight: 800;color:rgba(45, 45, 45, 1); }
 .process-step h4 { margin-bottom: 0.5rem; }
 .process-step p { font-size: 0.85rem; color: var(--text-muted); }
 

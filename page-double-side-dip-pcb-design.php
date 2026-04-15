@@ -34,7 +34,7 @@ get_header(); ?>
                     </ul>
                 </div>
                 <div class="overview-image">
-                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/pcb_feature.png" alt="Single Sided SMD PCB Feature">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/yellow.png" alt="Single Sided SMD PCB Feature">
                     <div class="glass-card-overlay">
                         <span>High-Precision SMD Layout</span>
                     </div>
@@ -184,7 +184,7 @@ get_header(); ?>
 .feature-list li { margin-bottom: 1rem; padding-left: 2rem; position: relative; }
 .feature-list li::before { content: "✓"; position: absolute; left: 0; color: var(--secondary); font-weight: 900; }
 .overview-image { position: relative; border-radius: 1rem; overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.1); }
-.glass-card-overlay { position: absolute; bottom: 2rem; right: 2rem; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); padding: 1rem 1.5rem; border-radius: 0.5rem; font-weight: 700; border: 1px solid rgba(255,255,255,0.3); }
+.glass-card-overlay { position: absolute; bottom: 2rem; right: 2rem; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); padding: 1rem 1.5rem; border-radius: 0.5rem; font-weight: 700; border: 1px solid rgba(255,255,255,0.3);color:rgba(49, 49, 49, 1); }
 
 /* Specs Grid */
 .specs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 4rem; }
@@ -199,7 +199,7 @@ get_header(); ?>
 .process-timeline { display: flex; justify-content: space-between; margin-top: 4rem; position: relative; }
 .process-timeline::before { content: ""; position: absolute; top: 1.5rem; left: 5%; right: 5%; height: 2px; background: #e2e8f0; z-index: 0; }
 .process-step { flex: 1; text-align: center; position: relative; z-index: 1; padding: 0 1rem; }
-.step-num { width: 3rem; height: 3rem; background: #fff; border: 2px solid var(--secondary); color: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-weight: 800; }
+.step-num { width: 3rem; height: 3rem; background: #fff; border: 2px solid var(--secondary); color: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-weight: 800;color:rgba(45, 45, 45, 1); }
 .process-step h4 { margin-bottom: 0.5rem; }
 .process-step p { font-size: 0.85rem; color: var(--text-muted); }
 
