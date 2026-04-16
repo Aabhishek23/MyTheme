@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
 .feature-list li { margin-bottom: 1rem; padding-left: 2rem; position: relative; }
 .feature-list li::before { content: "✓"; position: absolute; left: 0; color: var(--secondary); font-weight: 900; }
 .overview-image { position: relative; border-radius: 1rem; overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.1); }
-.glass-card-overlay { position: absolute; bottom: 2rem; right: 2rem; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); padding: 1rem 1.5rem; border-radius: 0.5rem; font-weight: 700; border: 1px solid rgba(255,255,255,0.3);color:rgba(49, 49, 49, 1); }
+.glass-card-overlay { position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); padding: 1rem 1.5rem; border-radius: 0.5rem; font-weight: 700; border: 1px solid rgba(255,255,255,0.3);color:rgba(49, 49, 49, 1); }
 
 /* PCB Image Slider */
 .pcb-slider { position: relative; border-radius: 1rem; overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.12); }
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
 .slide { display: none; position: relative; }
 .slide.active { display: block; animation: fadeSlide 0.5s ease; }
 @keyframes fadeSlide { from { opacity: 0; transform: scale(1.03); } to { opacity: 1; transform: scale(1); } }
-.slide img { width: 100%; height: 380px; object-fit: cover; display: block; }
+.slide img { width: 100%; height: 550px; object-fit: cover; display: block; }
 .slide-label { position: absolute; top: 1rem; left: 1rem; background: rgba(0,0,0,0.55); backdrop-filter: blur(6px); color: #fff; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.35rem 0.85rem; border-radius: 2rem; }
 
 /* Tabs */

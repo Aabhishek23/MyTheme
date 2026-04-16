@@ -34,9 +34,37 @@ get_header(); ?>
                     </ul>
                 </div>
                 <div class="overview-image">
-                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/double-side-smd-pcb-design.png" alt="Single Sided SMD PCB Feature">
-                    <div class="glass-card-overlay">
-                        <span>High-Precision SMD Layout</span>
+                    <!-- Image Slider -->
+                    <div class="pcb-slider" id="smdSlider">
+                        <div class="slider-track">
+                            <div class="slide active">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/double-side-smd-pcb-design-Top.png" alt="SMD PCB Top Layer">
+                                <div class="slide-label">Top Layer</div>
+                            </div>
+                            <div class="slide">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/double-side-smd-pcb-design-Bottom.png" alt="SMD PCB Bottom Layer">
+                                <div class="slide-label">Bottom Layer</div>
+                            </div>
+                            <div class="slide">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/double-side-smd-pcb-design-bottom.png" alt="SMD PCB Full Board">
+                                <div class="slide-label">Full Board</div>
+                            </div>
+                        </div>
+                        <!-- Navigation Tabs -->
+                        <div class="slider-tabs">
+                            <button class="stab active" onclick="goToSlide('smdSlider', 0)">Top Layer</button>
+                            <button class="stab" onclick="goToSlide('smdSlider', 1)">Bottom Layer</button>
+                            <button class="stab" onclick="goToSlide('smdSlider', 2)">Full Board</button>
+                        </div>
+                        <!-- Dot Indicators -->
+                        <div class="slider-dots">
+                            <span class="dot active" onclick="goToSlide('smdSlider', 0)"></span>
+                            <span class="dot" onclick="goToSlide('smdSlider', 1)"></span>
+                            <span class="dot" onclick="goToSlide('smdSlider', 2)"></span>
+                        </div>
+                        <div class="glass-card-overlay">
+                            <span>High-Precision SMD Layout</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -145,6 +173,33 @@ get_header(); ?>
     </section>
 </main>
 
+<script>
+function goToSlide(sliderId, index) {
+    const slider = document.getElementById(sliderId);
+    const slides = slider.querySelectorAll('.slide');
+    const tabs   = slider.querySelectorAll('.stab');
+    const dots   = slider.querySelectorAll('.dot');
+    slides.forEach((s, i) => s.classList.toggle('active', i === index));
+    tabs.forEach((t, i)   => t.classList.toggle('active', i === index));
+    dots.forEach((d, i)   => d.classList.toggle('active', i === index));
+    if (window['_timer_' + sliderId]) clearInterval(window['_timer_' + sliderId]);
+    window['_timer_' + sliderId] = setInterval(() => {
+        const current = [...slider.querySelectorAll('.slide')].findIndex(s => s.classList.contains('active'));
+        goToSlide(sliderId, (current + 1) % slider.querySelectorAll('.slide').length);
+    }, 3000);
+}
+document.addEventListener('DOMContentLoaded', () => {
+    ['smdSlider'].forEach(id => {
+        window['_timer_' + id] = setInterval(() => {
+            const slider = document.getElementById(id);
+            if (!slider) return;
+            const slides = slider.querySelectorAll('.slide');
+            const current = [...slides].findIndex(s => s.classList.contains('active'));
+            goToSlide(id, (current + 1) % slides.length);
+        }, 3000);
+    });
+});
+</script>
 <style>
 /* Section Spacing */
 .pcb-design-template section { padding: 6rem 0; }
@@ -184,7 +239,27 @@ get_header(); ?>
 .feature-list li { margin-bottom: 1rem; padding-left: 2rem; position: relative; }
 .feature-list li::before { content: "✓"; position: absolute; left: 0; color: var(--secondary); font-weight: 900; }
 .overview-image { position: relative; border-radius: 1rem; overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.1); }
-.glass-card-overlay { position: absolute; bottom: 2rem; right: 2rem; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); padding: 1rem 1.5rem; border-radius: 0.5rem; font-weight: 700; border: 1px solid rgba(255,255,255,0.3);color:rgba(49, 49, 49, 1); }
+.glass-card-overlay { position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); padding: 1rem 1.5rem; border-radius: 0.5rem; font-weight: 700; border: 1px solid rgba(255,255,255,0.3);color:rgba(49, 49, 49, 1); }
+
+/* PCB Image Slider */
+.pcb-slider { position: relative; border-radius: 1rem; overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.12); }
+.slider-track { position: relative; }
+.slide { display: none; position: relative; }
+.slide.active { display: block; animation: fadeSlide 0.5s ease; }
+@keyframes fadeSlide { from { opacity: 0; transform: scale(1.03); } to { opacity: 1; transform: scale(1); } }
+.slide img { width: 100%; height: 550px; object-fit: cover; display: block; }
+.slide-label { position: absolute; top: 1rem; left: 1rem; background: rgba(0,0,0,0.55); backdrop-filter: blur(6px); color: #fff; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.35rem 0.85rem; border-radius: 2rem; }
+
+/* Tabs */
+.slider-tabs { display: flex; gap: 0; border-top: 1px solid rgba(255,255,255,0.15); background: rgba(10,10,20,0.75); backdrop-filter: blur(8px); }
+.stab { flex: 1; padding: 0.65rem 0.5rem; border: none; background: transparent; color: rgba(255,255,255,0.6); font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: all 0.25s; border-bottom: 2px solid transparent; text-transform: uppercase; letter-spacing: 0.05em; }
+.stab:hover { color: #fff; background: rgba(255,255,255,0.08); }
+.stab.active { color: var(--secondary, #f0c040); border-bottom-color: var(--secondary, #f0c040); background: rgba(255,255,255,0.05); }
+
+/* Dots */
+.slider-dots { display: flex; justify-content: center; gap: 0.5rem; padding: 0.6rem 0; background: rgba(10,10,20,0.75); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.3); cursor: pointer; transition: background 0.3s, transform 0.3s; }
+.dot.active { background: var(--secondary, #f0c040); transform: scale(1.3); }
 
 /* Specs Grid */
 .specs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 4rem; }
