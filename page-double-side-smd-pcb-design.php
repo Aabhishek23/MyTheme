@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Single Side SMD PCB Design
+ * Template Name: Double Side SMD PCB Design
  */
 get_header(); ?>
 
@@ -25,8 +25,8 @@ get_header(); ?>
         <div class="container">
             <div class="grid-2">
                 <div class="overview-text">
-                    <h2 class="section-title">SMD Optimization for Single-Sided Boards</h2>
-                    <p>Our Single-Sided SMD PCB design process focuses on maximizing land pattern accuracy and solder mask precision. By leveraging SMD technology on a single conductive layer, we provide lightweight and compact solutions for modern electronics.</p>
+                    <h2 class="section-title">SMD Optimization for Double-Sided Boards</h2>
+                    <p>Our Double-Sided SMD PCB design leverages both top and bottom copper layers to deliver higher component density and more complex circuit routing. By utilizing SMD technology across dual conductive layers, we provide advanced compact solutions for high-performance modern electronics.</p>
                     <ul class="feature-list">
                         <li><strong>SMD Compatibility:</strong> Precision-engineered for 0402, 0603, and fine-pitch ICs.</li>
                         <li><strong>Automated Assembly:</strong> Optimized for pick-and-place manufacturing.</li>
@@ -135,7 +135,7 @@ get_header(); ?>
         <div class="container">
             <div class="cta-card">
                 <h2>Start Your SMD Project Today</h2>
-                <p>Get a specialized quote for your Single-Sided SMD PCB requirements. Experience precision manufacturing tailored for modern surface-mount technology.</p>
+                <p>Get a specialized quote for your Double-Sided SMD PCB requirements. Experience precision manufacturing tailored for high-density, dual-layer surface-mount technology.</p>
                 <div class="cta-btns">
                     <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-primary btn-large">Request SMD Quote</a>
                     <a href="tel:+123456789" class="btn btn-outline-white">Consult an Engineer</a>
