@@ -13,7 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['full_name'])) {
     
     $full_name = sanitize_text_field($_POST['full_name']);
     $email     = sanitize_email($_POST['email']);
-    $phone     = sanitize_text_field($_POST['phone']);
+    $country_code = sanitize_text_field($_POST['country_code']);
+    $phone_num    = sanitize_text_field($_POST['phone']);
+    $phone        = $country_code . ' ' . $phone_num;
     $address   = sanitize_textarea_field($_POST['address']);
     
     $body = "You have a new High-Precision Manufacturing request:\n\n";
@@ -250,7 +252,10 @@ get_header(); ?>
                     <div class="form-grid-flex" style="margin-top: 20px;">
                         <div class="input-wrap">
                             <label>Phone Number *</label>
-                            <input type="tel" name="phone" placeholder="+1 234 567 890" required>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" name="country_code" placeholder="+91" style="width: 80px; padding: 0.85rem; border: 1.5px solid var(--mfg-border); border-radius: 6px;" required>
+                                <input type="tel" name="phone" placeholder="1234567890" style="flex: 1; padding: 0.85rem; border: 1.5px solid var(--mfg-border); border-radius: 6px;" required>
+                            </div>
                         </div>
                     </div>
                     <div class="form-grid-flex" style="margin-top: 20px;">

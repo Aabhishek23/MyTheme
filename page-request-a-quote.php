@@ -14,7 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['full_name'])) {
     $full_name = sanitize_text_field($_POST['full_name']);
     $email     = sanitize_email($_POST['email']);
     $company   = sanitize_text_field($_POST['company']);
-    $phone     = sanitize_text_field($_POST['phone']);
+    $country_code = sanitize_text_field($_POST['country_code']);
+    $phone_num    = sanitize_text_field($_POST['phone']);
+    $phone        = $country_code . ' ' . $phone_num;
     $address   = sanitize_textarea_field($_POST['address']);
     $service_type = sanitize_text_field($_POST['service_type']);
     $pin_count    = sanitize_text_field($_POST['pin_count']);
@@ -108,8 +110,8 @@ get_header(); ?>
         <div class="container">
             <div class="text-center">
                 <span class="badge">AIPL Design Studio</span>
-                <h1>PCB Design &amp; Consultancy</h1>
-                <p>Collaborate with our expert engineers to design high-performance, manufacture-ready PCBs. From concept to full schematic and layout, we deliver precision engineering.</p>
+                <h1>PCB Design, Prototyping &amp; Engineering Consultancy</h1>
+                <p>Work with our expert team to develop high-performance, production-ready PCB solutions. From concept, schematic, and layout design to prototyping, manufacturing, testing, and project consultancy — we deliver end-to-end precision engineering.</p>
                 <div class="mfg-cta-banner">
                     <p>Looking for PCB Manufacturing only?</p>
                     <a href="<?php echo esc_url(home_url('/manufacturing-quote')); ?>" class="mfg-link-btn">Go to Online Manufacturing Quote &rarr;</a>
@@ -130,7 +132,6 @@ get_header(); ?>
                             <li><span>✓</span> Technical Consultancy Services</li>
                             <li><span>✓</span> High-Precision Manufacturing</li>
                             <li><span>✓</span> 24h Engineering Support</li>
-                            <li><span>✓</span> ISO 9001:2015 Certified Quality</li>
                         </ul>
                     </div>
                     <div class="contact-card">
@@ -163,7 +164,10 @@ get_header(); ?>
                                 </div>
                                 <div class="form-group">
                                     <label>Phone Number *</label>
-                                    <input type="tel" name="phone" placeholder="+1 234 567 890" required>
+                                    <div style="display: flex; gap: 10px;">
+                                        <input type="text" name="country_code" placeholder="+91" style="width: 100px;" required>
+                                        <input type="tel" name="phone" placeholder="1234567890" style="flex: 1;" required>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Company Name</label>
@@ -191,6 +195,7 @@ get_header(); ?>
                                 <div class="form-group">
                                     <label>Target Layers</label>
                                     <select name="target_layers">
+                                        <option value="1">1 Layer</option>
                                         <option value="2">2 Layers</option>
                                         <option value="4">4 Layers</option>
                                         <option value="6">6 Layers</option>
@@ -298,17 +303,19 @@ get_header(); ?>
 
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
 .form-group { margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
-.form-group label { font-size: 0.9rem; font-weight: 600; color: #888; }
+.form-group label { font-size: 0.95rem; font-weight: 600; color: #ffffff; margin-bottom: 0.5rem; }
 
 input, select, textarea { 
     background: rgba(0,0,0,0.3); 
-    border: 1px solid rgba(255,255,255,0.1); 
+    border: 1px solid rgba(255,255,255,0.2); 
     padding: 1rem 1.25rem; 
     border-radius: 0.75rem; 
-    color: #fff; 
+    color: #ffffff !important; 
     font-size: 1rem; 
     transition: all 0.3s;
 }
+select option { background: #111; color: #fff; }
+::placeholder { color: rgba(255,255,255,0.6); }
 input:focus, select:focus, textarea:focus { border-color: #7c4dff; outline: none; background: rgba(0,0,0,0.5); }
 
 /* Project Type Cards */
