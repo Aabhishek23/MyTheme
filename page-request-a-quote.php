@@ -67,6 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['full_name'])) {
                 $error_message = "Upload Error: " . ($upload['error'] ?? 'Unknown error');
             }
         }
+    } elseif (isset($_FILES['gerber_file']) && $_FILES['gerber_file']['error'] == UPLOAD_ERR_INI_SIZE) {
+        $error_message = "File is too large for the server. Please check your PHP upload settings.";
     }
 
     // Only save to DB if there's no error
@@ -143,7 +145,7 @@ get_header(); ?>
                         <div class="success-message">
                             <h2>✅ Request Sent Successfully!</h2>
                             <p>Thank you, <?php echo esc_html($full_name); ?>. Our engineers will review your Gerber files and get back to you at <?php echo esc_html($email); ?> shortly.</p>
-                            <a href="<?php echo esc_url(home_url('/request-a-quote')); ?>" class="btn btn-outline">Send Another Request</a>
+                            <a href="<?php echo esc_url(get_permalink()); ?>" class="btn btn-outline">Send Another Request</a>
                         </div>
                     <?php else : ?>
                         <?php if ($error_message) echo '<p class="error-text">'.$error_message.'</p>'; ?>
@@ -247,6 +249,20 @@ get_header(); ?>
 </main>
 
 <style>
+/* Header Overrides for Visibility */
+.main-header {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.main-header .nav-menu > .menu-item > a, 
+.main-header .nav-menu > .nav-item > a,
+.main-header .logo {
+    color: #111111 !important;
+    -webkit-text-fill-color: #111111 !important;
+}
+
 /* Base Styles */
 .quote-page { background: #000; color: #fff; padding-bottom: 8rem; }
 .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }

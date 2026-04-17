@@ -34,30 +34,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['full_name'])) {
     
     // File Attachment Handling
     $attachments = array();
+    $file_url = "";
     if (!empty($_FILES['gerber_file']['name'])) {
+        // ... handled below ...
+    } elseif (isset($_FILES['gerber_file']) && $_FILES['gerber_file']['error'] == UPLOAD_ERR_INI_SIZE) {
+        $error_message = "File is too large. Please check your PHP settings (upload_max_filesize).";
+    }
+
+    if (empty($error_message) && !empty($_FILES['gerber_file']['name'])) {
         require_once(ABSPATH . 'wp-admin/includes/file.php');
         $upload_overrides = array('test_form' => false, 'test_type' => false);
         $upload = wp_handle_upload($_FILES['gerber_file'], $upload_overrides);
         if (isset($upload['file'])) {
             $attachments[] = $upload['file'];
+            $file_url = $upload['url'];
+        } else {
+            $error_message = "Upload Error: " . ($upload['error'] ?? 'Unknown error');
         }
     }
 
-    // Save to custom post type 'pcb_quote'
-    $post_id = wp_insert_post(array(
-        'post_title'   => 'Mfg Quote: ' . $full_name,
-        'post_content' => $body,
-        'post_status'  => 'publish',
-        'post_type'    => 'pcb_quote',
-    ));
+    // Only proceed if no upload error
+    if (empty($error_message)) {
+        // Save to custom post type 'pcb_quote'
+        $post_id = wp_insert_post(array(
+            'post_title'   => 'Mfg Quote: ' . $full_name,
+            'post_content' => $body,
+            'post_status'  => 'publish',
+            'post_type'    => 'pcb_quote',
+        ));
 
-    if ($post_id) {
-        update_post_meta($post_id, '_customer_email', $email);
-        update_post_meta($post_id, '_customer_phone', $phone);
-        update_post_meta($post_id, '_customer_address', $address);
-        update_post_meta($post_id, '_service_type', 'manufacturing');
-        $message_sent = true;
-        @wp_mail($to, $subject, $body, $headers, $attachments);
+        if ($post_id) {
+            update_post_meta($post_id, '_customer_email', $email);
+            update_post_meta($post_id, '_customer_phone', $phone);
+            update_post_meta($post_id, '_customer_address', $address);
+            update_post_meta($post_id, '_service_type', 'manufacturing');
+            update_post_meta($post_id, '_file_url', $file_url);
+            $message_sent = true;
+            @wp_mail($to, $subject, $body, $headers, $attachments);
+        }
     }
 }
 
@@ -78,6 +92,7 @@ get_header(); ?>
             </div>
         </header>
 
+        <?php if ($error_message) echo '<p style="color:red; text-align:center; font-weight:700; background:rgba(255,0,0,0.1); padding:10px; border-radius:5px;">'.$error_message.'</p>'; ?>
         <form id="mfgQuoteForm" method="POST" enctype="multipart/form-data">
             <!-- Gerber Upload Section -->
             <section class="upload-section">
@@ -255,7 +270,7 @@ get_header(); ?>
                     <div class="success-icon">✅</div>
                     <h2>Project Saved Successfully!</h2>
                     <p>Our engineering team will review your Gerber files and specifications within 24 hours.</p>
-                    <button class="reload-btn" onclick="window.location.reload()">Send Another Request</button>
+                    <a href="<?php echo esc_url(get_permalink()); ?>" class="reload-btn" style="text-decoration:none; display:inline-block;">Send Another Request</a>
                 </div>
             </div>
         <?php endif; ?>
@@ -264,6 +279,20 @@ get_header(); ?>
 </div>
 
 <style>
+/* Header Overrides for Visibility */
+.main-header {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.main-header .nav-menu > .menu-item > a, 
+.main-header .nav-menu > .nav-item > a,
+.main-header .logo {
+    color: #111111 !important;
+    -webkit-text-fill-color: #111111 !important;
+}
+
 /* JLCPCB Style Simulation with Premium Touch */
 :root {
     --mfg-blue: #007bff;
@@ -276,7 +305,7 @@ get_header(); ?>
     --mfg-orange: #ff6a00;
 }
 
-.mfg-page-wrapper { background: var(--mfg-bg); min-height: 100vh; padding: 2rem 1rem; }
+.mfg-page-wrapper { background: var(--mfg-bg); min-height: 100vh; padding: 10rem 1rem 4rem; }
 .mfg-quote-page { color: var(--mfg-text); font-family: 'Segoe UI', Roboto, sans-serif; }
 .mfg-container { max-width: 900px; margin: 0 auto; background: var(--mfg-card-bg); padding: 2rem 2.5rem; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
 
@@ -359,14 +388,30 @@ document.addEventListener('DOMContentLoaded', function() {
     segments.forEach(seg => {
         seg.addEventListener('click', function() {
             const input = this.querySelector('input');
-            const name = input.getAttribute('name');
-            document.querySelectorAll(`input[name="${name}"]`).forEach(otherInput => {
-                otherInput.parentElement.classList.remove('active');
-            });
-            this.classList.add('active');
-            input.checked = true;
+            if (input) {
+                const name = input.getAttribute('name');
+                document.querySelectorAll(`input[name="${name}"]`).forEach(otherInput => {
+                    otherInput.parentElement.classList.remove('active');
+                });
+                this.classList.add('active');
+                input.checked = true;
+            }
         });
     });
+
+    // Handle file upload feedback
+    const fileInput = document.getElementById('gerber_upload');
+    const uploadLabel = document.querySelector('.upload-btn');
+    if (fileInput && uploadLabel) {
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const fileName = this.files[0].name;
+                uploadLabel.innerHTML = '<span class="icon">✅</span> ' + fileName;
+                uploadLabel.style.background = "#2ecc71"; // Change to green on success
+                uploadLabel.style.boxShadow = "0 4px 15px rgba(46, 204, 113, 0.3)";
+            }
+        });
+    }
 });
 </script>
 
