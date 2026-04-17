@@ -14,8 +14,103 @@ function mytheme_setup() {
     register_nav_menus(array(
         'primary-menu' => __('Primary Menu', 'mytheme'),
     ));
+
+    // Register Quotes Post Type
+    register_post_type('pcb_quote', array(
+        'labels' => array(
+            'name' => 'Quotes',
+            'singular_name' => 'Quote',
+            'add_new' => 'Add New',
+            'add_new_item' => 'Add New Quote',
+            'edit_item' => 'Edit Quote',
+            'new_item' => 'New Quote',
+            'view_item' => 'View Quote',
+            'search_items' => 'Search Quotes',
+            'not_found' => 'No Quotes found',
+            'all_items' => 'All Quotes',
+        ),
+        'public' => false,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'menu_icon' => 'dashicons-media-spreadsheet',
+        'supports' => array('title', 'editor', 'custom-fields'),
+        'capability_type' => 'post',
+    ));
 }
 add_action('after_setup_theme', 'mytheme_setup');
+
+/**
+ * ── QUOTES ADMIN DASHBOARD FEATURES ──────────────────────────────────────────
+ * This shows user details and file links inside the WordPress Admin Panel.
+ */
+
+// 1. Add Custom Columns to the Quotes List Table
+add_filter('manage_pcb_quote_posts_columns', function($columns) {
+    $columns['customer_info'] = 'Customer Details';
+    $columns['service_type'] = 'Service';
+    $columns['pcb_specs'] = 'PCB Specs';
+    $columns['file_download'] = 'Download File';
+    return $columns;
+});
+
+add_action('manage_pcb_quote_posts_custom_column', function($column, $post_id) {
+    switch ($column) {
+        case 'customer_info':
+            echo '<strong>Email:</strong> ' . esc_html(get_post_meta($post_id, '_customer_email', true)) . '<br>';
+            echo '<strong>Phone:</strong> ' . esc_html(get_post_meta($post_id, '_customer_phone', true)) . '<br>';
+            echo '<strong>Address:</strong> ' . esc_html(get_post_meta($post_id, '_customer_address', true));
+            break;
+        case 'service_type':
+            $service = get_post_meta($post_id, '_service_type', true);
+            echo '<span style="background:#7c4dff; color:#fff; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:700; text-transform:uppercase;">' . esc_html($service) . '</span>';
+            break;
+        case 'pcb_specs':
+            echo '<strong>Type:</strong> ' . esc_html(get_post_meta($post_id, '_pcb_type', true)) . '<br>';
+            echo '<strong>Qty:</strong> ' . esc_html(get_post_meta($post_id, '_quantity', true));
+            break;
+        case 'file_download':
+            $file_url = get_post_meta($post_id, '_file_url', true);
+            if ($file_url) {
+                echo '<a href="' . esc_url($file_url) . '" target="_blank" class="button button-small button-primary">Download Gerber ZIP</a>';
+            } else { echo '<span style="color:#999; font-style:italic">No File</span>'; }
+            break;
+    }
+}, 10, 2);
+
+// 2. Add a Meta Box for full details inside the Quote Editor
+add_action('add_meta_boxes', function() {
+    add_meta_box('pcb_quote_details', 'FULL QUOTE SUBMISSION DETAILS', function($post) {
+        $meta = get_post_custom($post->ID);
+        ?>
+        <div style="background:#f9f9f9; padding:20px; border:1px solid #ddd; border-radius:10px;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                <div>
+                    <h4 style="border-bottom:2px solid #7c4dff; padding-bottom:10px;">👤 Contact Info</h4>
+                    <p><strong>Email:</strong> <?php echo esc_html($meta['_customer_email'][0] ?? 'N/A'); ?></p>
+                    <p><strong>Phone:</strong> <?php echo esc_html($meta['_customer_phone'][0] ?? 'N/A'); ?></p>
+                    <p><strong>Address:</strong> <?php echo esc_html($meta['_customer_address'][0] ?? 'N/A'); ?></p>
+                </div>
+                <div>
+                    <h4 style="border-bottom:2px solid #7c4dff; padding-bottom:10px;">🔬 Project Details</h4>
+                    <p><strong>Service Requested:</strong> <span style="background:#7c4dff; color:#fff; padding:2px 10px; border-radius:15px;"><?php echo esc_html($meta['_service_type'][0] ?? 'N/A'); ?></span></p>
+                    <p><strong>PCB Type:</strong> <?php echo esc_html($meta['_pcb_type'][0] ?? 'N/A'); ?></p>
+                    <p><strong>Quantity:</strong> <?php echo esc_html($meta['_quantity'][0] ?? 'N/A'); ?></p>
+                    <p><strong>Material:</strong> <?php echo esc_html($meta['_material'][0] ?? 'N/A'); ?></p>
+                    <p><strong>Thickness:</strong> <?php echo esc_html($meta['_thickness'][0] ?? '0'); ?> mm</p>
+                </div>
+            </div>
+            <div style="margin-top:20px; padding-top:20px; border-top:1px solid #ccc;">
+                <h4 style="color:#7c4dff;">📦 Attachment</h4>
+                <?php if (!empty($meta['_file_url'][0])) : ?>
+                    <a href="<?php echo esc_url($meta['_file_url'][0]); ?>" class="button button-primary button-large" target="_blank" style="padding:10px 30px; background:#7c4dff; border-color:#7c4dff;">DOWNLOAD GERBER FILES (.ZIP)</a>
+                <?php else : ?>
+                    <p style="color:red; font-style:italic;">No file was uploaded with this request.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php
+    }, 'pcb_quote', 'normal', 'high');
+});
 
 // Add nav-item class to WordPress menu items for CSS compatibility
 function mytheme_add_menu_class($classes, $item, $args) {
@@ -39,6 +134,14 @@ function mytheme_scripts() {
     wp_enqueue_script('main-js', get_template_directory_uri() . '/assets/js/main.js', array(), '1.0', true);
 }
 add_action('wp_enqueue_scripts', 'mytheme_scripts');
+
+// 3. Allow ZIP and RAR uploads in WordPress
+add_filter('upload_mimes', function($mimes) {
+    if (!isset($mimes['zip'])) $mimes['zip'] = 'application/zip';
+    if (!isset($mimes['rar'])) $mimes['rar'] = 'application/x-rar-compressed';
+    if (!isset($mimes['7z']))  $mimes['7z']  = 'application/x-7z-compressed';
+    return $mimes;
+});
 
 function mytheme_admin_scripts($hook) {
     if ('nav-menus.php' === $hook) {

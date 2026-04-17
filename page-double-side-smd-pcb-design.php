@@ -46,7 +46,7 @@ get_header(); ?>
                                 <div class="slide-label">Bottom Layer</div>
                             </div>
                             <div class="slide">
-                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/double-side-smd-pcb-design-bottom.png" alt="SMD PCB Full Board">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/double-side-smd-pcb-design-Full.png" alt="SMD PCB Full Board">
                                 <div class="slide-label">Full Board</div>
                             </div>
                         </div>
