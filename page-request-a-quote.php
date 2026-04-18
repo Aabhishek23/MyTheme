@@ -136,8 +136,8 @@ get_header(); ?>
                     </div>
                     <div class="contact-card">
                         <p>Need immediate help?</p>
-                        <a href="tel:+123456789" class="phone-link">+123 456 789</a>
-                        <p>support@aipl.com</p>
+                        <a href="tel:+91 9826541718" class="phone-link">+91 9826541718</a>
+                        <p>info@aimsint.in</p>
                     </div>
                 </div>
 
@@ -166,7 +166,7 @@ get_header(); ?>
                                     <label>Phone Number *</label>
                                     <div style="display: flex; gap: 10px;">
                                         <input type="text" name="country_code" placeholder="+91" style="width: 100px;" required>
-                                        <input type="tel" name="phone" placeholder="1234567890" style="flex: 1;" required>
+                                        <input type="tel" name="phone" placeholder="9826541718" style="flex: 1;" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -424,6 +424,18 @@ document.addEventListener('DOMContentLoaded', function() {
         let files = dt.files;
         fileInput.files = files; 
         updateFileStatus(files[0]);
+    }
+
+    // Handle Form Submitting State
+    const form = document.getElementById('pcbQuoteForm');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (form && submitBtn) {
+        form.addEventListener('submit', function() {
+            submitBtn.innerHTML = '<span class="spinner">⏳</span> Submitting...';
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = "0.7";
+            submitBtn.style.cursor = "not-allowed";
+        });
     }
 });
 </script>

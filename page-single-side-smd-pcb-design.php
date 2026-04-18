@@ -138,7 +138,7 @@ get_header(); ?>
                 <p>Get a specialized quote for your Single-Sided SMD PCB requirements. Experience precision manufacturing tailored for modern surface-mount technology.</p>
                 <div class="cta-btns">
                     <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-primary btn-large">Request SMD Quote</a>
-                    <a href="tel:+123456789" class="btn btn-outline-white">Consult an Engineer</a>
+                    <a href="tel:+919826541718" class="btn btn-outline-white">Consult an Engineer</a>
                 </div>
             </div>
         </div>

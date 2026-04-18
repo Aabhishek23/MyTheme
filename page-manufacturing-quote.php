@@ -254,7 +254,7 @@ get_header(); ?>
                             <label>Phone Number *</label>
                             <div style="display: flex; gap: 10px;">
                                 <input type="text" name="country_code" placeholder="+91" style="width: 80px; padding: 0.85rem; border: 1.5px solid var(--mfg-border); border-radius: 6px;" required>
-                                <input type="tel" name="phone" placeholder="1234567890" style="flex: 1; padding: 0.85rem; border: 1.5px solid var(--mfg-border); border-radius: 6px;" required>
+                                <input type="tel" name="phone" placeholder="9826541718" style="flex: 1; padding: 0.85rem; border: 1.5px solid var(--mfg-border); border-radius: 6px;" required>
                             </div>
                         </div>
                     </div>
@@ -415,6 +415,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 uploadLabel.style.background = "#2ecc71"; // Change to green on success
                 uploadLabel.style.boxShadow = "0 4px 15px rgba(46, 204, 113, 0.3)";
             }
+        });
+    }
+
+    // Handle Form Submitting State
+    const form = document.getElementById('mfgQuoteForm');
+    const submitBtn = form.querySelector('.mfg-submit-btn');
+    if (form && submitBtn) {
+        form.addEventListener('submit', function() {
+            submitBtn.innerHTML = '⏳ SUBMITTING...';
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = "0.7";
+            submitBtn.style.cursor = "not-allowed";
         });
     }
 });
