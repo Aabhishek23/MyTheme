@@ -38,25 +38,25 @@ get_header(); ?>
                     <div class="pcb-slider" id="multiSlider">
                         <div class="slider-track">
                             <div class="slide active">
-                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/double-side-smd-pcb-design.png" alt="Layer 1 Top">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/top_multilyyer.jpeg" alt="Layer 1 Top" onerror="this.onerror=null; this.style.display='none';">
                                 <div class="slide-label">Layer 1: Top Signal</div>
                             </div>
                             <div class="slide">
-                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/redpcb.png" alt="Layer 2 Internal">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/mid1_multilyyer.jpeg" alt="Layer 2 Internal" onerror="this.onerror=null; this.style.display='none';">
                                 <div class="slide-label">Layer 2: Ground Plane</div>
                             </div>
                             <div class="slide">
-                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/yellow.png" alt="Layer 3 Internal">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/mid2_multilyyer.jpeg" alt="Layer 3 Internal" onerror="this.onerror=null; this.style.display='none';">
                                 <div class="slide-label">Layer 3: Power Plane</div>
                             </div>
                             <div class="slide">
-                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/single-side-smd-pcb-design.png" alt="Layer 4 Bottom">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/bottom_multilyyer.jpeg" alt="Layer 4 Bottom" onerror="this.onerror=null; this.style.display='none';">
                                 <div class="slide-label">Layer 4: Bottom Signal</div>
                             </div>
-                            <div class="slide">
+                            <!-- <div class="slide">
                                 <img src="<?php echo get_template_directory_uri(); ?>/assets/images/pcb_feature.png" alt="Full Board">
                                 <div class="slide-label">Full 4-Layer Board</div>
-                            </div>
+                            </div> -->
                         </div>
                         <!-- Navigation Tabs -->
                         <div class="slider-tabs">
@@ -64,7 +64,7 @@ get_header(); ?>
                             <button class="stab" onclick="goToSlide('multiSlider', 1)">L2</button>
                             <button class="stab" onclick="goToSlide('multiSlider', 2)">L3</button>
                             <button class="stab" onclick="goToSlide('multiSlider', 3)">L4</button>
-                            <button class="stab" onclick="goToSlide('multiSlider', 4)">Full</button>
+                            <!-- <button class="stab" onclick="goToSlide('multiSlider', 4)">Full</button> -->
                         </div>
                         <!-- Dot Indicators -->
                         <div class="slider-dots">
@@ -177,7 +177,7 @@ get_header(); ?>
                 <h2>Ready for Your Multilayer Project?</h2>
                 <p>Get a high-precision manufacturing quote for your 4-layer PCB design. Our expert engineers will review your Gerber files for DFM optimization.</p>
                 <div class="cta-btns">
-                    <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-primary btn-large">Request 4-Layer Quote</a>
+                    <a href="<?php echo esc_url(home_url('/manufacturing-quote')); ?>" class="btn btn-primary btn-large">Request up to  4-Layer Quote</a>
                     <a href="tel:+919826541718" class="btn btn-outline-white">Consult an Expert</a>
                 </div>
             </div>

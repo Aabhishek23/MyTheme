@@ -38,15 +38,15 @@ get_header(); ?>
                     <div class="pcb-slider" id="smdSlider">
                         <div class="slider-track">
                             <div class="slide active">
-                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/double-side-smd-pcb-design-Top.png" alt="SMD PCB Top Layer">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/double-side-smd-pcb-design-Top.png" alt="SMD PCB Top Layer" onerror="this.onerror=null; this.style.display='none';">
                                 <div class="slide-label">Top Layer</div>
                             </div>
                             <div class="slide">
-                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/double-side-smd-pcb-design-Bottom.png" alt="SMD PCB Bottom Layer">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/double-side-smd-pcb-design-Bottom.png" alt="SMD PCB Bottom Layer" onerror="this.onerror=null; this.style.display='none';">
                                 <div class="slide-label">Bottom Layer</div>
                             </div>
                             <div class="slide">
-                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/double-side-smd-pcb-design-Full.png" alt="SMD PCB Full Board">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/double-side-smd-pcb-design-Full.png" alt="SMD PCB Full Board" onerror="this.onerror=null; this.style.display='none';">
                                 <div class="slide-label">Full Board</div>
                             </div>
                         </div>
@@ -165,7 +165,7 @@ get_header(); ?>
                 <h2>Start Your SMD Project Today</h2>
                 <p>Get a specialized quote for your Double-Sided SMD PCB requirements. Experience precision manufacturing tailored for high-density, dual-layer surface-mount technology.</p>
                 <div class="cta-btns">
-                    <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-primary btn-large">Request SMD Quote</a>
+                    <a href="<?php echo esc_url(home_url('/request-a-quote')); ?>" class="btn btn-primary btn-large">Request SMD Quote</a>
                     <a href="tel:+919826541718" class="btn btn-outline-white">Consult an Engineer</a>
                 </div>
             </div>

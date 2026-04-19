@@ -34,7 +34,7 @@ get_header(); ?>
                     </ul>
                 </div>
                 <div class="overview-image">
-                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/single-side-smd-pcb-design.png" alt="Single Sided SMD PCB Feature">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/single-side-smd-pcb-design.png" alt="Single Sided SMD PCB Feature" onerror="this.onerror=null; this.style.display='none';">
                     <div class="glass-card-overlay">
                         <span>High-Precision SMD Layout</span>
                     </div>
@@ -137,7 +137,7 @@ get_header(); ?>
                 <h2>Start Your SMD Project Today</h2>
                 <p>Get a specialized quote for your Single-Sided SMD PCB requirements. Experience precision manufacturing tailored for modern surface-mount technology.</p>
                 <div class="cta-btns">
-                    <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-primary btn-large">Request SMD Quote</a>
+                    <a href="<?php echo esc_url(home_url('/request-a-quote')); ?>" class="btn btn-primary btn-large">Request SMD Quote</a>
                     <a href="tel:+919826541718" class="btn btn-outline-white">Consult an Engineer</a>
                 </div>
             </div>

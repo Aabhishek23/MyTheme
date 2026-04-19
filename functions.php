@@ -199,10 +199,9 @@ function mytheme_default_menu() {
                     </ul>
                 </div>
                 <div class="featured-content">
-                    <img src="https://via.placeholder.com/400x250" alt="Featured Content">
                     <h4>Navigating Software-Defined Vehicle Development</h4>
                     <p>Discover strategies to boost SDV innovation, reduce costs, and enhance reliability.</p>
-                    <a href="#" style="color: #5d3fd3; font-weight: 600;">Download &rarr;</a>
+                    <a href="#" style="color: #5d3fd3; font-weight: 600;">Learn more &rarr;</a>
                 </div>
             </div>
         </li>
@@ -329,7 +328,7 @@ function mytheme_customize_register($wp_customize) {
     ));
 
     $wp_customize->add_setting('design_future_title', array(
-        'default'           => 'Design the Future Today with Synopsys',
+        'default'           => 'End-to-End PCB Design & Manufacturing Services',
         'sanitize_callback' => 'sanitize_text_field',
     ));
     $wp_customize->add_control('design_future_title', array(
@@ -339,7 +338,7 @@ function mytheme_customize_register($wp_customize) {
     ));
 
     $wp_customize->add_setting('design_future_col1_title', array(
-        'default'           => 'Industry',
+        'default'           => 'PCB Design & Consultancy',
         'sanitize_callback' => 'sanitize_text_field',
     ));
     $wp_customize->add_control('design_future_col1_title', array(
@@ -349,7 +348,7 @@ function mytheme_customize_register($wp_customize) {
     ));
 
     $wp_customize->add_setting('design_future_col2_title', array(
-        'default'           => 'Technology',
+        'default'           => 'Manufacturing & Prototyping',
         'sanitize_callback' => 'sanitize_text_field',
     ));
     $wp_customize->add_control('design_future_col2_title', array(
@@ -360,14 +359,14 @@ function mytheme_customize_register($wp_customize) {
 
     // Items for Design the Future
     $df_defaults = array(
-        array('title' => 'AI Chip Development', 'desc' => 'Achieve first-pass silicon success in your AI chip development journey.'),
-        array('title' => 'HPC & Data Center', 'desc' => 'Accelerate development of AI, server, edge, networking & storage SoCs.'),
-        array('title' => 'Mobile/5G', 'desc' => 'Unleash bandwidth and harness security for a 5G world.'),
-        array('title' => 'Automotive', 'desc' => 'Drive the future of software-defined vehicles.'),
-        array('title' => 'Artificial Intelligence (AI)', 'desc' => 'Increase silicon performance & accelerate innovation.'),
-        array('title' => 'Multi-Die', 'desc' => 'A comprehensive solution for fast heterogeneous integration.'),
-        array('title' => 'Energy-Efficient Design', 'desc' => 'End-to-end solution for low power design, verification & IP.'),
-        array('title' => 'Memory', 'desc' => 'Next-generation memory solutions.')
+        array('title' => 'High-Speed Digital Design', 'desc' => 'Advanced design for high-speed signals, impedance control, and signal integrity.'),
+        array('title' => 'Mixed-Signal PCB Design', 'desc' => 'Expert layout for sensitive analog mixed with digital circuitry.'),
+        array('title' => 'RF & Microwave Design', 'desc' => 'Optimized board designs for wireless communications and RF applications.'),
+        array('title' => 'Power Electronics', 'desc' => 'Robust layouts for power supplies, motor drives, and energy systems.'),
+        array('title' => 'Rapid Prototyping', 'desc' => 'Quick-turn PCB fabrication to accelerate your product development.'),
+        array('title' => 'Mass Production', 'desc' => 'High-quality, cost-effective volume manufacturing of custom boards.'),
+        array('title' => 'PCB Assembly (PCBA)', 'desc' => 'Turnkey assembly services including component sourcing and soldering.'),
+        array('title' => 'Testing & Quality Assurance', 'desc' => 'Rigorous inspection and testing to ensure first-pass success.')
     );
 
     for ($i = 1; $i <= 8; $i++) {

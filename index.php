@@ -134,27 +134,27 @@
     <section style="background: #ffffff; padding: 6rem 0;" class="reveal">
         <div class="container">
             <h2 style="font-size: 2.5rem; text-align: center; margin-bottom: 4rem; font-weight: 300; color: #1f2937;">
-                <?php echo esc_html(get_theme_mod('design_future_title', 'Design the Future Today with Synopsys')); ?>
+                <?php echo esc_html(get_theme_mod('design_future_title', 'End-to-End PCB Design & Manufacturing Services')); ?>
             </h2>
 
             <div class="df-grid">
                 <?php
                 // Provide the exact same fallback defaults array so live site matches Customizer preview
                 $df_defaults = array(
-                    array('title' => 'AI Chip Development', 'desc' => 'Achieve first-pass silicon success in your AI chip development journey.'),
-                    array('title' => 'HPC & Data Center', 'desc' => 'Accelerate development of AI, server, edge, networking & storage SoCs.'),
-                    array('title' => 'Mobile/5G', 'desc' => 'Unleash bandwidth and harness security for a 5G world.'),
-                    array('title' => 'Automotive', 'desc' => 'Drive the future of software-defined vehicles.'),
-                    array('title' => 'Artificial Intelligence (AI)', 'desc' => 'Increase silicon performance & accelerate innovation.'),
-                    array('title' => 'Multi-Die', 'desc' => 'A comprehensive solution for fast heterogeneous integration.'),
-                    array('title' => 'Energy-Efficient Design', 'desc' => 'End-to-end solution for low power design, verification & IP.'),
-                    array('title' => 'Memory', 'desc' => 'Next-generation memory solutions.')
+                    array('title' => 'High-Speed Digital Design', 'desc' => 'Advanced design for high-speed signals, impedance control, and signal integrity.'),
+                    array('title' => 'Mixed-Signal PCB Design', 'desc' => 'Expert layout for sensitive analog mixed with digital circuitry.'),
+                    array('title' => 'RF & Microwave Design', 'desc' => 'Optimized board designs for wireless communications and RF applications.'),
+                    array('title' => 'Power Electronics', 'desc' => 'Robust layouts for power supplies, motor drives, and energy systems.'),
+                    array('title' => 'Rapid Prototyping', 'desc' => 'Quick-turn PCB fabrication to accelerate your product development.'),
+                    array('title' => 'Mass Production', 'desc' => 'High-quality, cost-effective volume manufacturing of custom boards.'),
+                    array('title' => 'PCB Assembly (PCBA)', 'desc' => 'Turnkey assembly services including component sourcing and soldering.'),
+                    array('title' => 'Testing & Quality Assurance', 'desc' => 'Rigorous inspection and testing to ensure first-pass success.')
                 );
                 ?>
 
                 <!-- Column 1 -->
                 <div class="df-col">
-                    <h3 class="df-col-title"><?php echo esc_html(get_theme_mod('design_future_col1_title', 'Industry')); ?></h3>
+                    <h3 class="df-col-title"><?php echo esc_html(get_theme_mod('design_future_col1_title', 'PCB Design & Consultancy')); ?></h3>
                     <div class="df-items">
                         <?php for ($i = 1; $i <= 4; $i++) : 
                             $icon = get_theme_mod("df_icon_$i", '');
@@ -164,11 +164,13 @@
                             // Exclude layout if title and desc are entirely empty, to allow user to easily remove rows
                             if (empty($title) && empty($desc)) continue;
                             
-                            $icon_src = $icon ? esc_url($icon) : 'https://via.placeholder.com/48x48?text=Icon';
+                            $icon_src = $icon ? esc_url($icon) : '';
                         ?>
                         <a href="<?php echo esc_url($link); ?>" class="df-item">
                             <div class="df-item-header">
-                                <img src="<?php echo $icon_src; ?>" alt="Icon" class="df-item-icon">
+                                <?php if ($icon_src) : ?>
+                                <img src="<?php echo $icon_src; ?>" alt="Icon" class="df-item-icon" onerror="this.onerror=null; this.style.display='none';">
+                                <?php endif; ?>
                                 <h4 class="df-item-title"><?php echo esc_html($title); ?></h4>
                             </div>
                             <p class="df-item-desc"><?php echo esc_html($desc); ?></p>
@@ -179,7 +181,7 @@
 
                 <!-- Column 2 -->
                 <div class="df-col">
-                    <h3 class="df-col-title"><?php echo esc_html(get_theme_mod('design_future_col2_title', 'Technology')); ?></h3>
+                    <h3 class="df-col-title"><?php echo esc_html(get_theme_mod('design_future_col2_title', 'Manufacturing & Prototyping')); ?></h3>
                     <div class="df-items">
                         <?php for ($i = 5; $i <= 8; $i++) : 
                             $icon = get_theme_mod("df_icon_$i", '');
@@ -189,11 +191,13 @@
 
                             if (empty($title) && empty($desc)) continue;
 
-                            $icon_src = $icon ? esc_url($icon) : 'https://via.placeholder.com/48x48?text=Icon';
+                            $icon_src = $icon ? esc_url($icon) : '';
                         ?>
                         <a href="<?php echo esc_url($link); ?>" class="df-item">
                             <div class="df-item-header">
-                                <img src="<?php echo $icon_src; ?>" alt="Icon" class="df-item-icon">
+                                <?php if ($icon_src) : ?>
+                                <img src="<?php echo $icon_src; ?>" alt="Icon" class="df-item-icon" onerror="this.onerror=null; this.style.display='none';">
+                                <?php endif; ?>
                                 <h4 class="df-item-title"><?php echo esc_html($title); ?></h4>
                             </div>
                             <p class="df-item-desc"><?php echo esc_html($desc); ?></p>
@@ -227,16 +231,12 @@
                             $link = get_theme_mod("ecosystem_link_$i", '#');
                             
                             if (empty($logo)) {
-                                if (is_customize_preview()) {
-                                    $logo = "https://via.placeholder.com/150x50?text=Logo+$i";
-                                } else {
-                                    continue;
-                                }
+                                continue;
                             }
                             $has_logos = true;
                     ?>
                     <a href="<?php echo esc_url($link); ?>" class="partner-logo" target="_blank" <?php echo ($loop > 1) ? 'aria-hidden="true"' : ''; ?>>
-                        <img src="<?php echo esc_url($logo); ?>" alt="Ecosystem Partner <?php echo $i; ?>" loading="lazy">
+                        <img src="<?php echo esc_url($logo); ?>" alt="Ecosystem Partner <?php echo $i; ?>" loading="lazy" onerror="this.onerror=null; this.style.display='none';">
                     </a>
                     <?php 
                         endfor; 
@@ -278,9 +278,7 @@
                     <div class="news-card">
                         <a href="<?php the_permalink(); ?>" class="news-img-link">
                             <?php if (has_post_thumbnail()) : ?>
-                                <?php the_post_thumbnail('medium_large', ['class' => 'news-img', 'loading' => 'lazy']); ?>
-                            <?php else : ?>
-                                <img src="https://via.placeholder.com/600x350?text=News" alt="Placeholder" class="news-img" loading="lazy">
+                                <?php the_post_thumbnail('medium_large', ['class' => 'news-img', 'loading' => 'lazy', 'onerror' => "this.onerror=null; this.style.display='none';"]); ?>
                             <?php endif; ?>
                         </a>
                         <div class="news-content">
@@ -306,7 +304,6 @@
                     ?>
                     <div class="news-card">
                         <a href="#" class="news-img-link">
-                            <img src="https://via.placeholder.com/600x350?text=Published+Post+Demo+<?php echo $i+1; ?>" alt="Placeholder" class="news-img" loading="lazy">
                         </a>
                         <div class="news-content">
                             <div class="news-meta">

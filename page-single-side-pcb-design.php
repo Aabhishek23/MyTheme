@@ -34,7 +34,7 @@ get_header(); ?>
                     </ul>
                 </div>
                 <div class="overview-image">
-                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/redpcb.png" alt="Single Sided PCB Feature">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/redpcb.png" alt="Single Sided PCB Feature" onerror="this.onerror=null; this.style.display='none';">
                     <div class="glass-card-overlay">
                         <span>ISO 9001:2015 Certified</span>
                     </div>
