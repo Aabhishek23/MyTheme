@@ -13,6 +13,10 @@ function mytheme_setup() {
     
     register_nav_menus(array(
         'primary-menu' => __('Primary Menu', 'mytheme'),
+        'footer-col-1' => __('Footer Column 1', 'mytheme'),
+        'footer-col-2' => __('Footer Column 2', 'mytheme'),
+        'footer-col-3' => __('Footer Column 3', 'mytheme'),
+        'footer-col-4' => __('Footer Column 4', 'mytheme'),
     ));
 
     // Register Quotes Post Type
@@ -33,6 +37,29 @@ function mytheme_setup() {
         'show_ui' => true,
         'show_in_menu' => true,
         'menu_icon' => 'dashicons-media-spreadsheet',
+        'supports' => array('title', 'editor', 'custom-fields'),
+        'capability_type' => 'post',
+    ));
+
+    // Register Contact Inquiries Post Type
+    register_post_type('contact_inquiry', array(
+        'labels' => array(
+            'name' => 'Inquiries',
+            'singular_name' => 'Inquiry',
+            'menu_name' => 'Messages',
+            'all_items' => 'All Messages',
+            'add_new' => 'Add New',
+            'add_new_item' => 'Add New Message',
+            'edit_item' => 'View Message',
+            'new_item' => 'New Message',
+            'view_item' => 'View Message',
+            'search_items' => 'Search Messages',
+            'not_found' => 'No messages found',
+        ),
+        'public' => false,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'menu_icon' => 'dashicons-email-alt',
         'supports' => array('title', 'editor', 'custom-fields'),
         'capability_type' => 'post',
     ));
@@ -77,6 +104,91 @@ add_action('manage_pcb_quote_posts_custom_column', function($column, $post_id) {
     }
 }, 10, 2);
 
+// ── CONTACT INQUIRIES ADMIN DASHBOARD ────────────────────────────────────────
+
+add_filter('manage_contact_inquiry_posts_columns', function($columns) {
+    $columns = array(
+        'cb' => $columns['cb'],
+        'title' => 'Sender Name',
+        'email' => 'Email Address',
+        'subject' => 'Subject',
+        'date' => 'Date'
+    );
+    return $columns;
+});
+
+add_action('manage_contact_inquiry_posts_custom_column', function($column, $post_id) {
+    switch ($column) {
+        case 'email':
+            echo esc_html(get_post_meta($post_id, '_contact_email', true));
+            break;
+        case 'subject':
+            echo esc_html(get_post_meta($post_id, '_contact_subject', true));
+            break;
+    }
+}, 10, 2);
+
+// ── UNREAD MESSAGES NOTIFICATION SYSTEM ──────────────────────────────────────
+
+// 1. Add notification bubble to the admin menu
+add_action('admin_menu', function() {
+    global $menu;
+    $unread_count = count(get_posts(array(
+        'post_type' => 'contact_inquiry',
+        'post_status' => 'publish',
+        'meta_query' => array(
+            array(
+                'key' => '_is_read',
+                'value' => '0',
+                'compare' => '='
+            )
+        ),
+        'posts_per_page' => -1
+    )));
+
+    if ($unread_count > 0) {
+        foreach ($menu as $key => $value) {
+            if ($value[2] == 'edit.php?post_type=contact_inquiry') {
+                $menu[$key][0] .= " <span class='update-plugins count-$unread_count'><span class='plugin-count'>" . number_format_i18n($unread_count) . "</span></span>";
+            }
+        }
+    }
+});
+
+// 2. Mark as read when the admin views the message
+add_action('add_meta_boxes', function() {
+    $screen = get_current_screen();
+    if ($screen && $screen->id === 'contact_inquiry') {
+        global $post;
+        if (get_post_meta($post->ID, '_is_read', true) === '0') {
+            update_post_meta($post->ID, '_is_read', '1');
+        }
+    }
+});
+
+// 3. Bold the unread messages in the admin list
+add_action('admin_head', function() {
+    ?>
+    <style>
+        .post-type-contact_inquiry .status-publish.post-unread td.column-title strong a,
+        .post-type-contact_inquiry .status-publish.post-unread td.column-title strong {
+            font-weight: 800 !important;
+            color: #000 !important;
+        }
+        .post-type-contact_inquiry tr.post-unread {
+            background-color: #f0f6fc !important;
+        }
+    </style>
+    <?php
+});
+
+add_filter('post_class', function($classes, $class, $post_id) {
+    if (get_post_type($post_id) === 'contact_inquiry' && get_post_meta($post_id, '_is_read', true) === '0') {
+        $classes[] = 'post-unread';
+    }
+    return $classes;
+}, 10, 3);
+
 // 2. Add a Meta Box for full details inside the Quote Editor
 add_action('add_meta_boxes', function() {
     add_meta_box('pcb_quote_details', 'FULL QUOTE SUBMISSION DETAILS', function($post) {
@@ -110,6 +222,21 @@ add_action('add_meta_boxes', function() {
         </div>
         <?php
     }, 'pcb_quote', 'normal', 'high');
+
+    add_meta_box('contact_inquiry_details', 'MESSAGE DETAILS', function($post) {
+        $email = get_post_meta($post->ID, '_contact_email', true);
+        $subject = get_post_meta($post->ID, '_contact_subject', true);
+        $message = $post->post_content;
+        ?>
+        <div style="background:#f9f9f9; padding:20px; border:1px solid #ddd; border-radius:10px;">
+            <p><strong>From:</strong> <?php echo esc_html($post->post_title); ?> (<?php echo esc_html($email); ?>)</p>
+            <p><strong>Subject:</strong> <?php echo esc_html($subject); ?></p>
+            <hr>
+            <p><strong>Message:</strong></p>
+            <div style="background:#fff; padding:15px; border:1px solid #eee; border-radius:5px; white-space: pre-wrap;"><?php echo esc_html($message); ?></div>
+        </div>
+        <?php
+    }, 'contact_inquiry', 'normal', 'high');
 });
 
 // Add nav-item class to WordPress menu items for CSS compatibility
@@ -713,6 +840,67 @@ function mytheme_customize_register($wp_customize) {
         'label'    => __('Gradient End Color', 'mytheme'),
         'section'  => 'connect_us_section',
     )));
+
+    // ── Footer Settings ────────────────────────────────────────────────────────
+    $wp_customize->add_section('footer_settings', array(
+        'title'    => __('Footer Settings', 'mytheme'),
+        'priority' => 160,
+    ));
+
+    // Footer Column 1 Title
+    $wp_customize->add_setting('footer_col1_title', array(
+        'default'           => 'Company',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('footer_col1_title', array(
+        'label'    => __('Column 1 Title', 'mytheme'),
+        'section'  => 'footer_settings',
+        'type'     => 'text',
+    ));
+
+    // Footer Column 2 Title
+    $wp_customize->add_setting('footer_col2_title', array(
+        'default'           => 'Resources',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('footer_col2_title', array(
+        'label'    => __('Column 2 Title', 'mytheme'),
+        'section'  => 'footer_settings',
+        'type'     => 'text',
+    ));
+
+    // Footer Column 3 Title
+    $wp_customize->add_setting('footer_col3_title', array(
+        'default'           => 'Trending',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('footer_col3_title', array(
+        'label'    => __('Column 3 Title', 'mytheme'),
+        'section'  => 'footer_settings',
+        'type'     => 'text',
+    ));
+
+    // Footer Column 4 Title
+    $wp_customize->add_setting('footer_col4_title', array(
+        'default'           => 'Learn',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('footer_col4_title', array(
+        'label'    => __('Column 4 Title', 'mytheme'),
+        'section'  => 'footer_settings',
+        'type'     => 'text',
+    ));
+
+    // Copyright Text
+    $wp_customize->add_setting('footer_copyright_text', array(
+        'default'           => sprintf('&copy; %s %s, Inc. All Rights Reserved.', date('Y'), get_bloginfo('name')),
+        'sanitize_callback' => 'wp_kses_post',
+    ));
+    $wp_customize->add_control('footer_copyright_text', array(
+        'label'    => __('Copyright Text', 'mytheme'),
+        'section'  => 'footer_settings',
+        'type'     => 'textarea',
+    ));
 }
 add_action('customize_register', 'mytheme_customize_register');
 
@@ -2344,3 +2532,49 @@ function mytheme_save_hero_slide_metabox_data($post_id) {
     }
 }
 add_action('save_post_hero_slide', 'mytheme_save_hero_slide_metabox_data');
+
+/**
+ * AUTO-CREATE FOOTER PAGES
+ * This function creates all the pages linked in the footer and assigns their templates.
+ */
+function mytheme_create_footer_pages() {
+    if (get_option('mytheme_footer_pages_created')) return;
+
+    $footer_pages = array(
+        'About Us' => 'page-about-us.php',
+        'Contact Us' => 'page-contact-us.php',
+        'PCB Manufacturing Capabilities' => 'page-pcb-manufacturing-capabilities.php',
+        'Track Your Order' => 'page-track-your-order.php',
+        'Quality & Certifications' => 'page-technical-content.php',
+        'Design Guidelines' => 'page-technical-content.php',
+        'Component Library' => 'page-technical-content.php',
+        'HDI PCB Design' => 'page-technical-content.php',
+        'High-Frequency PCBs' => 'page-technical-content.php',
+        'Flex & Rigid-Flex PCBs' => 'page-technical-content.php',
+        'What is an HDI PCB?' => 'page-technical-content.php',
+        'How to Export Gerber Files?' => 'page-technical-content.php',
+        'Understanding Impedance Control' => 'page-technical-content.php',
+    );
+
+    foreach ($footer_pages as $title => $template) {
+        $page_check = get_page_by_title($title);
+        if (!isset($page_check->ID)) {
+            $page_id = wp_insert_post(array(
+                'post_title'   => $title,
+                'post_type'    => 'page',
+                'post_status'  => 'publish',
+                'post_content' => 'This is a placeholder for the ' . $title . ' page. You can edit this content in the WordPress admin panel.',
+            ));
+
+            if ($page_id && $template) {
+                update_post_meta($page_id, '_wp_page_template', $template);
+            }
+        } else {
+            // Already exists, just update template if not set
+            update_post_meta($page_check->ID, '_wp_page_template', $template);
+        }
+    }
+
+    update_option('mytheme_footer_pages_created', true);
+}
+add_action('admin_init', 'mytheme_create_footer_pages');

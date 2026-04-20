@@ -3105,3 +3105,12 @@ a.wc-block-cart__submit-button:hover {
     font-weight: 900;
 }
 
+
+/* --- Footer Customizable --- */
+.footer-menu li {
+    margin-bottom: 0.75rem;
+}
+.footer-menu li a:hover {
+    color: #fff;
+    padding-left: 5px;
+}
