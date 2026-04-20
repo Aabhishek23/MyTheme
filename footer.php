@@ -29,7 +29,7 @@
                             <li style="margin-bottom: 0.75rem;"><a href="<?php echo home_url('/about-us/'); ?>">About Us</a></li>
                             <li style="margin-bottom: 0.75rem;"><a href="<?php echo home_url('/contact-us/'); ?>">Contact Us</a></li>
                             <li style="margin-bottom: 0.75rem;"><a href="<?php echo home_url('/pcb-manufacturing-capabilities/'); ?>">PCB Manufacturing Capabilities</a></li>
-                            <li style="margin-bottom: 0.75rem;"><a href="<?php echo home_url('/quality-certifications/'); ?>">Quality & Certifications</a></li>
+                            <!-- <li style="margin-bottom: 0.75rem;"><a href="<?php echo home_url('/quality-certifications/'); ?>">Quality & Certifications</a></li> -->
                         <?php elseif($i == 2) : ?>
                             <li style="margin-bottom: 0.75rem;"><a href="<?php echo home_url('/request-a-quote/'); ?>">Get a Quote</a></li>
                             <li style="margin-bottom: 0.75rem;"><a href="<?php echo home_url('/track-your-order/'); ?>">Track Your Order</a></li>

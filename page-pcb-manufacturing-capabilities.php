@@ -22,7 +22,7 @@ get_header(); ?>
                 <div class="cap-card">
                     <h3>Base Materials & Layers</h3>
                     <ul class="cap-list">
-                        <li><strong>Layer Count:</strong> 1 - 32 Layers</li>
+                        <li><strong>Layer Count:</strong> 1 - 4 Layers</li>
                         <li><strong>Materials:</strong> FR4 (Standard, High-Tg), Aluminum, Copper Base, Rogers, Teflon, Polyimide (Flex)</li>
                         <li><strong>Board Thickness:</strong> 0.2mm - 6.0mm</li>
                         <li><strong>Max Board Size:</strong> 500mm x 1100mm</li>

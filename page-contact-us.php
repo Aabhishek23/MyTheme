@@ -43,7 +43,7 @@ get_header(); ?>
                             <div class="info-icon">📍</div>
                             <div class="info-text">
                                 <h3>Visit Our Lab</h3>
-                                <p>123 Tech Corridor, Sector 63,<br>Noida, UP 201301, India</p>
+                                <p>AIMS Interactive Pvt Ltd,<br>Near Dubey Lodge, Wright Town,<br>Jabalpur, MP 482002, India</p>
                             </div>
                         </div>
                         <div class="info-item">
@@ -98,7 +98,7 @@ get_header(); ?>
                                 <option value="General Inquiry">General Inquiry</option>
                                 <option value="Technical Support">Technical Support</option>
                                 <option value="Order Status">Order Status</option>
-                                <option value="Partnership">Partnership</option>
+                              
                             </select>
                         </div>
                         <div class="form-group">
@@ -112,13 +112,22 @@ get_header(); ?>
         </div>
     </section>
 
-    <!-- Map Section placeholder -->
+    <!-- Map Section -->
     <section class="map-section reveal">
         <div class="container">
             <div class="map-wrapper">
-                <div class="map-overlay">
-                    <p>Map Integration Ready</p>
+                <div class="compass-rose">
+                    <span class="north">N</span>
+                    <span class="south">S</span>
+                    <span class="east">E</span>
+                    <span class="west">W</span>
+                    <div class="needle"></div>
                 </div>
+                <iframe 
+                    src="https://maps.google.com/maps?q=AIMS%20Interactive%20Pvt%20Ltd%20Jabalpur&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+                    allowfullscreen="" 
+                    loading="lazy">
+                </iframe>
             </div>
         </div>
     </section>
@@ -159,8 +168,17 @@ get_header(); ?>
 .submit-btn-glow:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,123,255,0.4); background: #0056b3; }
 
 .map-section { padding-bottom: 8rem; }
-.map-wrapper { height: 400px; background: #111; border-radius: 2rem; border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; }
-.map-overlay { color: var(--text-muted); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+.map-wrapper { height: 450px; background: #111; border-radius: 2rem; border: 1px solid var(--glass-border); overflow: hidden; position: relative; }
+.map-wrapper iframe { width: 100%; height: 100%; border: 0; filter: grayscale(0.5) brightness(0.8) contrast(1.2); opacity: 0.9; transition: 0.5s; }
+.map-wrapper:hover iframe { filter: grayscale(0) brightness(1) contrast(1); opacity: 1; }
+
+.compass-rose { position: absolute; top: 25px; right: 25px; width: 60px; height: 60px; background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; z-index: 10; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px); pointer-events: none; }
+.compass-rose span { position: absolute; font-size: 11px; font-weight: 900; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+.north { top: 5px; color: #ff3b30 !important; }
+.south { bottom: 5px; }
+.east { right: 7px; }
+.west { left: 7px; }
+.needle { width: 2px; height: 34px; background: linear-gradient(to bottom, #ff3b30 50%, #fff 50%); border-radius: 5px; box-shadow: 0 0 10px rgba(255,59,48,0.3); }
 
 .success-alert { background: rgba(0, 255, 127, 0.1); border: 1px solid rgba(0, 255, 127, 0.3); padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; color: #00ff7f; animation: slideDown 0.5s ease-out; }
 @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }

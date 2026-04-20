@@ -9,9 +9,9 @@ get_header(); ?>
     <section class="page-hero">
         <div class="container">
             <div class="hero-content reveal">
-                <span class="badge">WHO WE ARE</span>
+                <span class="badge">ESTABLISHED 2007</span>
                 <h1>Engineering the <span class="gradient-text">Future of PCBs</span></h1>
-                <p class="lead">We are a premier PCB design and manufacturing firm dedicated to delivering high-precision solutions for the most demanding industries.</p>
+                <p class="lead">Since 2007, we have been a premier PCB design and manufacturing firm dedicated to delivering high-precision solutions for the most demanding industries.</p>
             </div>
         </div>
         <div class="hero-bg-glow"></div>
@@ -22,8 +22,8 @@ get_header(); ?>
         <div class="container">
             <div class="stats-grid">
                 <div class="stat-card">
-                    <span class="stat-number">10+</span>
-                    <span class="stat-label">Years Experience</span>
+                    <span class="stat-number">2007</span>
+                    <span class="stat-label">Year Established</span>
                 </div>
                 <div class="stat-card">
                     <span class="stat-number">5k+</span>
@@ -74,8 +74,8 @@ get_header(); ?>
             <div class="content-wrapper">
                 <div class="text-content">
                     <h2>Our Journey</h2>
-                    <p>Founded by a team of passionate engineers, we realized early on that the electronics industry needed more than just a PCB supplier—it needed a partner.</p>
-                    <p>Over the last decade, we've evolved from a small design studio into a full-scale manufacturing powerhouse, serving clients from stealth startups to Fortune 500 tech giants.</p>
+                    <p>Founded in 2007 by a team of passionate engineers, we realized early on that the electronics industry needed more than just a PCB supplier—it needed a partner.</p>
+                    <p>Since our inception, we've evolved from a small design studio into a full-scale manufacturing powerhouse, serving clients from stealth startups to Fortune 500 tech giants.</p>
                     <p>Today, we specialize in high-density interconnect (HDI) boards, high-frequency RF designs, and complex multi-layer systems that push the boundaries of what's possible.</p>
                 </div>
                 <div class="image-content">
