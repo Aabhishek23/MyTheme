@@ -52,7 +52,7 @@
             <?php endfor; ?>
         </div>
         <div style="padding-top: 2rem; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; color: var(--text-muted); font-size: 0.85rem;">
-            <p><?php echo wp_kses_post(get_theme_mod('footer_copyright_text', sprintf('&copy; %s %s, Inc. All Rights Reserved.', date('Y'), get_bloginfo('name')))); ?></p>
+            <p><?php echo wp_kses_post(get_theme_mod('footer_copyright_text', sprintf('&copy; 2025 %s, Inc. All Rights Reserved.', get_bloginfo('name')))); ?></p>
             <div style="background: var(--surface); padding: 0.5rem 1rem; border-radius: 4px; border: 1px solid var(--glass-border);">
                 🌐 English ▼
             </div>
