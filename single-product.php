@@ -33,7 +33,6 @@ get_header(); ?>
                                 <?php else : ?>
                                     <div class="shubham-rating empty">⭐⭐⭐⭐⭐</div>
                                 <?php endif; ?>
-                                <button class="wishlist-btn" title="Add to Wishlist">♡</button>
                             </div>
                             
                             <h1 class="shubham-title"><?php the_title(); ?></h1>
