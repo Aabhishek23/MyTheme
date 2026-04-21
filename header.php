@@ -51,6 +51,7 @@ wp_nav_menu(array(
                         <?php if (class_exists('WooCommerce')) : ?>
                         <a href="<?php echo esc_url(wc_get_account_endpoint_url('orders')); ?>">📦 Mere Orders</a>
                         <a href="<?php echo esc_url(wc_get_checkout_url()); ?>">🛒 Checkout</a>
+                        <a href="<?php echo esc_url(home_url('/track-application/')); ?>">💼 Job Status</a>
                         <?php endif; ?>
                         <div class="user-dropdown-divider"></div>
                         <a href="<?php echo esc_url(wp_logout_url(home_url())); ?>" class="user-logout">🚪 Logout</a>

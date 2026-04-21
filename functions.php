@@ -2789,3 +2789,234 @@ add_action('admin_init', 'mytheme_create_footer_pages');
  */
 remove_action( "woocommerce_after_single_product_summary", "woocommerce_output_related_products", 20 );
 
+
+/**
+ * Auto-create Careers page on theme activation or init
+ */
+function mytheme_create_careers_page() {
+    if (get_page_by_path('careers')) return;
+
+    $page_id = wp_insert_post(array(
+        'post_title'     => 'Careers',
+        'post_name'      => 'careers',
+        'post_content'   => '',
+        'post_status'    => 'publish',
+        'post_type'      => 'page',
+        'page_template'  => 'page-careers.php'
+    ));
+}
+add_action('init', 'mytheme_create_careers_page');
+
+
+/**
+ * 10. REGISTER CAREERS CUSTOM POST TYPE
+ */
+function mytheme_register_careers_cpt() {
+    $labels = array(
+        "name" => "Careers",
+        "singular_name" => "Job Opening",
+        "menu_name" => "Careers",
+        "all_items" => "All Job Openings",
+        "add_new" => "Add New Open Role",
+        "add_new_item" => "Add New Job Opening",
+        "edit_item" => "Edit Job Opening",
+        "new_item" => "New Job Opening",
+        "view_item" => "View Job Opening",
+        "search_items" => "Search Careers",
+        "not_found" => "No jobs found",
+    );
+    $args = array(
+        "label" => "Careers",
+        "labels" => $labels,
+        "description" => "Manage job openings and internships.",
+        "public" => true,
+        "show_ui" => true,
+        "show_in_menu" => true,
+        "capability_type" => "post",
+        "hierarchical" => false,
+        "rewrite" => array("slug" => "career-opening", "with_front" => true),
+        "query_var" => true,
+        "menu_icon" => "dashicons-businessperson",
+        "supports" => array("title", "editor", "excerpt"),
+    );
+    register_post_type("career", $args);
+}
+add_action("init", "mytheme_register_careers_cpt");
+
+/**
+ * JOB DETAILS METABOX
+ */
+function mytheme_add_job_metabox() {
+    add_meta_box("job_details", "JOB SETTINGS", "mytheme_job_metabox_html", "career", "normal", "high");
+}
+add_action("add_meta_boxes", "mytheme_add_job_metabox");
+
+function mytheme_job_metabox_html($post) {
+    $location = get_post_meta($post->ID, "_job_location", true);
+    $type = get_post_meta($post->ID, "_job_type", true);
+    $salary = get_post_meta($post->ID, "_job_salary", true);
+    ?>
+    <div style="padding:10px;">
+        <p>
+            <label>Location (e.g. Remote, New Delhi):</label><br>
+            <input type="text" name="job_location" value="<?php echo esc_attr($location); ?>" style="width:100%;">
+        </p>
+        <p>
+            <label>Job Type (e.g. Full-time, Internship):</label><br>
+            <input type="text" name="job_type" value="<?php echo esc_attr($type); ?>" style="width:100%;">
+        </p>
+        <p>
+            <label>Salary/Compensation (e.g. Competitive, Unpaid):</label><br>
+            <input type="text" name="job_salary" value="<?php echo esc_attr($salary); ?>" style="width:100%;">
+        </p>
+    </div>
+    <?php
+}
+
+function mytheme_save_job_meta($post_id) {
+    if (isset($_POST["job_location"])) update_post_meta($post_id, "_job_location", sanitize_text_field($_POST["job_location"]));
+    if (isset($_POST["job_type"])) update_post_meta($post_id, "_job_type", sanitize_text_field($_POST["job_type"]));
+    if (isset($_POST["job_salary"])) update_post_meta($post_id, "_job_salary", sanitize_text_field($_POST["job_salary"]));
+}
+add_action("save_post_career", "mytheme_save_job_meta");
+
+
+/**
+ * Auto-create Job Application page
+ */
+function mytheme_create_job_app_page() {
+    if (get_page_by_path('apply-now')) return;
+
+    wp_insert_post(array(
+        'post_title'     => 'Apply Now',
+        'post_name'      => 'apply-now',
+        'post_content'   => '',
+        'post_status'    => 'publish',
+        'post_type'      => 'page',
+        'page_template'  => 'page-job-application.php'
+    ));
+}
+add_action('init', 'mytheme_create_job_app_page');
+
+
+/**
+ * 11. REGISTER JOB APPLICATIONS CPT (FOR STORING SUBMISSIONS)
+ */
+function mytheme_register_job_applications_cpt() {
+    register_post_type("job_application", array(
+        "labels" => array("name" => "Applications", "singular_name" => "Application"),
+        "public" => false, 
+        "show_ui" => true,
+        "show_in_menu" => "edit.php?post_type=career", // Nesting under Careers
+        "supports" => array("title"),
+        "menu_icon" => "dashicons-email-alt",
+    ));
+}
+add_action("init", "mytheme_register_job_applications_cpt");
+
+/**
+ * Handle Form Submission via AJAX
+ */
+add_action("wp_ajax_submit_job_application", "mytheme_handle_job_application");
+add_action("wp_ajax_nopriv_submit_job_application", "mytheme_handle_job_application");
+
+function mytheme_handle_job_application() {
+    if (!isset($_POST["name"])) wp_send_json_error("Missing data");
+
+    $name = sanitize_text_field($_POST["name"]);
+    $email = sanitize_email($_POST["email"]);
+    $job = sanitize_text_field($_POST["job"] ?? "Unknown Position");
+
+    $post_id = wp_insert_post(array(
+        "post_title" => $name . " - " . $job,
+        "post_type"  => "job_application",
+        "post_status"=> "publish",
+    ));
+
+    if ($post_id) {
+        update_post_meta($post_id, "_app_email", $email);
+        update_post_meta($post_id, "_app_phone", sanitize_text_field($_POST["phone"] ?? ""));
+        update_post_meta($post_id, "_app_exp", sanitize_text_field($_POST["experience"] ?? ""));
+        update_post_meta($post_id, "_app_linkedin", esc_url_raw($_POST["linkedin"] ?? ""));
+        update_post_meta($post_id, "_app_about", sanitize_textarea_field($_POST["about"] ?? ""));
+        update_post_meta($post_id, "_app_job", $job);
+
+        // Handle File Upload
+        if (!empty($_FILES["resume"]["name"])) {
+            require_once(ABSPATH . "wp-admin/includes/file.php");
+            $attachment_id = media_handle_upload("resume", $post_id);
+            if (!is_wp_error($attachment_id)) {
+                update_post_meta($post_id, "_app_resume_id", $attachment_id);
+            }
+        }
+        wp_send_json_success("Application submitted successfully!");
+    }
+    wp_send_json_error("Failed to save application");
+}
+
+/**
+ * Add Columns to Applications List
+ */
+add_filter("manage_job_application_posts_columns", function($cols) {
+    $cols["app_job"] = "Position";
+    $cols["app_email"] = "Email";
+    $cols["app_cv"] = "CV";
+    return $cols;
+});
+
+add_action("manage_job_application_posts_custom_column", function($col, $post_id) {
+    switch ($col) {
+        case "app_job": echo get_post_meta($post_id, "_app_job", true); break;
+        case "app_email": echo get_post_meta($post_id, "_app_email", true); break;
+        case "app_cv": 
+            $cv_id = get_post_meta($post_id, "_app_resume_id", true);
+            if ($cv_id) echo "<a href=\"".wp_get_attachment_url($cv_id)."\" target=\"_blank\">?? View CV</a>";
+            break;
+    }
+}, 10, 2);
+
+
+/**
+ * 12. JOB APPLICATION STATUS TRACKING
+ */
+
+// Add Status field to Admin Application editor
+add_action("add_meta_boxes", function() {
+    add_meta_box("app_status_box", "Application Status", "mytheme_app_status_html", "job_application", "side", "high");
+});
+
+function mytheme_app_status_html($post) {
+    $status = get_post_meta($post->ID, "_app_status", true) ?: "Under Review";
+    $options = array("Under Review", "Shortlisted", "Interview Scheduled", "On Hold", "Rejected");
+    echo "<select name=\"app_status\" style=\"width:100%;\">";
+    foreach ($options as $opt) {
+        echo "<option value=\"$opt\" " . selected($status, $opt, false) . ">$opt</option>";
+    }
+    echo "</select>";
+}
+
+add_action("save_post_job_application", function($post_id) {
+    if (isset($_POST["app_status"])) update_post_meta($post_id, "_app_status", sanitize_text_field($_POST["app_status"]));
+});
+
+// Add to Profile Dropdown (Assuming it is in header.php or a specific function)
+// I will look for the dropdown code in header.php or functions.php first.
+
+
+/**
+ * Auto-create Track Application page
+ */
+function mytheme_create_track_app_page() {
+    if (get_page_by_path('track-application')) return;
+
+    wp_insert_post(array(
+        'post_title'     => 'Track Application',
+        'post_name'      => 'track-application',
+        'post_content'   => '',
+        'post_status'    => 'publish',
+        'post_type'      => 'page',
+        'page_template'  => 'page-track-application.php'
+    ));
+}
+add_action('init', 'mytheme_create_track_app_page');
+
