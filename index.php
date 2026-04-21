@@ -1,6 +1,7 @@
 <?php get_header(); ?> 
 
 <main>
+    <?php if (is_front_page() || is_home()) : ?>
     <!-- Hero Slider Section -->
     <div class="hero-slider-wrapper">
         <?php
@@ -92,6 +93,13 @@
             </div>
         </section>
     </div>
+    <?php else : ?>
+    <section class="generic-hero" style="background: var(--surface); padding: 8rem 0 4rem; text-align: center;">
+        <div class="container">
+            <h1 style="font-size: 3.5rem; letter-spacing: -2px;"><?php the_title(); ?></h1>
+        </div>
+    </section>
+    <?php endif; ?>
 
     <!-- Pervasive Intelligence Section -->
     <section style="padding: 8rem 0; text-align: center;" class="reveal">

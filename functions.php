@@ -63,6 +63,60 @@ function mytheme_setup() {
         'supports' => array('title', 'editor', 'custom-fields'),
         'capability_type' => 'post',
     ));
+
+    // Register Webinar Post Type
+    register_post_type('webinar', array(
+        'labels' => array(
+            'name' => 'Webinars',
+            'singular_name' => 'Webinar',
+            'add_new' => 'Add New Webinar',
+            'add_new_item' => 'Add New Webinar',
+            'edit_item' => 'Edit Webinar',
+            'new_item' => 'New Webinar',
+            'view_item' => 'View Webinar',
+            'search_items' => 'Search Webinars',
+            'not_found' => 'No Webinars found',
+            'all_items' => 'All Webinars',
+        ),
+        'public' => true,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'menu_icon' => 'dashicons-video-alt3',
+        'supports' => array('title', 'editor', 'thumbnail', 'excerpt'),
+        'has_archive' => true,
+        'rewrite' => array('slug' => 'webinars'),
+        'show_in_rest' => true,
+    ));
+
+    // Register Tradeshow Post Type
+    register_post_type('tradeshow', array(
+        'labels' => array(
+            'name' => 'Trade Shows',
+            'singular_name' => 'Trade Show',
+            'add_new' => 'Add New Show',
+            'add_new_item' => 'Add New Trade Show',
+            'edit_item' => 'Edit Trade Show',
+            'new_item' => 'New Trade Show',
+            'view_item' => 'View Trade Show',
+            'search_items' => 'Search Trade Shows',
+            'not_found' => 'No Trade Shows found',
+            'all_items' => 'All Trade Shows',
+        ),
+        'public' => true,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'menu_icon' => 'dashicons-location-alt',
+        'supports' => array('title', 'editor', 'thumbnail', 'excerpt'),
+        'has_archive' => true,
+        'rewrite' => array('slug' => 'tradeshows'),
+        'show_in_rest' => true,
+    ));
+
+    // Flush rewrite rules
+    if (get_option('mytheme_flush_v2') !== 'done') {
+        flush_rewrite_rules();
+        update_option('mytheme_flush_v2', 'done');
+    }
 }
 add_action('after_setup_theme', 'mytheme_setup');
 
@@ -237,6 +291,137 @@ add_action('add_meta_boxes', function() {
         </div>
         <?php
     }, 'contact_inquiry', 'normal', 'high');
+
+    // Webinar Details Meta Box
+    add_meta_box('webinar_details', 'WEBINAR SETTINGS', function($post) {
+        $video_url = get_post_meta($post->ID, '_webinar_video_url', true);
+        $webinar_date = get_post_meta($post->ID, '_webinar_date', true);
+        $webinar_time = get_post_meta($post->ID, '_webinar_time', true);
+        $webinar_duration = get_post_meta($post->ID, '_webinar_duration', true);
+        $speaker_name = get_post_meta($post->ID, '_webinar_speaker', true);
+        $reg_link = get_post_meta($post->ID, '_webinar_reg_link', true);
+        $is_live = get_post_meta($post->ID, '_webinar_is_live', true);
+        ?>
+        <div style="padding:15px; background:#f4f4f4; border:1px solid #ccc; border-radius:8px;">
+            <p>
+                <label><strong>YouTube Video URL:</strong></label><br>
+                <input type="text" name="webinar_video_url" value="<?php echo esc_attr($video_url); ?>" class="widefat" placeholder="https://www.youtube.com/watch?v=...">
+                <small>Leave empty if no video available yet.</small>
+            </p>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+                <p>
+                    <label><strong>Webinar Date:</strong></label><br>
+                    <input type="date" name="webinar_date" value="<?php echo esc_attr($webinar_date); ?>" class="widefat">
+                </p>
+                <p>
+                    <label><strong>Webinar Time:</strong></label><br>
+                    <input type="time" name="webinar_time" value="<?php echo esc_attr($webinar_time); ?>" class="widefat">
+                </p>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+                <p>
+                    <label><strong>Duration (e.g., 60 mins):</strong></label><br>
+                    <input type="text" name="webinar_duration" value="<?php echo esc_attr($webinar_duration); ?>" class="widefat">
+                </p>
+                <p>
+                    <label><strong>Speaker Name:</strong></label><br>
+                    <input type="text" name="webinar_speaker" value="<?php echo esc_attr($speaker_name); ?>" class="widefat">
+                </p>
+            </div>
+            <p>
+                <label><strong>Registration / Join Link:</strong></label><br>
+                <input type="text" name="webinar_reg_link" value="<?php echo esc_attr($reg_link); ?>" class="widefat" placeholder="Zoom/Teams Link">
+            </p>
+            <p>
+                <label><strong>Resources / PDF Link (Optional):</strong></label><br>
+                <input type="text" name="webinar_resource_url" value="<?php echo esc_attr(get_post_meta($post->ID, '_webinar_resource_url', true)); ?>" class="widefat" placeholder="Direct link to PDF or slides">
+            </p>
+            <p>
+                <label>
+                    <input type="checkbox" name="webinar_is_live" value="yes" <?php checked($is_live, 'yes'); ?>>
+                    <strong>Mark as LIVE Webinar</strong>
+                </label>
+            </p>
+        </div>
+        <?php
+    }, 'webinar', 'normal', 'high');
+
+    // Tradeshow Details Meta Box
+    add_meta_box('tradeshow_details', 'TRADE SHOW SETTINGS', function($post) {
+        $location = get_post_meta($post->ID, '_tradeshow_location', true);
+        $start_date = get_post_meta($post->ID, '_tradeshow_start_date', true);
+        $end_date = get_post_meta($post->ID, '_tradeshow_end_date', true);
+        $booth = get_post_meta($post->ID, '_tradeshow_booth', true);
+        $map_url = get_post_meta($post->ID, '_tradeshow_map_url', true);
+        ?>
+        <div style="padding:15px; background:#f0f7ff; border:1px solid #c2d1e0; border-radius:8px;">
+            <p>
+                <label><strong>Event Location (Venue, City, Country):</strong></label><br>
+                <input type="text" name="tradeshow_location" value="<?php echo esc_attr($location); ?>" class="widefat" placeholder="e.g. Las Vegas Convention Center, USA">
+            </p>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+                <p>
+                    <label><strong>Start Date:</strong></label><br>
+                    <input type="date" name="tradeshow_start_date" value="<?php echo esc_attr($start_date); ?>" class="widefat">
+                </p>
+                <p>
+                    <label><strong>End Date:</strong></label><br>
+                    <input type="date" name="tradeshow_end_date" value="<?php echo esc_attr($end_date); ?>" class="widefat">
+                </p>
+            </div>
+            <p>
+                <label><strong>Booth / Stand Number:</strong></label><br>
+                <input type="text" name="tradeshow_booth" value="<?php echo esc_attr($booth); ?>" class="widefat" placeholder="e.g. Hall 4, Booth #452">
+            </p>
+            <p>
+                <label><strong>Google Maps Link:</strong></label><br>
+                <input type="text" name="tradeshow_map_url" value="<?php echo esc_attr($map_url); ?>" class="widefat" placeholder="https://goo.gl/maps/...">
+            </p>
+        </div>
+        <?php
+    }, 'tradeshow', 'normal', 'high');
+});
+
+// Save Webinar Meta Data
+add_action('save_post_webinar', function($post_id) {
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    
+    $fields = array(
+        'webinar_video_url'    => '_webinar_video_url',
+        'webinar_date'         => '_webinar_date',
+        'webinar_time'         => '_webinar_time',
+        'webinar_duration'     => '_webinar_duration',
+        'webinar_speaker'      => '_webinar_speaker',
+        'webinar_reg_link'     => '_webinar_reg_link',
+        'webinar_resource_url' => '_webinar_resource_url',
+    );
+
+    foreach ($fields as $key => $meta_key) {
+        if (isset($_POST[$key])) {
+            update_post_meta($post_id, $meta_key, sanitize_text_field($_POST[$key]));
+        }
+    }
+
+    update_post_meta($post_id, '_webinar_is_live', isset($_POST['webinar_is_live']) ? 'yes' : 'no');
+});
+
+// Save Tradeshow Meta Data
+add_action('save_post_tradeshow', function($post_id) {
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    
+    $fields = array(
+        'tradeshow_location'   => '_tradeshow_location',
+        'tradeshow_start_date' => '_tradeshow_start_date',
+        'tradeshow_end_date'   => '_tradeshow_end_date',
+        'tradeshow_booth'      => '_tradeshow_booth',
+        'tradeshow_map_url'    => '_tradeshow_map_url',
+    );
+
+    foreach ($fields as $key => $meta_key) {
+        if (isset($_POST[$key])) {
+            update_post_meta($post_id, $meta_key, sanitize_text_field($_POST[$key]));
+        }
+    }
 });
 
 // Add nav-item class to WordPress menu items for CSS compatibility
@@ -2099,6 +2284,26 @@ function mytheme_create_account_page() {
     }
     
     update_option('mytheme_account_page_created_v3', true);
+
+    // Auto-create Webinars Page
+    if (!get_page_by_path('webinars')) {
+        wp_insert_post(array(
+            'post_title'   => 'Webinars',
+            'post_name'    => 'webinars',
+            'post_status'  => 'publish',
+            'post_type'    => 'page',
+        ));
+    }
+
+    // Auto-create Tradeshows Page
+    if (!get_page_by_path('tradeshows')) {
+        wp_insert_post(array(
+            'post_title'   => 'Trade Shows',
+            'post_name'    => 'tradeshows',
+            'post_status'  => 'publish',
+            'post_type'    => 'page',
+        ));
+    }
 }
 
 /**
