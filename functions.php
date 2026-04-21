@@ -2783,3 +2783,9 @@ function mytheme_create_footer_pages() {
     update_option('mytheme_footer_pages_created', true);
 }
 add_action('admin_init', 'mytheme_create_footer_pages');
+
+/**
+ * Remove Related Products on Single Product Page
+ */
+remove_action( "woocommerce_after_single_product_summary", "woocommerce_output_related_products", 20 );
+

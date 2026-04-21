@@ -59,26 +59,26 @@ get_header(); ?>
                             <h3 class="why-shop-title">Why Shop From <?php bloginfo('name'); ?>?</h3>
                             
                             <div class="why-shop-item">
-                                <div class="icon">🚀</div>
+                                <div class="icon">🏆</div>
                                 <div class="text">
-                                    <strong>SuperFast Order</strong>
-                                    <p>Place your order online and pick it up directly from our shop.</p>
+                                    <strong>Quality Assurance</strong>
+                                    <p>Delivering high-precision solutions that meet the strictest industry standards.</p>
                                 </div>
                             </div>
                             
                             <div class="why-shop-item">
-                                <div class="icon">💎</div>
+                                <div class="icon">👨‍🔬</div>
                                 <div class="text">
-                                    <strong>Best Prices & Offers</strong>
-                                    <p>Enjoy the best prices with offers directly from manufacturers.</p>
+                                    <strong>Expert Support</strong>
+                                    <p>We provide expert technical support to ensure you get the best product solutions.</p>
                                 </div>
                             </div>
                             
                             <div class="why-shop-item">
-                                <div class="icon">📱</div>
+                                <div class="icon">📦</div>
                                 <div class="text">
-                                    <strong>Wide Assortment</strong>
-                                    <p>Explore a wide assortment of mobile accessories, chargers, and more.</p>
+                                    <strong>Reliable Logistics</strong>
+                                    <p>Safe and efficient shipping ensuring your orders reach you on time, every time.</p>
                                 </div>
                             </div>
                         </div>
