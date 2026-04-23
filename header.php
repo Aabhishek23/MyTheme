@@ -49,7 +49,7 @@ wp_nav_menu(array(
                     <div class="header-user-dropdown" id="userDropdown">
                         <a href="<?php echo esc_url($account_url ?: '#'); ?>">👤 My Account</a>
                         <?php if (class_exists('WooCommerce')) : ?>
-                        <a href="<?php echo esc_url(wc_get_account_endpoint_url('orders')); ?>">📦 Mere Orders</a>
+                        <a href="<?php echo esc_url(wc_get_account_endpoint_url('orders')); ?>">📦 My Orders</a>
                         <a href="<?php echo esc_url(wc_get_checkout_url()); ?>">🛒 Checkout</a>
                         <a href="<?php echo esc_url(home_url('/track-application/')); ?>">💼 Job Status</a>
                         <?php endif; ?>
