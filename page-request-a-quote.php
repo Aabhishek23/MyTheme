@@ -27,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['full_name'])) {
     $full_address = "$street_address, $city, $state - $pincode, $country";
 
     $service_type = sanitize_text_field($_POST['service_type']);
-    $layers       = sanitize_text_field($_POST['target_layers']);
     $timeline     = sanitize_text_field($_POST['timeline']);
     $message      = sanitize_textarea_field($_POST['message']);
 
@@ -45,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['full_name'])) {
     $body .= "Country: $country\n\n";
     $body .= "--- Design Details ---\n";
     $body .= "Service: $service_type\n";
-    $body .= "Layers: $layers\n";
     $body .= "Timeline: $timeline\n\n";
     $body .= "--- Message ---\n";
     $body .= "$message\n";
@@ -102,7 +100,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['full_name'])) {
             update_post_meta($post_id, '_customer_pincode', $pincode);
             update_post_meta($post_id, '_customer_country', $country);
             update_post_meta($post_id, '_service_type', $service_type);
-            update_post_meta($post_id, '_target_layers', $layers);
             update_post_meta($post_id, '_timeline', $timeline);
             update_post_meta($post_id, '_file_url', $file_url);
             
@@ -223,16 +220,6 @@ get_header(); ?>
                                         <option value="schematic_layout">Full Design (Schematic + Layout)</option>
                                         <option value="consultancy">Technical Consultancy / Review</option>
                                         <option value="reverse_engineering">Reverse Engineering</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Target Layers</label>
-                                    <select name="target_layers">
-                                        <option value="1">1 Layer</option>
-                                        <option value="2">2 Layers</option>
-                                        <option value="4">4 Layers</option>
-                                        <option value="6">6 Layers</option>
-                                        <option value="8+">8+ Layers</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
