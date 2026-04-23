@@ -13,17 +13,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['full_name'])) {
     
     $full_name = sanitize_text_field($_POST['full_name']);
     $email     = sanitize_email($_POST['email']);
-    $country_code = sanitize_text_field($_POST['country_code']);
+    $phone_prefix = sanitize_text_field($_POST['phone_prefix']);
     $phone_num    = sanitize_text_field($_POST['phone']);
-    $phone        = $country_code . ' ' . $phone_num;
-    $address   = sanitize_textarea_field($_POST['address']);
+    $phone        = $phone_prefix . ' ' . $phone_num;
+
+    $city     = sanitize_text_field($_POST['city']);
+    $state    = sanitize_text_field($_POST['state']);
+    $country  = sanitize_text_field($_POST['country']);
+    $pincode  = sanitize_text_field($_POST['pincode']);
+    $street_address = sanitize_textarea_field($_POST['address']);
+    
+    $full_address = "$street_address, $city, $state - $pincode, $country";
     
     $body = "You have a new High-Precision Manufacturing request:\n\n";
     $body .= "--- Contact Details ---\n";
     $body .= "Name: $full_name\n";
     $body .= "Email: $email\n";
-    $body .= "Phone: $phone\n";
-    $body .= "Address: $address\n\n";
+    $body .= "Phone: $phone\n\n";
+    $body .= "--- Address Details ---\n";
+    $body .= "Street: $street_address\n";
+    $body .= "City: $city\n";
+    $body .= "State: $state\n";
+    $body .= "Pincode: $pincode\n";
+    $body .= "Country: $country\n\n";
     
     $body .= "--- PCB Specifications ---\n";
     foreach ($_POST as $key => $value) {
@@ -68,7 +80,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['full_name'])) {
         if ($post_id) {
             update_post_meta($post_id, '_customer_email', $email);
             update_post_meta($post_id, '_customer_phone', $phone);
-            update_post_meta($post_id, '_customer_address', $address);
+            update_post_meta($post_id, '_customer_address', $full_address);
+            update_post_meta($post_id, '_customer_city', $city);
+            update_post_meta($post_id, '_customer_state', $state);
+            update_post_meta($post_id, '_customer_pincode', $pincode);
+            update_post_meta($post_id, '_customer_country', $country);
             update_post_meta($post_id, '_service_type', 'manufacturing');
             update_post_meta($post_id, '_file_url', $file_url);
             $message_sent = true;
@@ -252,16 +268,41 @@ get_header(); ?>
                     <div class="form-grid-flex" style="margin-top: 20px;">
                         <div class="input-wrap">
                             <label>Phone Number *</label>
-                            <div style="display: flex; gap: 10px;">
-                                <input type="text" name="country_code" placeholder="+91" style="width: 80px; padding: 0.85rem; border: 1.5px solid var(--mfg-border); border-radius: 6px;" required>
-                                <input type="tel" name="phone" placeholder="9826541718" style="flex: 1; padding: 0.85rem; border: 1.5px solid var(--mfg-border); border-radius: 6px;" required>
+                            <div class="phone-input-group" style="display: flex; gap: 10px;">
+                                <input type="text" name="phone_prefix" value="+91" style="flex: 0 0 80px; text-align: center; padding: 0.85rem; border: 1.5px solid var(--mfg-border); border-radius: 6px;" required autocomplete="tel-country-code">
+                                <input type="tel" name="phone" placeholder="9826541718" style="flex: 1; padding: 0.85rem; border: 1.5px solid var(--mfg-border); border-radius: 6px;" required autocomplete="tel-national">
                             </div>
+                        </div>
+                        <div class="input-wrap">
+                            <label>Country *</label>
+                            <select name="country" required style="width: 100%; padding: 0.85rem; border: 1.5px solid var(--mfg-border); border-radius: 6px;">
+                                <option value="India" selected>India</option>
+                                <option value="USA">USA</option>
+                                <option value="UK">UK</option>
+                                <option value="Germany">Germany</option>
+                                <option value="China">China</option>
+                                <option value="Others">Others</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-grid-flex" style="margin-top: 20px;">
                         <div class="input-wrap">
-                            <label>Shipping Address *</label>
-                            <textarea name="address" rows="3" placeholder="Enter your full shipping address..." required style="width: 100%; padding: 0.85rem; border: 1.5px solid var(--mfg-border); border-radius: 6px;"></textarea>
+                            <label>State *</label>
+                            <input type="text" name="state" placeholder="e.g. Madhya Pradesh" required style="width: 100%; padding: 0.85rem; border: 1.5px solid var(--mfg-border); border-radius: 6px;">
+                        </div>
+                        <div class="input-wrap">
+                            <label>District / City *</label>
+                            <input type="text" name="city" placeholder="e.g. Indore" required style="width: 100%; padding: 0.85rem; border: 1.5px solid var(--mfg-border); border-radius: 6px;">
+                        </div>
+                    </div>
+                    <div class="form-grid-flex" style="margin-top: 20px;">
+                        <div class="input-wrap">
+                            <label>Pincode *</label>
+                            <input type="text" name="pincode" placeholder="e.g. 452001" required style="width: 100%; padding: 0.85rem; border: 1.5px solid var(--mfg-border); border-radius: 6px;">
+                        </div>
+                        <div class="input-wrap" style="flex: 2;">
+                            <label>Street Address *</label>
+                            <textarea name="address" rows="1" placeholder="House No, Street, Landmark" required style="width: 100%; padding: 0.85rem; border: 1.5px solid var(--mfg-border); border-radius: 6px;"></textarea>
                         </div>
                     </div>
                 </div>
@@ -384,6 +425,7 @@ get_header(); ?>
     .mfg-header { flex-direction: column; gap: 1rem; }
     .header-links a { margin: 0 1rem 0 0; }
 }
+textarea { background: #000 !important; color: #fff !important; }
 </style>
 
 <script>

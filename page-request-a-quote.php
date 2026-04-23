@@ -14,12 +14,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['full_name'])) {
     $full_name = sanitize_text_field($_POST['full_name']);
     $email     = sanitize_email($_POST['email']);
     $company   = sanitize_text_field($_POST['company']);
-    $country_code = sanitize_text_field($_POST['country_code']);
+    $phone_prefix = sanitize_text_field($_POST['phone_prefix']);
     $phone_num    = sanitize_text_field($_POST['phone']);
-    $phone        = $country_code . ' ' . $phone_num;
-    $address   = sanitize_textarea_field($_POST['address']);
+    $phone        = $phone_prefix . ' ' . $phone_num;
+    
+    $city     = sanitize_text_field($_POST['city']);
+    $state    = sanitize_text_field($_POST['state']);
+    $country  = sanitize_text_field($_POST['country']);
+    $pincode  = sanitize_text_field($_POST['pincode']);
+    $street_address = sanitize_textarea_field($_POST['address']);
+    
+    $full_address = "$street_address, $city, $state - $pincode, $country";
+
     $service_type = sanitize_text_field($_POST['service_type']);
-    $pin_count    = sanitize_text_field($_POST['pin_count']);
     $layers       = sanitize_text_field($_POST['target_layers']);
     $timeline     = sanitize_text_field($_POST['timeline']);
     $message      = sanitize_textarea_field($_POST['message']);
@@ -29,11 +36,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['full_name'])) {
     $body .= "Name: $full_name\n";
     $body .= "Email: $email\n";
     $body .= "Company: $company\n";
-    $body .= "Phone: $phone\n";
-    $body .= "Address: $address\n\n";
+    $body .= "Phone: $phone\n\n";
+    $body .= "--- Address Details ---\n";
+    $body .= "Street: $street_address\n";
+    $body .= "City: $city\n";
+    $body .= "State: $state\n";
+    $body .= "Pincode: $pincode\n";
+    $body .= "Country: $country\n\n";
     $body .= "--- Design Details ---\n";
     $body .= "Service: $service_type\n";
-    $body .= "Pins: $pin_count\n";
     $body .= "Layers: $layers\n";
     $body .= "Timeline: $timeline\n\n";
     $body .= "--- Message ---\n";
@@ -85,9 +96,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['full_name'])) {
         if ($post_id) {
             update_post_meta($post_id, '_customer_email', $email);
             update_post_meta($post_id, '_customer_phone', $phone);
-            update_post_meta($post_id, '_customer_address', $address);
+            update_post_meta($post_id, '_customer_address', $full_address);
+            update_post_meta($post_id, '_customer_city', $city);
+            update_post_meta($post_id, '_customer_state', $state);
+            update_post_meta($post_id, '_customer_pincode', $pincode);
+            update_post_meta($post_id, '_customer_country', $country);
             update_post_meta($post_id, '_service_type', $service_type);
-            update_post_meta($post_id, '_pin_count', $pin_count);
             update_post_meta($post_id, '_target_layers', $layers);
             update_post_meta($post_id, '_timeline', $timeline);
             update_post_meta($post_id, '_file_url', $file_url);
@@ -164,14 +178,37 @@ get_header(); ?>
                                 </div>
                                 <div class="form-group">
                                     <label>Phone Number *</label>
-                                    <div style="display: flex; gap: 10px;">
-                                        <input type="text" name="country_code" placeholder="+91" style="width: 100px;" required>
-                                        <input type="tel" name="phone" placeholder="9826541718" style="flex: 1;" required>
+                                    <div class="phone-input-group" style="display: flex; gap: 10px;">
+                                        <input type="text" name="phone_prefix" value="+91" style="flex: 0 0 80px; min-width: 80px; text-align: center;" required autocomplete="tel-country-code">
+                                        <input type="tel" name="phone" placeholder="9826541718" style="flex: 1;" required autocomplete="tel-national">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Company Name</label>
                                     <input type="text" name="company" placeholder="Example Corp">
+                                </div>
+                                <div class="form-group">
+                                    <label>Country *</label>
+                                    <select name="country" required>
+                                        <option value="India" selected>India</option>
+                                        <option value="USA">USA</option>
+                                        <option value="UK">UK</option>
+                                        <option value="Germany">Germany</option>
+                                        <option value="China">China</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>State *</label>
+                                    <input type="text" name="state" placeholder="e.g. Madhya Pradesh" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>District / City *</label>
+                                    <input type="text" name="city" placeholder="e.g. Indore" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Pincode *</label>
+                                    <input type="text" name="pincode" placeholder="e.g. 452001" required>
                                 </div>
                             </div>
                         </div>
@@ -187,10 +224,6 @@ get_header(); ?>
                                         <option value="consultancy">Technical Consultancy / Review</option>
                                         <option value="reverse_engineering">Reverse Engineering</option>
                                     </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Estimated Pin Count</label>
-                                    <input type="text" name="pin_count" placeholder="e.g. 100-500 pins">
                                 </div>
                                 <div class="form-group">
                                     <label>Target Layers</label>
@@ -216,8 +249,8 @@ get_header(); ?>
                         <div class="form-step">
                             <h2 class="form-title">3. Delivery Address</h2>
                             <div class="form-group">
-                                <label>Shipping / Billing Address *</label>
-                                <textarea name="address" rows="3" placeholder="Enter your full address here..." required></textarea>
+                                <label>Street Address (House No, Building, Area) *</label>
+                                <textarea name="address" rows="3" placeholder="Enter your full street address here..." required></textarea>
                             </div>
                         </div>
 
@@ -306,7 +339,7 @@ get_header(); ?>
 .form-group label { font-size: 0.95rem; font-weight: 600; color: #ffffff; margin-bottom: 0.5rem; }
 
 input, select, textarea { 
-    background: rgba(0,0,0,0.3); 
+    background: #000; 
     border: 1px solid rgba(255,255,255,0.2); 
     padding: 1rem 1.25rem; 
     border-radius: 0.75rem; 
@@ -314,6 +347,7 @@ input, select, textarea {
     font-size: 1rem; 
     transition: all 0.3s;
 }
+textarea { background: #000 !important; color: #fff !important; }
 select option { background: #111; color: #fff; }
 ::placeholder { color: rgba(255,255,255,0.6); }
 input:focus, select:focus, textarea:focus { border-color: #7c4dff; outline: none; background: rgba(0,0,0,0.5); }
@@ -435,7 +469,7 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.disabled = true;
             submitBtn.style.opacity = "0.7";
             submitBtn.style.cursor = "not-allowed";
-        });
-    }
+            });
+        }
 });
 </script>
