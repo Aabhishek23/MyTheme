@@ -425,7 +425,7 @@ get_header(); ?>
     .mfg-header { flex-direction: column; gap: 1rem; }
     .header-links a { margin: 0 1rem 0 0; }
 }
-textarea { background: #000 !important; color: #fff !important; }
+textarea { background: #fff !important; color: #000 !important; border: 1.5px solid var(--mfg-border) !important; }
 </style>
 
 <script>
