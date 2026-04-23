@@ -42,7 +42,7 @@ get_header(); ?>
                                 <div class="slide-label">Top Layer</div>
                             </div>
                             <div class="slide">
-                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/double-side-smd-pcb-design-Bottom.png" alt="SMD PCB Bottom Layer" onerror="this.onerror=null; this.style.display='none';">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/double-side-smd-pcb-design-bottom.png" alt="SMD PCB Bottom Layer" onerror="this.onerror=null; this.style.display='none';">
                                 <div class="slide-label">Bottom Layer</div>
                             </div>
                             <div class="slide">
