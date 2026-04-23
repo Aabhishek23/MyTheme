@@ -38,19 +38,19 @@ get_header(); ?>
                     <div class="pcb-slider" id="multiSlider">
                         <div class="slider-track">
                             <div class="slide active">
-                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/top_multilyyer.jpeg" alt="Layer 1 Top" onerror="this.onerror=null; this.style.display='none';">
+                                <!-- <img src="<?php echo get_template_directory_uri(); ?>/assets/images/top_multilyyer.jpeg" alt="Layer 1 Top" onerror="this.onerror=null; this.style.display='none';"> -->
                                 <div class="slide-label">Layer 1: Top Signal</div>
                             </div>
                             <div class="slide">
-                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/mid1_multilyyer.jpeg" alt="Layer 2 Internal" onerror="this.onerror=null; this.style.display='none';">
+                                <!-- <img src="<?php echo get_template_directory_uri(); ?>/assets/images/mid1_multilyyer.jpeg" alt="Layer 2 Internal" onerror="this.onerror=null; this.style.display='none';"> -->
                                 <div class="slide-label">Layer 2: Ground Plane</div>
                             </div>
                             <div class="slide">
-                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/mid2_multilyyer.jpeg" alt="Layer 3 Internal" onerror="this.onerror=null; this.style.display='none';">
+                                <!-- <img src="<?php echo get_template_directory_uri(); ?>/assets/images/mid2_multilyyer.jpeg" alt="Layer 3 Internal" onerror="this.onerror=null; this.style.display='none';"> -->
                                 <div class="slide-label">Layer 3: Power Plane</div>
                             </div>
                             <div class="slide">
-                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/bottom_multilyyer.jpeg" alt="Layer 4 Bottom" onerror="this.onerror=null; this.style.display='none';">
+                                <!-- <img src="<?php echo get_template_directory_uri(); ?>/assets/images/bottom_multilyyer.jpeg" alt="Layer 4 Bottom" onerror="this.onerror=null; this.style.display='none';"> -->
                                 <div class="slide-label">Layer 4: Bottom Signal</div>
                             </div>
                             <!-- <div class="slide">
