@@ -2349,7 +2349,7 @@ function mytheme_resend_smtp_integration($phpmailer) {
     $phpmailer->setFrom('info@aimsint.in', 'AIPL Store'); 
 }
 
-// Force WordPress & WooCommerce to always use Resend's testing email as sender 
+// Force WordPress & WooCommerce to always use info@aimsint.in as sender 
 add_filter('wp_mail_from', function($original_email_address) {
     return 'info@aimsint.in';
 }, 999);
@@ -2358,10 +2358,39 @@ add_filter('wp_mail_from_name', function($original_email_from) {
     return 'AIPL Store';
 }, 999);
 
+/**
+ * Global Email Replacement: Replace abhishekparochi3441@gmail.com with info@aimsint.in
+ * This handles cases where the email might be stored in the database (e.g. WooCommerce settings)
+ */
+add_filter('woocommerce_email_footer_text', function($footer_text) {
+    return str_replace('abhishekparochi3441@gmail.com', 'info@aimsint.in', $footer_text);
+}, 999);
+
+add_filter('option_admin_email', function($email) {
+    return 'info@aimsint.in';
+});
+
+add_filter('gettext', function($translated_text, $text, $domain) {
+    if (strpos($translated_text, 'abhishekparochi3441@gmail.com') !== false) {
+        $translated_text = str_replace('abhishekparochi3441@gmail.com', 'info@aimsint.in', $translated_text);
+    }
+    return $translated_text;
+}, 999, 3);
+
+/**
+ * Nuclear Option: Intercept ALL outgoing emails and replace the old address
+ */
+add_filter('wp_mail', function($args) {
+    if (isset($args['message'])) {
+        $args['message'] = str_replace('abhishekparochi3441@gmail.com', 'info@aimsint.in', $args['message']);
+    }
+    return $args;
+}, 9999);
+
 // Add a test tool to immediately check why mail is failing
 add_action('template_redirect', function() {
-    if (false && isset($_GET['test_email'])) {
-        $to = 'tanayaparochi@gmail.com'; 
+    if (isset($_GET['test_email'])) {
+        $to = 'info@aimsint.in'; 
         
         global $phpmailer;
         if (!is_object($phpmailer) || !is_a($phpmailer, 'PHPMailer\\PHPMailer\\PHPMailer')) {
@@ -2382,7 +2411,8 @@ add_action('template_redirect', function() {
         });
 
         echo "<h2>Testing Resend Email Connection...</h2><hr><pre>";
-        $sent = wp_mail($to, 'Test Email from AIPL Store', 'Ye ek test email hai. Agar ye dikh raha hai, to API kaam kar rahi hai!');
+        $test_msg = 'Ye ek test email hai. Old email check: abhishekparochi3441@gmail.com should be replaced by info@aimsint.in automatically.';
+        $sent = wp_mail($to, 'Test Email from AIPL Store', $test_msg);
         echo "</pre><hr>";
         
         if ($sent) {
