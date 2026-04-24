@@ -2342,15 +2342,16 @@ function mytheme_resend_smtp_integration($phpmailer) {
     $phpmailer->Port       = 465; // Or 587
     $phpmailer->SMTPSecure = 'ssl'; // Or 'tls'
     $phpmailer->Username   = 'resend'; 
-    $phpmailer->Password   = 're_jZNfFbhq_NZp3T1FPdLP5ZBKCKdKzp1kJ'; 
+    $phpmailer->Password   = 're_4JGH7Y6J_3CRqytnW7qzBDYrxpLsVh2qz'; 
+
     
     // Default testing email from Resend. Change this once you have a verified domain.
-    $phpmailer->setFrom('onboarding@resend.dev', 'AIPL Store'); 
+    $phpmailer->setFrom('info@aimsint.in', 'AIPL Store'); 
 }
 
 // Force WordPress & WooCommerce to always use Resend's testing email as sender 
 add_filter('wp_mail_from', function($original_email_address) {
-    return 'onboarding@resend.dev';
+    return 'info@aimsint.in';
 }, 999);
 
 add_filter('wp_mail_from_name', function($original_email_from) {
