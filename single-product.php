@@ -19,9 +19,45 @@ get_header(); ?>
                     <!-- Left: Product Image Gallery -->
                     <div class="boat-single-gallery">
                         <?php
-                        // Main product image and thumbnails
-                        do_action( 'woocommerce_before_single_product_summary' );
+                        // Custom Gallery: Main Image + Vertical Thumbnails
+                        $product_id      = get_the_ID();
+                        $main_image_id   = get_post_thumbnail_id($product_id);
+                        $gallery_ids     = $product->get_gallery_image_ids();
+                        $all_image_ids   = array_merge([$main_image_id], $gallery_ids);
+                        $first_id        = $all_image_ids[0];
                         ?>
+                        <div class="aipl-gallery-wrap">
+                            <!-- Thumbnail column (left) -->
+                            <div class="aipl-thumbs">
+                                <?php foreach ($all_image_ids as $img_id) :
+                                    $thumb_url = wp_get_attachment_image_url($img_id, 'thumbnail');
+                                    $full_url  = wp_get_attachment_image_url($img_id, 'large');
+                                ?>
+                                    <div class="aipl-thumb <?php echo ($img_id === $first_id) ? 'active' : ''; ?>"
+                                         onclick="aiplSetMain('<?php echo esc_js($full_url); ?>', this)">
+                                        <img src="<?php echo esc_url($thumb_url); ?>" alt="">
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+
+                            <!-- Main image (right) -->
+                            <div class="aipl-main-img-wrap">
+                                <?php
+                                $main_url = wp_get_attachment_image_url($first_id, 'large');
+                                ?>
+                                <img id="aipl-main-img" src="<?php echo esc_url($main_url); ?>" alt="<?php the_title(); ?>">
+                                <a href="<?php echo esc_url($main_url); ?>" id="aipl-fullview-link" target="_blank" class="click-to-view">Click to see full view</a>
+                            </div>
+                        </div>
+
+                        <script>
+                        function aiplSetMain(url, el) {
+                            document.getElementById('aipl-main-img').src = url;
+                            document.getElementById('aipl-fullview-link').href = url;
+                            document.querySelectorAll('.aipl-thumb').forEach(function(t){ t.classList.remove('active'); });
+                            el.classList.add('active');
+                        }
+                        </script>
                     </div>
 
                     <!-- Right: Product Information Summary -->

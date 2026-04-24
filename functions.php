@@ -10,6 +10,9 @@ function mytheme_setup() {
     ));
     add_theme_support('html5', array('search-form', 'comment-form', 'comment-list', 'gallery', 'caption'));
     add_theme_support('woocommerce');
+    add_theme_support('wc-product-gallery-zoom');
+    add_theme_support('wc-product-gallery-lightbox');
+    add_theme_support('wc-product-gallery-slider');
     
     register_nav_menus(array(
         'primary-menu' => __('Primary Menu', 'mytheme'),
@@ -1687,6 +1690,8 @@ add_action("save_post_product", "mytheme_save_product_meta");
  */
 function mytheme_optimize_wc_scripts() {
     if (!class_exists('WooCommerce')) return;
+    // On single product pages, keep ALL scripts loaded for gallery (flexslider, photoswipe, zoom)
+    if (is_product()) return;
     if (is_cart() || is_checkout() || is_account_page() || is_woocommerce()) return;
     
     wp_dequeue_script('wc-add-to-cart');
@@ -1761,6 +1766,25 @@ function mytheme_remove_block_library_css() {
     wp_dequeue_style('wc-blocks-style'); // WooCommerce block styles
 }
 add_action('wp_enqueue_scripts', 'mytheme_remove_block_library_css', 100);
+
+/**
+ * Force-load WooCommerce gallery scripts on single product pages
+ * This ensures flexslider, photoswipe and zoom work correctly.
+ */
+add_action('wp_enqueue_scripts', 'mytheme_force_product_gallery_scripts', 101);
+function mytheme_force_product_gallery_scripts() {
+    if (!is_product()) return;
+    // WooCommerce gallery requires these scripts
+    wp_enqueue_script('flexslider');
+    wp_enqueue_script('zoom');
+    wp_enqueue_script('photoswipe');
+    wp_enqueue_script('photoswipe-ui-default');
+    wp_enqueue_script('wc-single-product');
+    wp_enqueue_style('photoswipe');
+    wp_enqueue_style('photoswipe-default-skin');
+    wp_enqueue_style('woocommerce-general');
+    wp_enqueue_style('woocommerce-layout');
+}
 
 /**
  * Performance Optimization: Dequeue Jetpack assets if not on a post/page that needs them
@@ -3051,3 +3075,9 @@ function mytheme_create_track_app_page() {
 }
 add_action('init', 'mytheme_create_track_app_page');
 
+
+
+/* Force Single Column for Vertical Thumbnails Gallery */
+add_filter( 'woocommerce_product_thumbnails_columns', function() {
+    return 1;
+} );

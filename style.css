@@ -3499,3 +3499,374 @@ textarea {
     text-decoration: line-through !important;
 }
 
+
+
+/* -------------------------------------------------------------------------- */
+/* AMAZON STYLE PRODUCT GALLERY (VERTICAL THUMBNAILS LEFT) */
+/* -------------------------------------------------------------------------- */
+.boat-single-gallery .woocommerce-product-gallery {
+    display: flex !important;
+    flex-direction: row-reverse !important;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.boat-single-gallery .woocommerce-product-gallery .flex-viewport {
+    width: 82% !important;
+    flex: 1;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    background: #fff;
+}
+
+.boat-single-gallery .woocommerce-product-gallery .flex-control-nav {
+    width: 18% !important;
+    position: static !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+}
+
+.boat-single-gallery .woocommerce-product-gallery .flex-control-nav li {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+}
+
+.boat-single-gallery .woocommerce-product-gallery .flex-control-nav li img {
+    width: 100% !important;
+    height: auto !important;
+    cursor: pointer;
+    border: 2px solid #f0f0f0;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    opacity: 0.8;
+    display: block;
+}
+
+.boat-single-gallery .woocommerce-product-gallery .flex-control-nav li img.flex-active,
+.boat-single-gallery .woocommerce-product-gallery .flex-control-nav li img:hover {
+    border-color: #007bff !important;
+    opacity: 1;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .boat-single-gallery .woocommerce-product-gallery {
+        flex-direction: column !important;
+    }
+    .boat-single-gallery .woocommerce-product-gallery .flex-viewport,
+    .boat-single-gallery .woocommerce-product-gallery .flex-control-nav {
+        width: 100% !important;
+    }
+    .boat-single-gallery .woocommerce-product-gallery .flex-control-nav {
+        flex-direction: row !important;
+        overflow-x: auto;
+        padding: 10px 0;
+        white-space: nowrap;
+    }
+    .boat-single-gallery .woocommerce-product-gallery .flex-control-nav li {
+        width: 70px !important;
+        flex-shrink: 0;
+    }
+}
+
+.click-to-view {
+    text-align: center;
+    color: #007bff;
+    font-size: 1.1rem;
+    margin-top: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.click-to-view:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* PRODUCT MAIN IMAGE — FILL FULL GALLERY CONTAINER */
+/* -------------------------------------------------------------------------- */
+
+/* Make the gallery wrapper take full height */
+.shubham-style .boat-single-gallery {
+    background: #fff;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Flex-viewport (Flexslider main image container) fills all space */
+.shubham-style .boat-single-gallery .woocommerce-product-gallery {
+    display: flex !important;
+    flex-direction: row-reverse !important;
+    gap: 12px;
+    align-items: stretch !important;
+    width: 100%;
+}
+
+/* Main image container stretches vertically */
+.shubham-style .boat-single-gallery .woocommerce-product-gallery .flex-viewport {
+    flex: 1 1 auto !important;
+    width: 82% !important;
+}
+
+/* The slides list and each slide fill the viewport height */
+.shubham-style .boat-single-gallery .woocommerce-product-gallery .slides,
+.shubham-style .boat-single-gallery .woocommerce-product-gallery .slides li {
+    height: 100% !important;
+}
+
+/* The actual image inside each slide fills width & height fully */
+.shubham-style .boat-single-gallery .woocommerce-product-gallery .slides li img,
+.shubham-style .boat-single-gallery .woocommerce-product-gallery img {
+    width: 100% !important;
+    height: 480px !important;
+    object-fit: contain !important;
+    background: #f9f9f9;
+    border-radius: 8px;
+    display: block;
+}
+
+/* Make the WooCommerce product gallery div fill grid column */
+.shubham-style .boat-single-main-grid {
+    align-items: stretch;
+}
+
+/* Ensure gallery column stretches */
+.shubham-style .boat-single-gallery {
+    min-height: 480px;
+}
+
+/* Thumbnails column on left */
+.shubham-style .boat-single-gallery .flex-control-nav {
+    width: 18% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: static !important;
+}
+
+.shubham-style .boat-single-gallery .flex-control-nav li {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+}
+
+.shubham-style .boat-single-gallery .flex-control-nav li img {
+    width: 100% !important;
+    height: 70px !important;
+    object-fit: cover !important;
+    cursor: pointer;
+    border: 2px solid #f0f0f0;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    opacity: 0.75;
+    display: block;
+}
+
+.shubham-style .boat-single-gallery .flex-control-nav li img.flex-active,
+.shubham-style .boat-single-gallery .flex-control-nav li img:hover {
+    border-color: #007bff !important;
+    opacity: 1;
+    box-shadow: 0 2px 8px rgba(0,123,255,0.2);
+}
+
+
+/* ============================================================ */
+/* FINAL FIX — MAIN PRODUCT IMAGE FILLS FULL GALLERY AREA     */
+/* ============================================================ */
+
+/* The WooCommerce gallery div wrapper */
+.shubham-style .boat-single-gallery .woocommerce-product-gallery {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 10px;
+    align-items: flex-start;
+    width: 100%;
+}
+
+/* Thumbnail list on the LEFT, vertical */
+.shubham-style .boat-single-gallery .woocommerce-product-gallery .flex-control-nav {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 80px !important;
+    flex-shrink: 0;
+    order: 1;
+}
+
+.shubham-style .boat-single-gallery .woocommerce-product-gallery .flex-control-nav li {
+    width: 70px !important;
+    height: 70px !important;
+    float: none !important;
+    display: block !important;
+}
+
+.shubham-style .boat-single-gallery .woocommerce-product-gallery .flex-control-nav li img {
+    width: 70px !important;
+    height: 70px !important;
+    object-fit: cover !important;
+    border-radius: 6px !important;
+    border: 2px solid #eee !important;
+    cursor: pointer;
+    opacity: 0.75;
+    transition: all 0.2s;
+    display: block !important;
+}
+
+.shubham-style .boat-single-gallery .woocommerce-product-gallery .flex-control-nav li img.flex-active,
+.shubham-style .boat-single-gallery .woocommerce-product-gallery .flex-control-nav li img:hover {
+    border-color: #007bff !important;
+    opacity: 1;
+}
+
+/* Main image flex-viewport takes remaining space */
+.shubham-style .boat-single-gallery .woocommerce-product-gallery .flex-viewport {
+    flex: 1 !important;
+    width: auto !important;
+    order: 2;
+}
+
+/* Main image fills the viewport fully */
+.shubham-style .boat-single-gallery .woocommerce-product-gallery .flex-viewport img,
+.shubham-style .boat-single-gallery .woocommerce-product-gallery img.wp-post-image {
+    width: 100% !important;
+    height: 450px !important;
+    max-height: 500px !important;
+    object-fit: contain !important;
+    background: #f9f9f9;
+    border-radius: 8px;
+    display: block !important;
+}
+
+/* Remove any default WC height restrictions */
+.shubham-style .boat-single-gallery .woocommerce-product-gallery .woocommerce-product-gallery__image a,
+.shubham-style .boat-single-gallery .woocommerce-product-gallery .woocommerce-product-gallery__image {
+    display: block;
+    width: 100% !important;
+    height: 450px !important;
+}
+
+.shubham-style .boat-single-gallery .woocommerce-product-gallery .woocommerce-product-gallery__image img {
+    width: 100% !important;
+    height: 450px !important;
+    object-fit: contain !important;
+}
+
+
+/* ============================================================ */
+/* AIPL CUSTOM PRODUCT GALLERY — Amazon Style Layout           */
+/* ============================================================ */
+
+.aipl-gallery-wrap {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: flex-start;
+    width: 100%;
+}
+
+/* Left: Thumbnail Column */
+.aipl-thumbs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 75px;
+    flex-shrink: 0;
+}
+
+.aipl-thumb {
+    width: 70px;
+    height: 70px;
+    border: 2px solid #eee;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+.aipl-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.aipl-thumb.active,
+.aipl-thumb:hover {
+    border-color: #007bff;
+    opacity: 1;
+    box-shadow: 0 2px 8px rgba(0,123,255,0.2);
+}
+
+/* Right: Main Image */
+.aipl-main-img-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#aipl-main-img {
+    width: 100%;
+    height: 430px;
+    object-fit: contain;
+    background: #f9f9f9;
+    border-radius: 8px;
+    display: block;
+    border: 1px solid #eee;
+    transition: opacity 0.2s ease;
+}
+
+#aipl-fullview-link.click-to-view {
+    text-align: center;
+    color: #007bff;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    display: block;
+    padding: 4px 0;
+}
+
+#aipl-fullview-link.click-to-view:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .aipl-gallery-wrap {
+        flex-direction: column;
+    }
+    .aipl-thumbs {
+        flex-direction: row;
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+    .aipl-thumb {
+        flex-shrink: 0;
+    }
+    #aipl-main-img {
+        height: 280px;
+    }
+}
