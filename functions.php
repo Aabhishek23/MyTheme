@@ -3081,3 +3081,24 @@ add_action('init', 'mytheme_create_track_app_page');
 add_filter( 'woocommerce_product_thumbnails_columns', function() {
     return 1;
 } );
+
+/**
+ * -- Product Custom Meta: Color Count ------------------------------------------
+ */
+add_action('woocommerce_product_options_general_product_data', 'mytheme_add_custom_product_fields');
+function mytheme_add_custom_product_fields() {
+    woocommerce_wp_text_input(array(
+        'id'          => '_boat_color_count',
+        'label'       => __('Color Count Text', 'woocommerce'),
+        'description' => __('Enter the text to show for extra colors (e.g., +4)', 'woocommerce'),
+        'desc_tip'    => 'true',
+        'placeholder' => '+4',
+    ));
+}
+
+add_action('woocommerce_process_product_meta', 'mytheme_save_custom_product_fields');
+function mytheme_save_custom_product_fields($post_id) {
+    if (isset($_POST['_boat_color_count'])) {
+        update_post_meta($post_id, '_boat_color_count', sanitize_text_field($_POST['_boat_color_count']));
+    }
+}

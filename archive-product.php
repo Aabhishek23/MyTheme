@@ -95,7 +95,7 @@ get_header(); ?>
                                         </div>
                                         <div class="boat-colors">
                                             <span class="boat-dots"><span class="dot"></span><span class="dot darker"></span></span>
-                                            <span class="boat-color-count">+4</span>
+                                            <span class="boat-color-count"><?php echo esc_html(get_post_meta(get_the_ID(), '_boat_color_count', true)); ?></span>
                                         </div>
                                     </div>
                                     
