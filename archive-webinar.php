@@ -49,11 +49,11 @@
                                 <?php elseif (!empty($date) && $date >= $today) : ?>
                                     <span style="position: absolute; top: 15px; left: 15px; background: #ef4444; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; z-index: 2;">Upcoming</span>
                                 <?php endif; ?>
-                                <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
-                                    <span style="background: var(--primary); color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600;"><?php echo !empty($date) ? date('M j, Y', strtotime($date)) : 'ON-DEMAND'; ?></span>
-                                </div>
                             </div>
                             <div class="webinar-info" style="padding: 25px;">
+                                <div style="color: var(--primary); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 10px;">
+                                    📅 <?php echo !empty($date) ? date('M j, Y', strtotime($date)) : 'ON-DEMAND'; ?>
+                                </div>
                                 <h3 style="margin: 0 0 15px; font-size: 1.4rem; line-height: 1.3; color: #fff;"><?php the_title(); ?></h3>
                                 <div style="display: flex; flex-direction: column; gap: 8px; color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-bottom: 20px;">
                                     <?php if ($speaker) : ?>
