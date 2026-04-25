@@ -9,13 +9,13 @@
         </div>
     </section>
 
-    <!-- Filters/Search (Optional placeholder for now) -->
+    <!-- Filters/Search -->
     <section class="webinars-filters" style="background: #09090b; padding: 30px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
         <div class="container">
-            <div style="display: flex; justify-content: center; gap: 20px;">
-                <span style="color: #fff; border-bottom: 2px solid var(--primary); padding-bottom: 5px; cursor: pointer;">All Webinars</span>
-                <span style="color: rgba(255,255,255,0.5); cursor: pointer;">Upcoming</span>
-                <span style="color: rgba(255,255,255,0.5); cursor: pointer;">On-Demand</span>
+            <div class="webinar-tabs" style="display: flex; justify-content: center; gap: 20px;">
+                <span class="webinar-tab active" data-filter="all" style="color: #fff; border-bottom: 2px solid var(--primary); padding-bottom: 5px; cursor: pointer; font-weight: 600;">All Webinars</span>
+                <span class="webinar-tab" data-filter="upcoming" style="color: rgba(255,255,255,0.5); cursor: pointer; font-weight: 600;">Upcoming</span>
+                <span class="webinar-tab" data-filter="on-demand" style="color: rgba(255,255,255,0.5); cursor: pointer; font-weight: 600;">On-Demand</span>
             </div>
         </div>
     </section>
@@ -24,18 +24,30 @@
     <section class="webinars-list" style="background: #09090b; padding: 80px 0; min-height: 500px;">
         <div class="container">
             <div class="webinars-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px;">
-                <?php if (have_posts()) : while (have_posts()) : the_post(); 
+                <?php 
+                $today = date('Y-m-d');
+                if (have_posts()) : while (have_posts()) : the_post(); 
                     $date = get_post_meta(get_the_ID(), '_webinar_date', true);
                     $time = get_post_meta(get_the_ID(), '_webinar_time', true);
                     $speaker = get_post_meta(get_the_ID(), '_webinar_speaker', true);
                     $is_live = get_post_meta(get_the_ID(), '_webinar_is_live', true);
                     $bg_image = get_the_post_thumbnail_url(get_the_ID(), 'large');
+                    
+                    // Determine Type for Filtering
+                    $type = 'on-demand';
+                    if ($is_live === 'yes') {
+                        $type = 'upcoming';
+                    } elseif (!empty($date) && $date >= $today) {
+                        $type = 'upcoming';
+                    }
                 ?>
-                    <div class="webinar-card" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; overflow: hidden; transition: transform 0.3s ease, border-color 0.3s ease; position: relative;">
+                    <div class="webinar-card" data-type="<?php echo esc_attr($type); ?>" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; overflow: hidden; transition: transform 0.3s ease, border-color 0.3s ease; position: relative;">
                         <a href="<?php the_permalink(); ?>" style="text-decoration: none; color: inherit; display: block;">
                             <div class="webinar-thumb" style="height: 200px; background-image: url('<?php echo esc_url($bg_image); ?>'); background-size: cover; background-position: center; position: relative;">
                                 <?php if ($is_live === 'yes') : ?>
-                                    <span style="position: absolute; top: 15px; left: 15px; background: #ef4444; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; animation: pulse 2s infinite;">● Live Now</span>
+                                    <span style="position: absolute; top: 15px; left: 15px; background: #ef4444; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; animation: pulse 2s infinite; z-index: 2;">● Live Now</span>
+                                <?php elseif (!empty($date) && $date >= $today) : ?>
+                                    <span style="position: absolute; top: 15px; left: 15px; background: #ef4444; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; z-index: 2;">Upcoming</span>
                                 <?php endif; ?>
                                 <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
                                     <span style="background: var(--primary); color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600;"><?php echo !empty($date) ? date('M j, Y', strtotime($date)) : 'ON-DEMAND'; ?></span>
@@ -76,6 +88,36 @@
         </div>
     </section>
 </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.webinar-tab');
+    const cards = document.querySelectorAll('.webinar-card');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const filter = tab.getAttribute('data-filter');
+
+            // Update tab styles
+            tabs.forEach(t => {
+                t.style.color = 'rgba(255,255,255,0.5)';
+                t.style.borderBottom = 'none';
+            });
+            tab.style.color = '#fff';
+            tab.style.borderBottom = '2px solid var(--primary)';
+
+            // Filter cards
+            cards.forEach(card => {
+                if (filter === 'all' || card.getAttribute('data-type') === filter) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
 
 <style>
 .webinar-card:hover {
