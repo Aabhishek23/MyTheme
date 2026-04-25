@@ -9,7 +9,7 @@
     $thumb = get_the_post_thumbnail_url(get_the_ID(), 'full');
 ?>
 
-<main class="tradeshow-single" style="background: #09090b; color: #fff; min-height: 100vh;">
+<main class="tradeshow-single" style="background: #09090b; color: #fff; min-height: 100vh; padding-top: 100px;">
     <!-- Featured Image Hero -->
     <section class="ts-hero" style="height: 400px; background-image: linear-gradient(to bottom, rgba(0,0,0,0.3), #09090b), url('<?php echo esc_url($thumb); ?>'); background-size: cover; background-position: center; display: flex; align-items: flex-end; padding-bottom: 60px;">
         <div class="container">

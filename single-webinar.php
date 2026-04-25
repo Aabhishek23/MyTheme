@@ -18,7 +18,7 @@
     }
 ?>
 
-<main class="webinar-single" style="background: #09090b; color: #fff; min-height: 100vh;">
+<main class="webinar-single" style="background: #09090b; color: #fff; min-height: 100vh; padding-top: 100px;">
     <!-- Top Banner / Breadcrumb -->
     <section style="padding: 40px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
         <div class="container">

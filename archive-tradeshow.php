@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-<main class="tradeshows-archive">
+<main class="tradeshows-archive" style="padding-top: 100px;">
     <!-- Hero Section -->
     <section class="tradeshows-hero" style="background: linear-gradient(135deg, #09090b 0%, #1e1b4b 100%); padding: 100px 0; color: #fff; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
         <div class="container">

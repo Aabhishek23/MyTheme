@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-<main class="webinars-archive">
+<main class="webinars-archive" style="padding-top: 100px;">
     <!-- Hero/Header Section -->
     <section class="webinars-hero" style="background: linear-gradient(135deg, #09090b 0%, #18181b 100%); padding: 100px 0; color: #fff; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
         <div class="container">
