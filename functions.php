@@ -991,7 +991,7 @@ function mytheme_customize_register($wp_customize) {
     ));
 
     $wp_customize->add_setting('connect_btn_text', array(
-        'default'           => 'Contact Sales',
+        'default'           => 'Contact Us',
         'sanitize_callback' => 'sanitize_text_field',
     ));
     $wp_customize->add_control('connect_btn_text', array(

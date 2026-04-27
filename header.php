@@ -65,7 +65,7 @@ wp_nav_menu(array(
                     Login
                 </a>
             <?php endif; ?>
-            <a href="#" class="contact-btn">Contact Sales</a>
+            <a href="<?php echo esc_url(home_url('/contact-us/')); ?>" class="contact-btn">Contact Us</a>
         </div>
         <script>
         (function() {

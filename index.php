@@ -370,7 +370,7 @@
                 <?php echo esc_html(get_theme_mod('connect_title', 'Connect with Us')); ?>
             </h2>
             <a href="<?php echo esc_url(get_theme_mod('connect_btn_link', '#')); ?>" class="btn btn-primary" style="background: #fff; color: <?php echo esc_attr($grad_start); ?>; padding: 1rem 3rem; border: none; font-weight: 600; border-radius: 4px;">
-                <?php echo esc_html(get_theme_mod('connect_btn_text', 'Contact Sales')); ?>
+                <?php echo esc_html(get_theme_mod('connect_btn_text', 'Contact Us')); ?>
             </a>
         </div>
     </section>
