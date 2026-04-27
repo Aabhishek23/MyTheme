@@ -9,8 +9,8 @@ get_header(); ?>
         <div class="container">
             <div class="hero-content reveal">
                 <span class="badge">REAL-TIME UPDATES</span>
-                <h1>Track Your <span class="gradient-text">Project Status</span></h1>
-                <p class="lead">Enter your order ID or tracking number to see the current stage of your PCB manufacturing or design process.</p>
+                <h1>Track Your <span class="gradient-text">Order Status</span></h1>
+                <p class="lead">Enter your order ID or tracking number to see the real-time status and delivery updates of your purchase.</p>
             </div>
         </div>
     </section>
@@ -30,49 +30,87 @@ get_header(); ?>
                 </div>
             </div>
 
-            <!-- Tracking Result Placeholder (Hidden by default) -->
-            <?php if(isset($_GET['order_id'])): ?>
+            <!-- Tracking Result -->
+            <?php 
+            if(isset($_GET['order_id'])): 
+                $order_id_input = sanitize_text_field($_GET['order_id']);
+                $order_id = str_replace('AIPL-', '', $order_id_input);
+                
+                $order = false;
+                if (is_numeric($order_id)) {
+                    $order = wc_get_order($order_id);
+                }
+
+                $is_valid = false;
+                $error_msg = "Order not found. Please verify your Order ID.";
+
+                if ($order && !is_wp_error($order)) {
+                    $is_valid = true;
+                    // Filter: Exclude Service/Solution/Quotation
+                    $items = $order->get_items();
+                    foreach ($items as $item) {
+                        $product_id = $item->get_product_id();
+                        $terms = get_the_terms($product_id, 'product_cat');
+                        if($terms) {
+                            foreach($terms as $term) {
+                                if(in_array(strtolower($term->slug), ['service', 'services', 'solution', 'solutions', 'consultancy', 'quotation'])) {
+                                    $is_valid = false;
+                                    $error_msg = "Tracking is not available for this order type.";
+                                    break 2;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if($is_valid):
+                    $status = $order->get_status();
+                    $status_name = wc_get_order_status_name($status);
+                    $date_created = $order->get_date_created() ? $order->get_date_created()->date('F j, Y') : 'N/A';
+            ?>
             <div class="track-result reveal">
                 <div class="order-status-card">
                     <div class="card-header">
                         <div class="order-meta">
                             <span class="order-label">Order ID:</span>
-                            <span class="order-value"><?php echo esc_html($_GET['order_id']); ?></span>
+                            <span class="order-value"><?php echo esc_html($order_id_input); ?></span>
                         </div>
-                        <div class="status-badge pulse">In Production</div>
+                        <div class="status-badge pulse <?php echo esc_attr($status); ?>"><?php echo esc_html($status_name); ?></div>
                     </div>
                     
-                    <div class="status-timeline">
-                        <div class="step completed">
-                            <div class="step-dot"></div>
-                            <div class="step-label">Order Confirmed</div>
-                            <div class="step-date">April 15, 2026</div>
+                    <?php if($status === 'cancelled' || $status === 'failed'): ?>
+                        <div class="status-alert" style="background: rgba(255,0,0,0.1); border: 1px solid rgba(255,0,0,0.2); padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem; color: #ff4d4d; text-align: center;">
+                            <strong>This order has been <?php echo esc_html($status_name); ?>.</strong><br>
+                            If you have any questions, please contact our support team.
                         </div>
-                        <div class="step completed">
-                            <div class="step-dot"></div>
-                            <div class="step-label">Engineering Review (EQ)</div>
-                            <div class="step-date">April 16, 2026</div>
+                    <?php else: ?>
+                        <div class="status-timeline">
+                            <div class="step completed">
+                                <div class="step-dot"></div>
+                                <div class="step-label">Order Confirmed</div>
+                                <div class="step-date"><?php echo esc_html($date_created); ?></div>
+                            </div>
+                            <div class="step <?php echo in_array($status, ['processing', 'completed']) ? 'completed' : 'active'; ?>">
+                                <div class="step-dot"></div>
+                                <div class="step-label">Processing</div>
+                            </div>
+                            <div class="step <?php echo in_array($status, ['completed']) ? 'completed' : ''; ?>">
+                                <div class="step-dot"></div>
+                                <div class="step-label">Dispatched / Shipped</div>
+                            </div>
                         </div>
-                        <div class="step active">
-                            <div class="step-dot"></div>
-                            <div class="step-label">Imaging & Lamination</div>
-                            <div class="step-info">Currently at 65% completion</div>
-                        </div>
-                        <div class="step">
-                            <div class="step-dot"></div>
-                            <div class="step-label">Drilling & Plating</div>
-                        </div>
-                        <div class="step">
-                            <div class="step-dot"></div>
-                            <div class="step-label">Testing & Inspection</div>
-                        </div>
-                        <div class="step">
-                            <div class="step-dot"></div>
-                            <div class="step-label">Shipping</div>
-                        </div>
-                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
+            <?php else: ?>
+                <div class="track-result reveal">
+                    <div class="order-status-card" style="text-align: center; border-color: rgba(255,0,0,0.2);">
+                        <div class="f-icon">⚠️</div>
+                        <h3 style="margin-bottom: 1rem;">Tracking Unavailable</h3>
+                        <p style="color: var(--text-muted);"><?php echo esc_html($error_msg); ?></p>
+                    </div>
+                </div>
+            <?php endif; ?>
             <?php endif; ?>
         </div>
     </section>
@@ -84,17 +122,17 @@ get_header(); ?>
                 <div class="feature-card">
                     <div class="f-icon">⏱️</div>
                     <h3>Milestone Alerts</h3>
-                    <p>Get notified via email as soon as your board moves to the next manufacturing stage.</p>
+                    <p>Get notified via email as soon as your order status changes or reaches a new milestone.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="f-icon">📸</div>
-                    <h3>AOI Reports</h3>
-                    <p>Premium users can view Automated Optical Inspection images directly from our lab.</p>
+                    <div class="f-icon">📋</div>
+                    <h3>Quality Assurance</h3>
+                    <p>Every order undergoes multiple quality checks before being dispatched to ensure the highest standards.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="f-icon">🚚</div>
-                    <h3>Global Logistics</h3>
-                    <p>Integration with DHL, FedEx, and BlueDart for real-time shipping tracking.</p>
+                    <div class="f-icon">📞</div>
+                    <h3>Dedicated Support</h3>
+                    <p>Our support team is available to assist you with any queries regarding your order or delivery.</p>
                 </div>
             </div>
         </div>
