@@ -81,7 +81,7 @@
                         wp_reset_postdata();
                     else:
                         // Static Fallback Tabs
-                        $fallbacks = ['Synopsys Converge', 'Introducing HAV', 'Electronics Digital Twin', 'NVIDIA and Synopsys', 'Synopsys and Ansys'];
+                        $fallbacks = ['AIPL Innovation', 'Electronic Solutions', 'Engineering Excellence', 'Advanced Technology', 'Future of Silicon'];
                         foreach($fallbacks as $i => $title) : ?>
                             <div class="nav-slide-item <?php echo ($i === 0) ? 'active' : ''; ?>" data-slide="<?php echo $i; ?>">
                                 <h3><?php echo esc_html($title); ?></h3>
@@ -122,7 +122,7 @@
             <!-- Image Grid Added Below Text -->
             <div class="card-grid">
                 <?php
-                $default_titles_arr = array('Synopsys.ai', 'EDA', 'Systems', 'Silicon IP');
+                $default_titles_arr = array('AIPL.ai', 'Design', 'Systems', 'Silicon Solutions');
                 for ($i = 1; $i <= 4; $i++) :
                     $img = get_theme_mod("pervasive_card_image_$i", '');
                     $title = get_theme_mod("pervasive_card_title_$i", $default_titles_arr[$i-1]);
@@ -304,9 +304,9 @@
                     else :
                         // Dummy cards if no posts exist
                         $dummy_data = array(
-                            array('title' => 'Synopsys Supports New Arm AGI CPU with Full-Stack Design Solutions', 'date' => 'March 24, 2026'),
-                            array('title' => 'Synopsys Introduces Software-Defined Hardware-Assisted Verification to Enable AI Proliferation', 'date' => 'March 11, 2026'),
-                            array('title' => 'Synopsys Launches Electronics Digital Twin Platform to Accelerate Physical AI System Development', 'date' => 'March 10, 2026'),
+                            array('title' => 'AIPL Unveils Next-Gen AI Silicon Architecture', 'date' => 'March 24, 2026'),
+                            array('title' => 'AIPL Introduces Advanced Verification Solutions for Global Markets', 'date' => 'March 11, 2026'),
+                            array('title' => 'AIPL Launches New Electronic Design Platform to Accelerate Innovation', 'date' => 'March 10, 2026'),
                         );
                         foreach ($dummy_data as $i => $data) :
                     ?>
@@ -344,14 +344,14 @@
             <div class="sc-grid">
                 <div class="sc-col">
                     <h2 class="sc-title" style="color: <?php echo esc_attr($sc_title_c); ?>; font-weight: 300;"><?php echo esc_html(get_theme_mod('sc_col1_title', 'Support & Services')); ?></h2>
-                    <p class="sc-desc" style="color: <?php echo esc_attr($sc_desc_c); ?>; font-weight: 300;"><?php echo esc_html(get_theme_mod('sc_col1_desc', 'Explore the Synopsys Support Community! Login is required. View our service offerings as well.')); ?></p>
+                    <p class="sc-desc" style="color: <?php echo esc_attr($sc_desc_c); ?>; font-weight: 300;"><?php echo esc_html(get_theme_mod('sc_col1_desc', 'Explore the AIPL Support Community! Login is required to access premium resources.')); ?></p>
                     <a href="<?php echo esc_url(get_theme_mod('sc_col1_link_url', '#')); ?>" class="sc-link" style="color: <?php echo esc_attr($sc_title_c); ?>; font-weight: 600;"><?php echo esc_html(get_theme_mod('sc_col1_link_text', 'View Support & Services')); ?> &nbsp; &gt;</a>
                 </div>
                 <!-- Vertical Divider -->
                 <div class="sc-divider" style="background: #e5e7eb;"></div>
                 <div class="sc-col">
                     <h2 class="sc-title" style="color: <?php echo esc_attr($sc_title_c); ?>; font-weight: 300;"><?php echo esc_html(get_theme_mod('sc_col2_title', 'Careers')); ?></h2>
-                    <p class="sc-desc" style="color: <?php echo esc_attr($sc_desc_c); ?>; font-weight: 300;"><?php echo esc_html(get_theme_mod('sc_col2_desc', 'Work at Synopsys and join a first-in-class team of technology professionals. Apply for a position today.')); ?></p>
+                    <p class="sc-desc" style="color: <?php echo esc_attr($sc_desc_c); ?>; font-weight: 300;"><?php echo esc_html(get_theme_mod('sc_col2_desc', 'Work at AIPL and join a first-in-class team of technology professionals. Apply today!')); ?></p>
                     <a href="<?php echo esc_url(get_theme_mod('sc_col2_link_url', '#')); ?>" class="sc-link" style="color: <?php echo esc_attr($sc_title_c); ?>; font-weight: 600;"><?php echo esc_html(get_theme_mod('sc_col2_link_text', 'View Careers')); ?> &nbsp; &gt;</a>
                 </div>
             </div>

@@ -1,12 +1,12 @@
 /*
 Theme Name: My Custom Theme
 Author: Taniya
-Description: A premium corporate theme inspired by Synopsys.
+Description: A premium corporate theme designed for AIPL.
 Version: 1.2
 */
 
 :root {
-    /* Color Palette - Synopsys Inspired */
+    /* Color Palette - Premium Corporate */
     --background: #09090b;
     --surface: #18181b;
     --primary: #ffffff;
@@ -143,12 +143,24 @@ a {
 }
 
 /* --- Navigation & Menus --- */
+#siteNav {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+}
+
 .nav-menu {
     display: flex;
     gap: 2.5rem;
     list-style: none;
     margin: 0;
     padding: 0;
+}
+
+.header-right-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 }
 
 .menu-item,
@@ -177,7 +189,8 @@ a {
     transition: transform 0.3s ease;
 }
 
-.menu-item-has-children:hover>a::after {
+.menu-item-has-children:hover>a::after,
+.menu-item-has-children.is-open>a::after {
     transform: rotate(180deg);
 }
 
@@ -255,7 +268,7 @@ a {
 
 .sub-menu a:hover {
     color: #5d3fd3;
-    /* Synopsys-like Primary */
+    /* Corporate Primary */
     background: #f9fafb;
     padding-left: 2rem;
 }
@@ -4014,8 +4027,9 @@ textarea {
 /* GLOBAL MOBILE RESPONSIVENESS (ADDED)                         */
 /* ============================================================ */
 
-/* Hide mobile button by default on desktop */
-.mobile-menu-btn {
+/* Hide mobile buttons by default on desktop */
+.mobile-menu-btn,
+.mobile-close-btn {
     display: none;
     background: none;
     border: none;
@@ -4024,105 +4038,222 @@ textarea {
     color: var(--secondary, #333);
 }
 
+.mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+}
+
+.mobile-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
 .main-header.scrolled .mobile-menu-btn {
     color: #000;
 }
 
 @media (max-width: 1024px) {
+
     /* Header & Navigation */
     .mobile-menu-btn {
         display: block;
         order: 2;
     }
-    
+
     .header-content {
         flex-wrap: wrap;
     }
-    
+
     #siteNav {
-        display: none;
-        width: 100%;
-        order: 3;
-        background: #fff;
-        padding: 1rem 0;
-        margin-top: 1rem;
-        border-top: 1px solid #eee;
-    }
-    
-    #siteNav.mobile-open {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 320px;
+        height: 100vh;
+        background: #ffffff;
+        z-index: 1000;
+        padding: 2.5rem 1.5rem;
         display: flex;
+        flex-direction: column;
+        transform: translateX(100%);
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: -15px 0 40px rgba(0,0,0,0.15);
+        margin-top: 0;
+        border-top: none;
+        overflow-y: auto;
+        gap: 0; /* Items will be spaced via margins/flex-grow */
     }
-    
+
+    #siteNav.mobile-open {
+        transform: translateX(0);
+    }
+
+    .mobile-close-btn {
+        display: block;
+        align-self: flex-end;
+        margin-bottom: 1.5rem;
+        color: #333;
+        font-size: 2.5rem;
+        line-height: 1;
+        transition: transform 0.3s ease;
+    }
+
+    .mobile-close-btn:hover {
+        transform: rotate(90deg);
+    }
+
     .nav-menu {
         flex-direction: column;
-        gap: 1rem;
+        gap: 0;
         width: 100%;
-    }
-    
-    .menu-item>a, .nav-item>a {
-        color: #333 !important;
-        padding: 0.5rem 1rem;
+        margin-bottom: 2rem;
     }
 
-    /* Sub-menus on mobile */
-    .sub-menu {
-        position: static;
-        opacity: 1;
-        visibility: visible;
-        transform: none;
-        box-shadow: none;
-        border: none;
-        padding-left: 2rem;
-        display: none;
-    }
-
-    .menu-item:hover>.sub-menu,
-    .nav-item:hover>.sub-menu {
-        display: block;
-    }
-    
     .header-right-actions {
-        display: none !important;
-        width: 100%;
-        order: 4;
-        background: #fff;
+        margin-top: auto;
+        padding-top: 2rem;
+        border-top: 1px solid #eee;
         flex-direction: column;
         align-items: flex-start !important;
-        padding: 0 1rem 1rem 1rem;
-        gap: 1rem !important;
+        width: 100%;
+        gap: 1.25rem !important;
     }
-    
-    .header-right-actions.mobile-open {
-        display: flex !important;
+
+    .header-right-actions a, 
+    .header-right-actions .header-user-btn {
+        width: 100%;
+        justify-content: flex-start;
     }
 
     .header-right-actions .contact-btn {
-        width: 100%;
-        text-align: center;
         background: #000 !important;
         color: #fff !important;
+        padding: 1rem !important;
+        border-radius: 8px;
     }
-    
+
+    .menu-item>a,
+    .nav-item>a {
+        color: #333 !important;
+        padding: 0.8rem 1rem !important;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    /* RESET: High-specificity override for mobile drawer content */
+    #siteNav .sub-menu,
+    #siteNav .menu-item.mega > .sub-menu,
+    #siteNav .nav-item.mega > .sub-menu {
+        position: static !important;
+        transform: none !important;
+        left: auto !important;
+        top: auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease;
+    }
+
+    #siteNav .menu-item.is-open > .sub-menu {
+        max-height: 5000px !important;
+    }
+
+    /* Hierarchy Padding (Applied to links to prevent cutting) */
+    #siteNav .nav-menu > li > a {
+        padding: 0.8rem 1.5rem !important; /* Level 1 */
+        font-weight: 600;
+    }
+
+    #siteNav .sub-menu li > a {
+        padding: 0.7rem 1.5rem 0.7rem 2.5rem !important; /* Level 2 */
+        font-size: 0.95rem;
+        color: #555 !important;
+    }
+
+    #siteNav .sub-menu .sub-menu li > a {
+        padding-left: 3.5rem !important; /* Level 3 */
+        font-size: 0.9rem;
+        color: #777 !important;
+    }
+
+    /* Mega Menu Column Overrides */
+    #siteNav .menu-item.mega > .sub-menu > li {
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+    }
+
+    /* Caret/Arrow Reset for Mobile Drawer */
+    #siteNav .sub-menu::before {
+        display: none !important;
+    }
+
+    .header-right-actions {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        order: 1; /* Keep actions visible on mobile header if possible, or hide them and move inside siteNav */
+    }
+
+    /* Hide actions in header but show in mobile menu if you prefer */
+    /* For now, let's keep the contact button visible in header for accessibility */
+    .header-right-actions .header-login-btn,
+    .header-right-actions .header-user-menu {
+        display: none;
+    }
+
+    /* Move login/user actions to bottom of mobile menu */
+    #siteNav .header-right-actions {
+        margin-top: auto;
+        display: flex !important;
+        flex-direction: column;
+        width: 100%;
+        padding: 1rem 0;
+        border-top: 2px solid #eee;
+    }
+
     /* Adjust Hero Section */
     .hero-title {
         font-size: 2.5rem !important;
         line-height: 1.2;
     }
-    
+
     .hero-subtitle {
         font-size: 1.2rem;
     }
-    
+
     .hero-content {
         padding: 0 1rem;
         margin-top: 5rem;
     }
-    
+
     .hero-btns {
         flex-direction: column;
         gap: 1rem;
     }
-    
+
     .hero-btns .btn {
         width: 100%;
         text-align: center;
@@ -4137,7 +4268,7 @@ textarea {
         justify-content: flex-start;
         -webkit-overflow-scrolling: touch;
     }
-    
+
     .nav-slide-item {
         flex: 0 0 auto;
         width: 220px;
@@ -4148,54 +4279,56 @@ textarea {
     .container {
         width: 90%;
     }
-    
+
     /* Support Careers Section */
     .sc-grid {
         display: flex;
         flex-direction: column;
         gap: 2rem;
     }
-    
+
     .sc-divider {
         display: none;
     }
-    
+
     /* Partner Logos */
     .partner-logos {
         flex-wrap: wrap;
         justify-content: center;
     }
-    
+
     /* News Carousel */
     .news-carousel {
         display: flex;
         flex-direction: column;
         gap: 2rem;
     }
-    
+
     .news-card {
         width: 100%;
         margin-bottom: 1rem;
     }
-    
+
     .news-nav {
-        display: none; /* Hide arrows on mobile since it stacks */
+        display: none;
+        /* Hide arrows on mobile since it stacks */
     }
 }
 
 @media (max-width: 768px) {
+
     /* More aggressive adjustments for smaller phones */
     .hero-title {
         font-size: 2rem !important;
     }
-    
+
     /* Design Future Grid */
     .df-grid {
         display: flex;
         flex-direction: column;
         gap: 2rem;
     }
-    
+
     .df-items {
         display: flex;
         flex-direction: column;
@@ -4207,20 +4340,20 @@ textarea {
 /* FOOTER RESPONSIVENESS                                        */
 /* ============================================================ */
 .footer-grid {
-    display: grid; 
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 4rem; 
-    margin-bottom: 4rem; 
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4rem;
+    margin-bottom: 4rem;
     text-align: left;
 }
 
 .footer-bottom {
-    padding-top: 2rem; 
-    border-top: 1px solid var(--glass-border); 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    color: var(--text-muted); 
+    padding-top: 2rem;
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-muted);
     font-size: 0.85rem;
 }
 
@@ -4236,7 +4369,7 @@ textarea {
         grid-template-columns: 1fr;
         gap: 2rem;
     }
-    
+
     .footer-bottom {
         flex-direction: column;
         gap: 1rem;

@@ -15,7 +15,7 @@ if (has_custom_logo()) {
     the_custom_logo();
 }
 else {
-    echo '<a href="' . esc_url(home_url('/')) . '" rel="home"><strong>' . (get_bloginfo('name') ? esc_html(get_bloginfo('name')) : 'SYNOPSYS') . '</strong><span style="font-weight: 300;">®</span></a>';
+    echo '<a href="' . esc_url(home_url('/')) . '" rel="home"><strong>' . (get_bloginfo('name') ? esc_html(get_bloginfo('name')) : 'AIPL') . '</strong><span style="font-weight: 300;">®</span></a>';
 }
 ?>
         </div>
@@ -23,6 +23,7 @@ else {
             ☰
         </button>
         <nav id="siteNav">
+            <button class="mobile-close-btn" id="mobileCloseBtn" aria-label="Close Menu">&times;</button>
             <?php
 wp_nav_menu(array(
     'theme_location' => 'primary-menu',
@@ -31,70 +32,45 @@ wp_nav_menu(array(
     'fallback_cb'    => 'mytheme_default_menu',
 ));
 ?>
-        </nav>
-        <div class="header-right-actions" id="headerActions" style="display: flex; align-items: center; gap: 1.5rem;">
-            <?php if (class_exists('WooCommerce') && (is_woocommerce() || is_cart() || is_checkout())) : ?>
-                <a href="<?php echo wc_get_cart_url(); ?>" class="header-cart" title="Aapka Shopping Cart">
-                    <span style="font-size: 1.2rem;">🛒</span>
-                    <span class="cart-count"><?php echo is_object(WC()->cart) ? WC()->cart->get_cart_contents_count() : 0; ?></span>
-                </a>
-            <?php endif; ?>
-            <?php if (is_user_logged_in()) : 
-                $current_user = wp_get_current_user();
-                $account_url  = get_permalink(get_option('mytheme_account_page_id')) ?: get_permalink(get_page_by_path('my-account'));
-            ?>
-                <div class="header-user-menu">
-                    <button class="header-user-btn" id="userMenuToggle">
-                        <span class="user-avatar">👤</span>
-                        <span class="user-name"><?php echo esc_html($current_user->first_name ?: $current_user->display_name); ?></span>
-                        <span style="font-size:0.6rem;">▼</span>
-                    </button>
-                    <div class="header-user-dropdown" id="userDropdown">
-                        <a href="<?php echo esc_url($account_url ?: '#'); ?>">👤 My Account</a>
-                        <?php if (class_exists('WooCommerce')) : ?>
-                        <a href="<?php echo esc_url(wc_get_account_endpoint_url('orders')); ?>">📦 My Orders</a>
-                        <a href="<?php echo esc_url(wc_get_checkout_url()); ?>">🛒 Checkout</a>
-                        <a href="<?php echo esc_url(home_url('/track-application/')); ?>">💼 Job Status</a>
-                        <?php endif; ?>
-                        <div class="user-dropdown-divider"></div>
-                        <a href="<?php echo esc_url(wp_logout_url(home_url())); ?>" class="user-logout">🚪 Logout</a>
+            <div class="header-right-actions" id="headerActions">
+                <?php if (class_exists('WooCommerce') && (is_woocommerce() || is_cart() || is_checkout())) : ?>
+                    <a href="<?php echo wc_get_cart_url(); ?>" class="header-cart" title="Aapka Shopping Cart">
+                        <span style="font-size: 1.2rem;">🛒</span>
+                        <span class="cart-count"><?php echo is_object(WC()->cart) ? WC()->cart->get_cart_contents_count() : 0; ?></span>
+                    </a>
+                <?php endif; ?>
+                <?php if (is_user_logged_in()) : 
+                    $current_user = wp_get_current_user();
+                    $account_url  = get_permalink(get_option('mytheme_account_page_id')) ?: get_permalink(get_page_by_path('my-account'));
+                ?>
+                    <div class="header-user-menu">
+                        <button class="header-user-btn" id="userMenuToggle">
+                            <span class="user-avatar">👤</span>
+                            <span class="user-name"><?php echo esc_html($current_user->first_name ?: $current_user->display_name); ?></span>
+                            <span style="font-size:0.6rem;">▼</span>
+                        </button>
+                        <div class="header-user-dropdown" id="userDropdown">
+                            <a href="<?php echo esc_url($account_url ?: '#'); ?>">👤 My Account</a>
+                            <?php if (class_exists('WooCommerce')) : ?>
+                            <a href="<?php echo esc_url(wc_get_account_endpoint_url('orders')); ?>">📦 My Orders</a>
+                            <a href="<?php echo esc_url(wc_get_checkout_url()); ?>">🛒 Checkout</a>
+                            <a href="<?php echo esc_url(home_url('/track-application/')); ?>">💼 Job Status</a>
+                            <?php endif; ?>
+                            <div class="user-dropdown-divider"></div>
+                            <a href="<?php echo esc_url(wp_logout_url(home_url())); ?>" class="user-logout">🚪 Logout</a>
+                        </div>
                     </div>
-                </div>
-            <?php else :
-                $login_url = get_permalink(get_option('mytheme_account_page_id')) ?: get_permalink(get_page_by_path('my-account'));
-                if (!$login_url) $login_url = wp_login_url();
-            ?>
-                <a href="<?php echo esc_url($login_url); ?>" class="header-login-btn">
-                    Login
-                </a>
-            <?php endif; ?>
-            <a href="<?php echo esc_url(home_url('/contact-us/')); ?>" class="contact-btn">Contact Us</a>
-        </div>
-        <script>
-        (function() {
-            var btn = document.getElementById('userMenuToggle');
-            var dd  = document.getElementById('userDropdown');
-            if (btn && dd) {
-                btn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    dd.classList.toggle('open');
-                });
-                document.addEventListener('click', function() { dd.classList.remove('open'); });
-            }
-            
-            var mobileBtn = document.getElementById('mobileMenuBtn');
-            var siteNav = document.getElementById('siteNav');
-            var headerActions = document.getElementById('headerActions');
-            if (mobileBtn && siteNav) {
-                mobileBtn.addEventListener('click', function() {
-                    siteNav.classList.toggle('mobile-open');
-                    if (headerActions) {
-                        headerActions.classList.toggle('mobile-open');
-                    }
-                });
-            }
-        })();
-        </script>
-
+                <?php else :
+                    $login_url = get_permalink(get_option('mytheme_account_page_id')) ?: get_permalink(get_page_by_path('my-account'));
+                    if (!$login_url) $login_url = wp_login_url();
+                ?>
+                    <a href="<?php echo esc_url($login_url); ?>" class="header-login-btn">
+                        Login
+                    </a>
+                <?php endif; ?>
+                <a href="<?php echo esc_url(home_url('/contact-us/')); ?>" class="contact-btn">Contact Us</a>
+            </div>
+        </nav>
+        <div class="mobile-overlay" id="mobileOverlay"></div>
     </div>
 </header>

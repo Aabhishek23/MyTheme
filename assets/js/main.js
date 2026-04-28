@@ -1,4 +1,35 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Mobile Drawer Controller (Highest Priority) ---
+    const initMobileMenu = () => {
+        const mobileBtn = document.getElementById('mobileMenuBtn');
+        const closeBtn = document.getElementById('mobileCloseBtn');
+        const siteNav = document.getElementById('siteNav');
+        const overlay = document.getElementById('mobileOverlay');
+        
+        if (!mobileBtn || !siteNav || !overlay) return;
+
+        const openMenu = () => {
+            siteNav.classList.add('mobile-open');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scroll
+        };
+
+        const closeMenu = () => {
+            siteNav.classList.remove('mobile-open');
+            overlay.classList.remove('active');
+            document.body.style.overflow = ''; // Restore scroll
+        };
+
+        mobileBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openMenu();
+        });
+        if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+        overlay.addEventListener('click', closeMenu);
+    };
+
+    initMobileMenu();
+
     // Reveal animations on scroll
     const reveals = document.querySelectorAll('.reveal');
     
@@ -115,75 +146,96 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Mega Menu Controller (Automatic wide-menu for all sub-items + Interaction Logic)
     const initAdvancedMenus = () => {
-        // ONLY target top-level items! Selecting sub-items causes nested hover conflicts.
+        // Target all items with children for mobile toggling (Robust detection)
+        const allNavItems = document.querySelectorAll('.nav-menu li');
+        const allNavItemsWithChildren = Array.from(allNavItems).filter(item => {
+            return item.classList.contains('menu-item-has-children') || item.querySelector('ul');
+        });
+
         const topNavItems = document.querySelectorAll('.nav-menu > li');
         
+        // 1. Desktop Mega Menu Logic (Top-level only)
         topNavItems.forEach(item => {
             const subMenu = item.querySelector('.sub-menu, .mega-menu');
             if (subMenu) {
-                // Determine if this should be a Mega Menu
-                // 1. If it already has the .mega class from WordPress Admin
-                // 2. OR If it has grandchildren
                 const hasGrandchildren = subMenu.querySelector('li .sub-menu, li ul');
-
                 if (item.classList.contains('mega') || hasGrandchildren) {
                     item.classList.add('mega');
-                    item.style.position = 'static';
-                    subMenu.style.display = 'flex';
-                    subMenu.style.width = 'max-content';
-                    subMenu.style.maxWidth = '92vw';
+                    if (window.innerWidth > 1024) {
+                        item.style.position = 'static';
+                        subMenu.style.display = 'flex';
+                        subMenu.style.width = 'max-content';
+                        subMenu.style.maxWidth = '92vw';
+                    }
                 }
 
-                // --- Interaction Logic: Pure Hover ---
-
-                // Hover: Add class on enter
+                // Hover Logic (Desktop Only)
                 item.addEventListener('mouseenter', () => {
-                    // Clear the timeout for this specific item if it exists
-                    if (item.hoverCloseTimeout) {
-                        clearTimeout(item.hoverCloseTimeout);
-                        item.hoverCloseTimeout = null;
-                    }
-
-                    // Close others immediately
-                    document.querySelectorAll('.nav-menu > li.is-open').forEach(openItem => {
-                        if (openItem !== item) {
-                            openItem.classList.remove('is-open');
-                            if (openItem.hoverCloseTimeout) {
-                                clearTimeout(openItem.hoverCloseTimeout);
-                                openItem.hoverCloseTimeout = null;
-                            }
+                    if (window.innerWidth > 1024) {
+                        if (item.hoverCloseTimeout) {
+                            clearTimeout(item.hoverCloseTimeout);
+                            item.hoverCloseTimeout = null;
                         }
-                    });
-                    
-                    item.classList.add('is-open');
-                    
-                    // Dynamically position the caret to align under hovered item text
-                    if (item.classList.contains('mega')) {
-                        // Request animation frame ensures the element's positioning has updated in DOM before reading rects
-                        requestAnimationFrame(() => {
-                            const itemRect = item.getBoundingClientRect();
-                            const subRect = subMenu.getBoundingClientRect();
-                            // If the mega menu has an active transition, the subRect position might be slightly off.
-                            // But since the mega menu is simply centered and opacity transitioned, rect should be stable.
-                            const caretPos = (itemRect.left + itemRect.width / 2) - subRect.left - 6; // -6 for half of 12px caret width
-                            
-                            // Prevent negative or miscalculated values if it goes off edge
-                            if (caretPos > 10) {
-                                subMenu.style.setProperty('--caret-pos', `${caretPos}px`);
+                        document.querySelectorAll('.nav-menu > li.is-open').forEach(openItem => {
+                            if (openItem !== item) {
+                                openItem.classList.remove('is-open');
                             }
                         });
+                        item.classList.add('is-open');
+                        if (item.classList.contains('mega')) {
+                            requestAnimationFrame(() => {
+                                const itemRect = item.getBoundingClientRect();
+                                const subRect = subMenu.getBoundingClientRect();
+                                const caretPos = (itemRect.left + itemRect.width / 2) - subRect.left - 6;
+                                if (caretPos > 10) {
+                                    subMenu.style.setProperty('--caret-pos', `${caretPos}px`);
+                                }
+                            });
+                        }
                     }
                 });
 
-                // Hover: Remove class with a slight delay on leave
                 item.addEventListener('mouseleave', () => {
-                    // Small delay so the user has time to move their mouse from the menu item to the dropdown content
-                    item.hoverCloseTimeout = setTimeout(() => {
-                        item.classList.remove('is-open');
-                        item.hoverCloseTimeout = null;
-                    }, 300); // 300ms delay provides a smooth bridging gap
+                    if (window.innerWidth > 1024) {
+                        item.hoverCloseTimeout = setTimeout(() => {
+                            item.classList.remove('is-open');
+                            item.hoverCloseTimeout = null;
+                        }, 300);
+                    }
                 });
             }
+        });
+
+        // 2. Mobile/Touch Click Logic (All levels)
+        allNavItemsWithChildren.forEach(item => {
+            // Attach the listener to the LI itself to catch clicks on text nodes, spans, or links
+            item.addEventListener('click', (e) => {
+                if (window.innerWidth <= 1024) {
+                    const subMenu = item.querySelector(':scope > ul, :scope > .sub-menu');
+                    if (!subMenu) return;
+
+                    // If the user clicked a link INSIDE the sub-menu, let it happen
+                    if (e.target.closest('ul') === subMenu) {
+                        return;
+                    }
+
+                    // Otherwise, if they clicked the header area of this LI
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const isOpen = item.classList.contains('is-open');
+                    
+                    // Toggle this specific item
+                    if (!isOpen) {
+                        // Close siblings at the same level
+                        const siblings = item.parentElement.querySelectorAll(':scope > li.is-open');
+                        siblings.forEach(sib => sib.classList.remove('is-open'));
+                        item.classList.add('is-open');
+                    } else {
+                        item.classList.remove('is-open');
+                    }
+                }
+            });
         });
 
         // Close when clicking outside (fallback for touch devices)
@@ -220,4 +272,23 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     initNewsCarousel();
+
+    // --- User Menu Dropdown (Desktop/Mobile) ---
+    const initUserMenu = () => {
+        const userBtn = document.getElementById('userMenuToggle');
+        const userDropdown = document.getElementById('userDropdown');
+        
+        if (userBtn && userDropdown) {
+            userBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                userDropdown.classList.toggle('open');
+            });
+
+            document.addEventListener('click', () => {
+                userDropdown.classList.remove('open');
+            });
+        }
+    };
+
+    initUserMenu();
 });
