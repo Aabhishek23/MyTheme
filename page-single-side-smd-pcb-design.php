@@ -151,14 +151,16 @@ get_header(); ?>
 
 /* Hero */
 .pcb-hero {
-    height: 80vh;
+    min-height: 80vh;
+    height: auto;
     display: flex;
     align-items: center;
     color: #fff;
     background-size: cover;
     background-position: center;
     margin-top: -80px; /* Offset for header if transparent */
-    padding-top: 260px !important;
+    padding-top: 150px !important;
+    padding-bottom: 4rem;
 }
 .pcb-hero h1 { font-size: 4rem; font-weight: 800; line-height: 1.1; margin: 1.5rem 0; }
 .pcb-hero p { font-size: 1.25rem; opacity: 0.9; max-width: 600px; margin-bottom: 2.5rem; }
@@ -212,12 +214,21 @@ get_header(); ?>
 
 @media (max-width: 768px) {
     .grid-2 { grid-template-columns: 1fr; }
+    .pcb-hero {
+        padding-top: 140px !important;
+        padding-bottom: 3rem;
+    }
+    .hero-btns {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
     .pcb-hero h1 { font-size: 2.5rem; }
     .process-timeline { flex-direction: column; gap: 3rem; }
     .process-timeline::before { display: none; }
     .cta-card { padding: 3rem 1.5rem; }
     .cta-btns { flex-direction: column; }
-    .btn-outline { margin-left: 0; margin-top: 1rem; }
+    .btn-outline { margin-left: 0; margin-top: 0; }
 }
 </style>
 
