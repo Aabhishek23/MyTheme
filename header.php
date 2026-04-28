@@ -39,9 +39,10 @@ wp_nav_menu(array(
 ));
 ?>
             <div class="header-right-actions" id="headerActions">
-                <?php if (class_exists('WooCommerce') && (is_woocommerce() || is_cart() || is_checkout())) : ?>
-                    <a href="<?php echo wc_get_cart_url(); ?>" class="header-cart" title="Aapka Shopping Cart">
-                        <span style="font-size: 1.2rem;">🛒</span>
+                <?php if (class_exists('WooCommerce')) : ?>
+                    <a href="<?php echo wc_get_cart_url(); ?>" class="header-cart" title="View your shopping cart">
+                        <span class="cart-icon">🛒</span>
+                        <span class="cart-label">My Cart</span>
                         <span class="cart-count"><?php echo is_object(WC()->cart) ? WC()->cart->get_cart_contents_count() : 0; ?></span>
                     </a>
                 <?php endif; ?>
@@ -66,12 +67,23 @@ wp_nav_menu(array(
                             <a href="<?php echo esc_url(wp_logout_url(home_url())); ?>" class="user-logout">🚪 Logout</a>
                         </div>
                     </div>
+                    <div class="header-mobile-user-links">
+                        <a href="<?php echo esc_url($account_url ?: '#'); ?>" class="header-user-link">👤 My Account</a>
+                        <?php if (class_exists('WooCommerce')) : ?>
+                        <a href="<?php echo esc_url(wc_get_account_endpoint_url('orders')); ?>" class="header-user-link">📦 My Orders</a>
+                        <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class="header-user-link">🛒 Checkout</a>
+                        <a href="<?php echo esc_url(home_url('/track-application/')); ?>" class="header-user-link">💼 Job Status</a>
+                        <?php endif; ?>
+                    </div>
+                    <a href="<?php echo esc_url(wp_logout_url(home_url())); ?>" class="header-logout-btn">
+                        🚪 Logout
+                    </a>
                 <?php else :
                     $login_url = get_permalink(get_option('mytheme_account_page_id')) ?: get_permalink(get_page_by_path('my-account'));
                     if (!$login_url) $login_url = wp_login_url();
                 ?>
                     <a href="<?php echo esc_url($login_url); ?>" class="header-login-btn">
-                        Login
+                        👤 Login
                     </a>
                 <?php endif; ?>
                 <a href="<?php echo esc_url(home_url('/contact-us/')); ?>" class="contact-btn">Contact Us</a>

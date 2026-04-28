@@ -3130,3 +3130,33 @@ function mytheme_save_custom_product_fields($post_id) {
     }
 }
 
+/**
+ * Add icons to menu items (Mobile Only via CSS)
+ */
+function mytheme_menu_icons($title, $item) {
+    if (is_admin()) return $title;
+    
+    $icons = array(
+        'Home' => '🏠',
+        'Solutions' => '💡',
+        'Products' => '📦',
+        'Product' => '📦',
+        'AIPL Tech Academy' => '🎓',
+        'Careers' => '💼',
+        'Shop' => '🛍️',
+        'About Us' => 'ℹ️',
+        'My Account' => '👤',
+        'My Cart' => '🛒',
+    );
+    
+    foreach ($icons as $label => $icon) {
+        if (trim(strip_tags($title)) === $label) {
+            return '<span class="mobile-menu-icon">' . $icon . '</span> ' . $title;
+        }
+    }
+    
+    return $title;
+}
+add_filter('nav_menu_item_title', 'mytheme_menu_icons', 10, 2);
+
+

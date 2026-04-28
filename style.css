@@ -163,6 +163,43 @@ a {
     gap: 1.5rem;
 }
 
+.header-cart {
+    position: relative;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    transition: var(--transition);
+}
+
+.cart-icon {
+    font-size: 1.4rem;
+}
+
+.cart-label {
+    display: none;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    padding: 2px;
+}
+
+.main-header.scrolled .header-cart {
+    color: #000;
+}
+
 .menu-item,
 .nav-item {
     position: relative;
@@ -725,6 +762,18 @@ a {
 .contact-btn:hover {
     background: #e2e2e2;
     transform: translateY(-2px);
+}
+
+.header-logout-btn {
+    display: none;
+}
+
+.header-mobile-user-links {
+    display: none;
+}
+
+.mobile-menu-icon {
+    display: none;
 }
 
 /* --- Utility --- */
@@ -4087,11 +4136,12 @@ textarea {
         flex-direction: column;
         transform: translateX(100%);
         transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: -15px 0 40px rgba(0,0,0,0.15);
+        box-shadow: -15px 0 40px rgba(0, 0, 0, 0.15);
         margin-top: 0;
         border-top: none;
         overflow-y: auto;
-        gap: 0; /* Items will be spaced via margins/flex-grow */
+        gap: 0;
+        /* Items will be spaced via margins/flex-grow */
     }
 
     #siteNav.mobile-open {
@@ -4129,7 +4179,7 @@ textarea {
         gap: 1.25rem !important;
     }
 
-    .header-right-actions a, 
+    .header-right-actions a,
     .header-right-actions .header-user-btn {
         width: 100%;
         justify-content: flex-start;
@@ -4145,18 +4195,19 @@ textarea {
     .menu-item>a,
     .nav-item>a {
         color: #333 !important;
-        padding: 0.8rem 1rem !important;
+        padding: 0.8rem 1.5rem !important;
         width: 100%;
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
         box-sizing: border-box;
+        gap: 12px;
     }
 
     /* RESET: High-specificity override for mobile drawer content */
     #siteNav .sub-menu,
-    #siteNav .menu-item.mega > .sub-menu,
-    #siteNav .nav-item.mega > .sub-menu {
+    #siteNav .menu-item.mega>.sub-menu,
+    #siteNav .nav-item.mega>.sub-menu {
         position: static !important;
         transform: none !important;
         left: auto !important;
@@ -4175,30 +4226,33 @@ textarea {
         transition: max-height 0.4s ease;
     }
 
-    #siteNav .menu-item.is-open > .sub-menu {
+    #siteNav .menu-item.is-open>.sub-menu {
         max-height: 5000px !important;
     }
 
     /* Hierarchy Padding (Applied to links to prevent cutting) */
-    #siteNav .nav-menu > li > a {
-        padding: 0.8rem 1.5rem !important; /* Level 1 */
+    #siteNav .nav-menu>li>a {
+        padding: 0.8rem 1.5rem !important;
+        /* Level 1 */
         font-weight: 600;
     }
 
-    #siteNav .sub-menu li > a {
-        padding: 0.7rem 1.5rem 0.7rem 2.5rem !important; /* Level 2 */
+    #siteNav .sub-menu li>a {
+        padding: 0.7rem 1.5rem 0.7rem 2.5rem !important;
+        /* Level 2 */
         font-size: 0.95rem;
         color: #555 !important;
     }
 
-    #siteNav .sub-menu .sub-menu li > a {
-        padding-left: 3.5rem !important; /* Level 3 */
+    #siteNav .sub-menu .sub-menu li>a {
+        padding-left: 3.5rem !important;
+        /* Level 3 */
         font-size: 0.9rem;
         color: #777 !important;
     }
 
     /* Mega Menu Column Overrides */
-    #siteNav .menu-item.mega > .sub-menu > li {
+    #siteNav .menu-item.mega>.sub-menu>li {
         width: 100% !important;
         padding: 0 !important;
         margin: 0 !important;
@@ -4214,12 +4268,15 @@ textarea {
         display: flex;
         align-items: center;
         gap: 1.5rem;
-        order: 1; /* Keep actions visible on mobile header if possible, or hide them and move inside siteNav */
+        order: 1;
+        /* Keep actions visible on mobile header if possible, or hide them and move inside siteNav */
     }
 
     /* Hide actions in header but show in mobile menu if you prefer */
     /* For now, let's keep the contact button visible in header for accessibility */
     .header-right-actions .header-login-btn,
+    .header-right-actions .header-logout-btn,
+    .header-right-actions .header-cart,
     .header-right-actions .header-user-menu {
         display: none;
     }
@@ -4232,6 +4289,95 @@ textarea {
         width: 100%;
         padding: 1rem 0;
         border-top: 2px solid #eee;
+        gap: 0.75rem !important;
+    }
+
+    #siteNav .header-right-actions .header-logout-btn,
+    #siteNav .header-right-actions .header-user-link {
+        display: flex !important;
+        width: 100%;
+        background: #f4f4f5;
+        color: #18181b;
+        padding: 0.8rem 1.2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        justify-content: flex-start;
+        align-items: center;
+        transition: var(--transition);
+        font-size: 1rem;
+        gap: 12px;
+        text-decoration: none;
+    }
+
+    #siteNav .header-right-actions .header-login-btn {
+        display: flex !important;
+        width: 100%;
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+        /* Premium Purple */
+        color: #ffffff !important;
+        padding: 0.8rem 1.2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        justify-content: flex-start;
+        align-items: center;
+        transition: var(--transition);
+        font-size: 1rem;
+        gap: 12px;
+        text-decoration: none;
+    }
+
+    .header-mobile-user-links {
+        display: flex !important;
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    #siteNav .header-right-actions .header-login-btn:hover,
+    #siteNav .header-right-actions .header-logout-btn:hover {
+        background: #e4e4e7;
+    }
+
+    #siteNav .header-right-actions .header-cart {
+        display: flex !important;
+        width: 100%;
+        background: #ffffff;
+        color: #18181b;
+        padding: 0.8rem 1.2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        justify-content: flex-start;
+        align-items: center;
+        transition: var(--transition);
+        font-size: 1rem;
+        border: 1px solid #e4e4e7;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        text-decoration: none;
+        box-sizing: border-box;
+        margin-bottom: 0.5rem;
+    }
+
+    #siteNav .header-right-actions .header-cart .cart-icon {
+        font-size: 1.2rem;
+    }
+
+    #siteNav .header-right-actions .header-cart .cart-label {
+        display: inline-block;
+        margin-left: 12px;
+    }
+
+    #siteNav .header-right-actions .header-cart .cart-count {
+        position: static;
+        margin-left: auto;
+        background: #ef4444;
+        color: #fff;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        font-size: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     /* Adjust Hero Section */
@@ -4312,6 +4458,14 @@ textarea {
     .news-nav {
         display: none;
         /* Hide arrows on mobile since it stacks */
+    }
+
+    .mobile-menu-icon {
+        display: inline-flex !important;
+        margin-right: 12px;
+        font-size: 1.2rem;
+        width: 24px;
+        justify-content: center;
     }
 }
 
@@ -4401,16 +4555,18 @@ textarea {
         padding-top: 6rem;
         padding-bottom: 3rem;
     }
+
     /* Reduce horizontal padding significantly to make forms/fields wider on mobile */
     .default-page-article {
         padding: 1.5rem 0.5rem;
     }
+
     .default-page-title {
         font-size: 2.2rem;
         margin-bottom: 1.5rem;
         padding: 0 0.5rem;
     }
-    
+
     /* Fix the Login/Auth form squishing on mobile */
     .mytheme-auth-wrapper {
         margin: 1.5rem auto 2rem;
@@ -4418,14 +4574,17 @@ textarea {
         width: 100%;
         max-width: 100%;
     }
+
     .auth-panel {
         padding: 1.5rem 1rem;
         border-radius: 12px;
     }
+
     .mytheme-already-logged {
         padding: 2rem 1rem;
         border-radius: 12px;
     }
+
     .auth-field input {
         padding: 1rem;
     }
