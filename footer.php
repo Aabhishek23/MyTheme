@@ -1,6 +1,6 @@
 <footer style="background: #000; padding: 6rem 0 3rem; border-top: 1px solid var(--glass-border);">
     <div class="container">
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4rem; margin-bottom: 4rem; text-align: left;">
+        <div class="footer-grid">
             <?php 
             $footer_titles = array(
                 'footer_col1_title' => 'Company',
@@ -51,7 +51,7 @@
             </div>
             <?php endfor; ?>
         </div>
-        <div style="padding-top: 2rem; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; color: var(--text-muted); font-size: 0.85rem;">
+        <div class="footer-bottom">
             <p><?php echo wp_kses_post(get_theme_mod('footer_copyright_text', sprintf('&copy; 2025 %s, Inc. All Rights Reserved.', get_bloginfo('name')))); ?></p>
             <div style="background: var(--surface); padding: 0.5rem 1rem; border-radius: 4px; border: 1px solid var(--glass-border);">
                 🌐 English ▼

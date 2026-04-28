@@ -19,7 +19,10 @@ else {
 }
 ?>
         </div>
-        <nav>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu">
+            ☰
+        </button>
+        <nav id="siteNav">
             <?php
 wp_nav_menu(array(
     'theme_location' => 'primary-menu',
@@ -29,7 +32,7 @@ wp_nav_menu(array(
 ));
 ?>
         </nav>
-        <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <div class="header-right-actions" id="headerActions" style="display: flex; align-items: center; gap: 1.5rem;">
             <?php if (class_exists('WooCommerce') && (is_woocommerce() || is_cart() || is_checkout())) : ?>
                 <a href="<?php echo wc_get_cart_url(); ?>" class="header-cart" title="Aapka Shopping Cart">
                     <span style="font-size: 1.2rem;">🛒</span>
@@ -77,6 +80,18 @@ wp_nav_menu(array(
                     dd.classList.toggle('open');
                 });
                 document.addEventListener('click', function() { dd.classList.remove('open'); });
+            }
+            
+            var mobileBtn = document.getElementById('mobileMenuBtn');
+            var siteNav = document.getElementById('siteNav');
+            var headerActions = document.getElementById('headerActions');
+            if (mobileBtn && siteNav) {
+                mobileBtn.addEventListener('click', function() {
+                    siteNav.classList.toggle('mobile-open');
+                    if (headerActions) {
+                        headerActions.classList.toggle('mobile-open');
+                    }
+                });
             }
         })();
         </script>
