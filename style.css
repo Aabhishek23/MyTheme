@@ -4376,3 +4376,48 @@ textarea {
         text-align: center;
     }
 }
+
+/* Responsive Default Page Container */
+.default-page-container {
+    padding-top: 10rem;
+    padding-bottom: 6rem;
+}
+
+.default-page-article {
+    background: var(--surface);
+    padding: 4rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--glass-border);
+}
+
+.default-page-title {
+    font-size: 3.5rem;
+    margin-bottom: 2.5rem;
+    letter-spacing: -0.04em;
+}
+
+@media (max-width: 768px) {
+    .default-page-container {
+        padding-top: 6rem;
+        padding-bottom: 3rem;
+    }
+    .default-page-article {
+        padding: 1.5rem 1rem;
+    }
+    .default-page-title {
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Fix the Login/Auth form squishing on mobile */
+    .mytheme-auth-wrapper {
+        margin: 2rem auto 3rem;
+        padding: 0 0.5rem;
+    }
+    .auth-panel {
+        padding: 1.5rem 1.2rem;
+    }
+    .mytheme-already-logged {
+        padding: 2rem 1.2rem;
+    }
+}

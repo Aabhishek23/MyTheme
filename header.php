@@ -3,6 +3,12 @@
 <head>
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Polyfill for Reddit tracking to prevent Uncaught Errors
+        !function(w){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];}}(window);
+        // Polyfill for Snapchat tracking to prevent Uncaught Errors
+        !function(e){if(!e.snaptr){var a=e.snaptr=function(){a.handleRequest?a.handleRequest.apply(a,arguments):a.queue.push(arguments)};a.queue=[];}}(window);
+    </script>
     <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
