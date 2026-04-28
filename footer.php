@@ -52,7 +52,7 @@
             <?php endfor; ?>
         </div>
         <div class="footer-bottom">
-            <p><?php echo wp_kses_post(get_theme_mod('footer_copyright_text', sprintf('&copy; 2025 %s, Inc. All Rights Reserved.', get_bloginfo('name')))); ?></p>
+            <p><?php echo wp_kses_post(get_theme_mod('footer_copyright_text', sprintf('&copy; 2025 %s, Pvt. Ltd. All Rights Reserved.', get_bloginfo('name')))); ?></p>
             <div style="background: var(--surface); padding: 0.5rem 1rem; border-radius: 4px; border: 1px solid var(--glass-border);">
                 🌐 English ▼
             </div>

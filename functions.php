@@ -188,7 +188,7 @@ add_action('manage_pcb_quote_posts_custom_column', function($column, $post_id) {
     }
 }, 10, 2);
 
-// â”€â”€ CONTACT INQUIRIES ADMIN DASHBOARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── CONTACT INQUIRIES ADMIN DASHBOARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 add_filter('manage_contact_inquiry_posts_columns', function($columns) {
     $columns = array(
@@ -212,7 +212,7 @@ add_action('manage_contact_inquiry_posts_custom_column', function($column, $post
     }
 }, 10, 2);
 
-// â”€â”€ UNREAD MESSAGES NOTIFICATION SYSTEM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── UNREAD MESSAGES NOTIFICATION SYSTEM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 // 1. Add notification bubble to the admin menu
 add_action('admin_menu', function() {
@@ -281,7 +281,7 @@ add_action('add_meta_boxes', function() {
         <div style="background:#f9f9f9; padding:20px; border:1px solid #ddd; border-radius:10px;">
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
                 <div>
-                    <h4 style="border-bottom:2px solid #7c4dff; padding-bottom:10px;">ðŸ‘¤ Contact Info</h4>
+                    <h4 style="border-bottom:2px solid #7c4dff; padding-bottom:10px;">👤 Contact Info</h4>
                     <p><strong>Email:</strong> <?php echo esc_html($meta['_customer_email'][0] ?? 'N/A'); ?></p>
                     <p><strong>Phone:</strong> <?php echo esc_html($meta['_customer_phone'][0] ?? 'N/A'); ?></p>
                     <p><strong>Address:</strong> <?php echo esc_html($meta['_customer_address'][0] ?? 'N/A'); ?></p>
@@ -296,7 +296,7 @@ add_action('add_meta_boxes', function() {
                 </div>
             </div>
             <div style="margin-top:20px; padding-top:20px; border-top:1px solid #ccc;">
-                <h4 style="color:#7c4dff;">ðŸ“¦ Attachment</h4>
+                <h4 style="color:#7c4dff;">📦 Attachment</h4>
                 <?php if (!empty($meta['_file_url'][0])) : ?>
                     <a href="<?php echo esc_url($meta['_file_url'][0]); ?>" class="button button-primary button-large" target="_blank" style="padding:10px 30px; background:#7c4dff; border-color:#7c4dff;">DOWNLOAD GERBER FILES (.ZIP)</a>
                 <?php else : ?>
@@ -468,12 +468,12 @@ function mytheme_styles() {
     wp_enqueue_style('google-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@200;300;400;700&family=Roboto:wght@400;500;700&display=swap', array(), null);
     
     // Main Styles
-    wp_enqueue_style('style', get_stylesheet_uri());
+    wp_enqueue_style('style', get_stylesheet_uri(), array(), filemtime(get_stylesheet_directory() . '/style.css'));
 }
 add_action('wp_enqueue_scripts', 'mytheme_styles');
 
 function mytheme_scripts() {
-    wp_enqueue_script('main-js', get_template_directory_uri() . '/assets/js/main.js', array(), '1.0', true);
+    wp_enqueue_script('main-js', get_template_directory_uri() . '/assets/js/main.js', array(), filemtime(get_template_directory() . '/assets/js/main.js'), true);
 }
 add_action('wp_enqueue_scripts', 'mytheme_scripts');
 
@@ -536,7 +536,7 @@ function mytheme_default_menu() {
                         <li><a href="#"><span>ðŸŒ</span> Cloud</a></li>
                         <li><a href="#"><span>ðŸ§Š</span> Electronics Digital Twins</a></li>
                         <li><a href="#"><span>âš¡</span> Energy-Efficient SoCs</a></li>
-                        <li><a href="#"><span>ðŸ“¦</span> Multi-Die</a></li>
+                        <li><a href="#"><span>📦</span> Multi-Die</a></li>
                         <li><a href="#"><span>ðŸ‘ï¸</span> Photonics & Optics</a></li>
                     </ul>
                 </div>
@@ -557,7 +557,7 @@ function mytheme_default_menu() {
  * Add Hero Section + Mega Menu Featured Panel Settings to Customizer
  */
 function mytheme_customize_register($wp_customize) {
-    // â”€â”€ Hero Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Hero Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     $wp_customize->add_section('hero_section', array(
         'title'    => __('Hero Section Settings', 'mytheme'),
         'priority' => 30,
@@ -596,7 +596,7 @@ function mytheme_customize_register($wp_customize) {
         'type'     => 'textarea',
     ));
 
-    // â”€â”€ Pervasive Intelligence Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Pervasive Intelligence Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     $wp_customize->add_section('pervasive_section', array(
         'title'       => __('Pervasive Intelligence Section', 'mytheme'),
         'description' => __('Settings for the section right below the hero banner.', 'mytheme'),
@@ -616,12 +616,12 @@ function mytheme_customize_register($wp_customize) {
 
     // Bullet Points
     $wp_customize->add_setting('pervasive_points', array(
-        'default'           => 'Supercharge Productivity â€¢ Conquer Complexity â€¢ Accelerate Time-to-Market',
+        'default'           => 'Supercharge Productivity • Conquer Complexity • Accelerate Time-to-Market',
         'sanitize_callback' => 'sanitize_text_field',
     ));
     $wp_customize->add_control('pervasive_points', array(
-        'label'    => __('Bullet Points (Separate with the bullet dot â€¢)', 'mytheme'),
-        'description' => __('Write your points and separate them using the dot character (â€¢)', 'mytheme'),
+        'label'    => __('Bullet Points (Separate with the bullet dot •)', 'mytheme'),
+        'description' => __('Write your points and separate them using the dot character (•)', 'mytheme'),
         'section'  => 'pervasive_section',
         'type'     => 'text',
     ));
@@ -662,7 +662,7 @@ function mytheme_customize_register($wp_customize) {
         ));
     }
 
-    // â”€â”€ Design the Future Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Design the Future Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     $wp_customize->add_section('design_future_section', array(
         'title'       => __('Design the Future Section', 'mytheme'),
         'description' => __('Settings for the two-column features section.', 'mytheme'),
@@ -755,7 +755,7 @@ function mytheme_customize_register($wp_customize) {
         ));
     }
 
-    // â”€â”€ What's New Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── What's New Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     $wp_customize->add_section('whats_new_section', array(
         'title'       => __('What\'s New Section (Posts Slider)', 'mytheme'),
         'description' => __('This section automatically pulls your latest published Posts.', 'mytheme'),
@@ -772,7 +772,7 @@ function mytheme_customize_register($wp_customize) {
         'type'     => 'text',
     ));
 
-    // â”€â”€ Ecosystem Partners Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Ecosystem Partners Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     $wp_customize->add_section('ecosystem_section', array(
         'title'       => __('Ecosystem Partners Section', 'mytheme'),
         'description' => __('Settings for the partner logos section.', 'mytheme'),
@@ -823,7 +823,7 @@ function mytheme_customize_register($wp_customize) {
         ));
     }
 
-    // â”€â”€ Mega Menu Featured Panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Mega Menu Featured Panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     $wp_customize->add_section('mega_featured_panel', array(
         'title'       => __('ðŸ—‚ï¸ Mega Menu Featured Panel', 'mytheme'),
         'description' => __('This content appears on the RIGHT side of any menu item that has "Enable Mega Featured Panel" checked (Appearance > Menus).', 'mytheme'),
@@ -883,7 +883,7 @@ function mytheme_customize_register($wp_customize) {
         'section' => 'mega_featured_panel',
         'type'    => 'url',
     ));
-    // â”€â”€ Support & Careers Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Support & Careers Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     $wp_customize->add_section('support_careers_section', array(
         'title'       => __('Support & Careers Section', 'mytheme'),
         'description' => __('Settings for the two-column support and careers section.', 'mytheme'),
@@ -1000,7 +1000,7 @@ function mytheme_customize_register($wp_customize) {
         'section'  => 'support_careers_section',
     )));
 
-    // â”€â”€ Connect with Us Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Connect with Us Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     $wp_customize->add_section('connect_us_section', array(
         'title'       => __('Connect with Us Section', 'mytheme'),
         'description' => __('Settings for the bottom CTA section.', 'mytheme'),
@@ -1056,7 +1056,7 @@ function mytheme_customize_register($wp_customize) {
         'section'  => 'connect_us_section',
     )));
 
-    // â”€â”€ Footer Settings â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Footer Settings â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     $wp_customize->add_section('footer_settings', array(
         'title'    => __('Footer Settings', 'mytheme'),
         'priority' => 160,
@@ -1196,7 +1196,7 @@ function mytheme_add_menu_icon_field($item_id, $item, $args, $depth) {
                        value="1" 
                        <?php checked($featured_enabled, '1'); ?>
                        class="mega-panel-toggle" data-target="mega-fields-<?php echo $item_id; ?>" />
-                <?php _e('âœ¨ Enable Mega Featured Panel (right-side card)', 'mytheme'); ?>
+                <?php _e('✨ Enable Mega Featured Panel (right-side card)', 'mytheme'); ?>
             </label>
         </p>
 
@@ -1263,21 +1263,21 @@ add_action('wp_nav_menu_item_custom_fields', 'mytheme_add_menu_icon_field', 10, 
  * Save the "Menu Icon", "Featured Panel" toggle, and all per-item featured fields
  */
 function mytheme_update_menu_icon_meta($menu_id, $menu_item_db_id, $args) {
-    // â”€â”€ Menu Icon â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Menu Icon â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     if (isset($_POST['menu-item-custom-icon'][$menu_item_db_id])) {
         update_post_meta($menu_item_db_id, '_menu_item_custom_icon', $_POST['menu-item-custom-icon'][$menu_item_db_id]);
     } else {
         delete_post_meta($menu_item_db_id, '_menu_item_custom_icon');
     }
 
-    // â”€â”€ Featured Panel toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Featured Panel toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     update_post_meta(
         $menu_item_db_id,
         '_menu_item_featured_panel',
         isset($_POST['menu-item-featured-panel'][$menu_item_db_id]) ? '1' : '0'
     );
 
-    // â”€â”€ Per-item featured content fields â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Per-item featured content fields â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     $fields = array(
         'menu-item-feat-image'    => '_menu_item_feat_image',
         'menu-item-feat-title'    => '_menu_item_feat_title',
@@ -1530,13 +1530,13 @@ function mytheme_inject_featured_panel($nav_menu, $args) {
 
         $item_id = $menu_item->ID;
 
-        // â”€â”€ Balanced UL-tag counting to find the DIRECT sub-menu's closing </ul> â”€â”€
+        // ── Balanced UL-tag counting to find the DIRECT sub-menu's closing </ul> â”€â”€
         // This ensures we inject as a sibling column, NOT inside a nested sub-menu.
         $search      = 'id="menu-item-' . $item_id . '"';
         $li_pos      = strpos($nav_menu, $search);
 
         if ($li_pos !== false) {
-            // Find the first <ul after this <li> â€” that is the direct sub-menu
+            // Find the first <ul after this <li> — that is the direct sub-menu
             $first_ul = strpos($nav_menu, '<ul', $li_pos);
 
             if ($first_ul !== false) {
@@ -1552,14 +1552,14 @@ function mytheme_inject_featured_panel($nav_menu, $args) {
                     if ($pos_close === false) break;
 
                     if ($pos_open !== false && $pos_open < $pos_close) {
-                        // Found another opening <ul> â€” go deeper
+                        // Found another opening <ul> — go deeper
                         $depth++;
                         $scan = $pos_open + 3; // move past '<ul'
                     } else {
                         // Found </ul>
                         $depth--;
                         if ($depth === 0) {
-                            // This </ul> closes our DIRECT sub-menu â†’ inject here
+                            // This </ul> closes our DIRECT sub-menu → inject here
                             $inject_pos = $pos_close;
                             break;
                         }
@@ -1619,7 +1619,7 @@ function mytheme_menu_icon_script() {
     <script>
     jQuery(document).ready(function($){
 
-        // â”€â”€ Toggle featured fields visibility when checkbox changes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Toggle featured fields visibility when checkbox changes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         $(document).on('change', '.mega-panel-toggle', function() {
             var target = $(this).data('target');
             if ($(this).is(':checked')) {
@@ -1629,7 +1629,7 @@ function mytheme_menu_icon_script() {
             }
         });
 
-        // â”€â”€ Menu Icon upload button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Menu Icon upload button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         $(document).on('click', '.custom-icon-upload-button', function(e) {
             e.preventDefault();
             var id = $(this).data('id');
@@ -1643,7 +1643,7 @@ function mytheme_menu_icon_script() {
             }.bind(wp.media())).open();
         });
 
-        // â”€â”€ Featured Panel image upload button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Featured Panel image upload button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         $(document).on('click', '.feat-image-upload-button', function(e) {
             e.preventDefault();
             var id = $(this).data('id');
@@ -1824,29 +1824,29 @@ add_action('wp_enqueue_scripts', 'mytheme_dequeue_jetpack', 100);
 
 /**
  * WooCommerce Customization:
- * Uses WooCommerce's built-in COD gateway (renamed) as "Pay Later â€” Contact Us"
- * COD natively supports WooCommerce Blocks Checkout â€” no custom JS needed.
+ * Uses WooCommerce's built-in COD gateway (renamed) as "Pay Later — Contact Us"
+ * COD natively supports WooCommerce Blocks Checkout — no custom JS needed.
  * Orders are placed immediately and set to 'on-hold' for manual payment.
  */
 
-// â”€â”€ 1. Force-enable COD gateway via database option â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── 1. Force-enable COD gateway via database option â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 add_action('init', 'mytheme_enable_cod_gateway');
 function mytheme_enable_cod_gateway() {
     $cod_settings = get_option('woocommerce_cod_settings', []);
     if (empty($cod_settings) || ($cod_settings['enabled'] ?? '') !== 'yes') {
         $cod_settings['enabled']     = 'yes';
-        $cod_settings['title']       = 'Pay Later â€” We Will Contact You';
-        $cod_settings['description'] = 'à¤¹à¤® à¤†à¤ªà¤¸à¥‡ à¤œà¤²à¥à¤¦ à¤¹à¥€ à¤­à¥à¤—à¤¤à¤¾à¤¨ à¤•à¥‡ à¤²à¤¿à¤ à¤¸à¤‚à¤ªà¤°à¥à¤• à¤•à¤°à¥‡à¤‚à¤—à¥‡à¥¤ (We will contact you shortly for payment details via Bank Transfer / UPI / Cash.)';
+        $cod_settings['title']       = 'Pay Later — We Will Contact You';
+        $cod_settings['description'] = 'हम आपसे जल्द ही भुगतान के लिए संपर्क करेंगे। (We will contact you shortly for payment details via Bank Transfer / UPI / Cash.)';
         $cod_settings['instructions'] = 'Hum aapse jald sampark karenge. Thank you!';
         update_option('woocommerce_cod_settings', $cod_settings);
     }
 }
 
-// â”€â”€ 2. Rename COD labels on the frontend â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── 2. Rename COD labels on the frontend â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 add_filter('woocommerce_gateway_title', 'mytheme_rename_cod_title', 10, 2);
 function mytheme_rename_cod_title($title, $id) {
     if ($id === 'cod') {
-        return 'Pay Later â€” We Will Contact You';
+        return 'Pay Later — We Will Contact You';
     }
     return $title;
 }
@@ -1854,31 +1854,31 @@ function mytheme_rename_cod_title($title, $id) {
 add_filter('woocommerce_gateway_description', 'mytheme_rename_cod_desc', 10, 2);
 function mytheme_rename_cod_desc($desc, $id) {
     if ($id === 'cod') {
-        return 'à¤¹à¤® à¤†à¤ªà¤¸à¥‡ à¤œà¤²à¥à¤¦ à¤¹à¥€ à¤­à¥à¤—à¤¤à¤¾à¤¨ à¤•à¥‡ à¤²à¤¿à¤ à¤¸à¤‚à¤ªà¤°à¥à¤• à¤•à¤°à¥‡à¤‚à¤—à¥‡à¥¤ <br><small>(We will contact you for payment via Bank Transfer / UPI / Cash.)</small>';
+        return 'हम आपसे जल्द ही भुगतान के लिए संपर्क करेंगे। <br><small>(We will contact you for payment via Bank Transfer / UPI / Cash.)</small>';
     }
     return $desc;
 }
 
-// â”€â”€ 3. After order placed via COD, set status to on-hold â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── 3. After order placed via COD, set status to on-hold â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 add_action('woocommerce_thankyou_cod', 'mytheme_cod_order_to_hold', 10, 1);
 function mytheme_cod_order_to_hold($order_id) {
     if (!$order_id) return;
     $order = wc_get_order($order_id);
     if ($order) {
-        $order->update_status('on-hold', 'Awaiting manual payment confirmation â€” customer to be contacted.');
+        $order->update_status('on-hold', 'Awaiting manual payment confirmation — customer to be contacted.');
     }
 }
 
-// â”€â”€ 4. Custom Thank You message â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── 4. Custom Thank You message â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 add_filter('woocommerce_thankyou_order_received_text', 'mytheme_custom_thankyou_text', 20, 2);
 function mytheme_custom_thankyou_text($text, $order) {
-    return 'ðŸŽ‰ <strong>Order placed successfully!</strong> Hum aapse jald se jald sampark karenge payment ke liye.<br><em>(à¤¶à¥‰à¤ªà¤¿à¤‚à¤— à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤²à¤¿à¤ à¤§à¤¨à¥à¤¯à¤µà¤¾à¤¦! à¤¹à¤® à¤†à¤ªà¤¸à¥‡ à¤œà¤²à¥à¤¦ à¤¸à¥‡ à¤œà¤²à¥à¤¦ à¤¸à¤‚à¤ªà¤°à¥à¤• à¤•à¤°à¥‡à¤‚à¤—à¥‡à¥¤)</em>';
+    return '🎉 <strong>Order placed successfully!</strong> Hum aapse jald se jald sampark karenge payment ke liye.<br><em>(शॉपिंग करने के लिए धन्यवाद! हम आपसे जल्द से जल्द संपर्क करेंगे।)</em>';
 }
 
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// USER AUTHENTICATION SYSTEM â€” Login, Register & Checkout Protection
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// USER AUTHENTICATION SYSTEM — Login, Register & Checkout Protection
+// ══â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 /**
  * 5. Redirect guests to login page if they try to reach checkout
@@ -1915,7 +1915,7 @@ function mytheme_auth_form_shortcode($atts) {
                 .woocommerce-message, .woocommerce-error { background: rgba(255,255,255,0.1) !important; color: white; border-top-color: #8b5cf6; }
             </style>
             <div class="auth-header">
-                <div class="auth-icon" style="font-size:3rem; text-align:center; margin-bottom:1rem;">ðŸ”‘</div>
+                <div class="auth-icon" style="font-size:3rem; text-align:center; margin-bottom:1rem;">🔑</div>
                 <h2 style="text-align:center; color:white; margin-bottom: 0.5rem;">Reset Password</h2>
                 <p style="text-align:center; color:rgba(255,255,255,0.7); margin-bottom:2rem;">Forgot your password? We will send you an email to reset it.</p>
             </div>
@@ -1936,13 +1936,13 @@ function mytheme_auth_form_shortcode($atts) {
         ?>
         <div class="mytheme-auth-wrapper">
             <div class="mytheme-already-logged">
-                <div class="auth-avatar">ðŸ‘¤</div>
+                <div class="auth-avatar">👤</div>
                 <h2>Hello, <?php echo esc_html($user->display_name); ?>!</h2>
                 <p>You are already logged in.</p>
                 <div class="auth-logged-actions">
-                    <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class="auth-btn auth-btn-primary">ðŸ›’ Checkout</a>
-                    <a href="<?php echo esc_url(wc_get_account_endpoint_url('orders')); ?>" class="auth-btn auth-btn-outline">ðŸ“¦ My Orders</a>
-                    <a href="<?php echo esc_url(wp_logout_url(home_url())); ?>" class="auth-btn auth-btn-danger">ðŸšª Logout</a>
+                    <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class="auth-btn auth-btn-primary">🛒 Checkout</a>
+                    <a href="<?php echo esc_url(wc_get_account_endpoint_url('orders')); ?>" class="auth-btn auth-btn-outline">📦 My Orders</a>
+                    <a href="<?php echo esc_url(wp_logout_url(home_url())); ?>" class="auth-btn auth-btn-danger">🚪 Logout</a>
                 </div>
             </div>
         </div>
@@ -1965,17 +1965,17 @@ function mytheme_auth_form_shortcode($atts) {
         <!-- Tab Switcher -->
         <div class="auth-tabs">
             <button class="auth-tab <?php echo ($active_tab !== 'register') ? 'active' : ''; ?>" data-tab="login">
-                ðŸ” Login
+                🔑 Login
             </button>
             <button class="auth-tab <?php echo ($active_tab === 'register') ? 'active' : ''; ?>" data-tab="register">
-                âœ¨ Register
+                ✨ Register
             </button>
         </div>
 
         <!-- Login Form -->
         <div class="auth-panel <?php echo ($active_tab !== 'register') ? 'active' : ''; ?>" id="panel-login">
             <div class="auth-header">
-                <div class="auth-icon">ðŸ”</div>
+                <div class="auth-icon">🔑</div>
                 <h2>Login to Your Account</h2>
                 <p>You must log in to place an order</p>
             </div>
@@ -1985,14 +1985,14 @@ function mytheme_auth_form_shortcode($atts) {
             <form method="post" class="auth-form" id="mytheme-login-form" action="#">
                 <input type="hidden" name="redirect_to" value="<?php echo esc_attr($redirect_to); ?>">
                 <div class="auth-field">
-                    <label for="auth-username">ðŸ“§ Email or Username</label>
+                    <label for="auth-username">📧 Email or Username</label>
                     <input type="text" id="auth-username" name="log" placeholder="your@email.com" required autocomplete="username">
                 </div>
                 <div class="auth-field">
-                    <label for="auth-password">ðŸ”’ Password</label>
+                    <label for="auth-password">🔒 Password</label>
                     <div class="password-wrapper">
-                        <input type="password" id="auth-password" name="pwd" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required autocomplete="current-password">
-                        <button type="button" class="toggle-pwd" data-target="auth-password">ðŸ‘</button>
+                        <input type="password" id="auth-password" name="pwd" placeholder="••••••••" required autocomplete="current-password">
+                        <button type="button" class="toggle-pwd" data-target="auth-password">👁️</button>
                     </div>
                 </div>
                 <div class="auth-options">
@@ -2003,16 +2003,16 @@ function mytheme_auth_form_shortcode($atts) {
                 </div>
                 <?php wp_nonce_field('mytheme-login-nonce', 'mytheme_login_nonce'); ?>
                 <button type="submit" class="auth-btn auth-btn-primary auth-submit">
-                    <span class="btn-text">Login â†’</span>
+                    <span class="btn-text">Login →</span>
                 </button>
-                <p class="auth-switch">Don't have an account? <a href="#" class="switch-tab" data-tab="register">Register âœ¨</a></p>
+                <p class="auth-switch">Don't have an account? <a href="#" class="switch-tab" data-tab="register">Register ✨</a></p>
             </form>
         </div>
 
         <!-- Register Form -->
         <div class="auth-panel <?php echo ($active_tab === 'register') ? 'active' : ''; ?>" id="panel-register">
             <div class="auth-header">
-                <div class="auth-icon">âœ¨</div>
+                <div class="auth-icon">✨</div>
                 <h2>Create a New Account</h2>
                 <p>Register now and start shopping!</p>
             </div>
@@ -2025,44 +2025,44 @@ function mytheme_auth_form_shortcode($atts) {
                 <input type="hidden" name="redirect_to" value="<?php echo esc_attr($redirect_to); ?>">
                 <div class="auth-fields-row">
                     <div class="auth-field">
-                        <label for="reg-firstname">ðŸ‘¤ First Name *</label>
+                        <label for="reg-firstname">👤 First Name *</label>
                         <input type="text" id="reg-firstname" name="reg_firstname" placeholder="John" required>
                     </div>
                     <div class="auth-field">
-                        <label for="reg-lastname">ðŸ‘¤ Last Name</label>
+                        <label for="reg-lastname">👤 Last Name</label>
                         <input type="text" id="reg-lastname" name="reg_lastname" placeholder="Doe">
                     </div>
                 </div>
                 <div class="auth-field">
-                    <label for="reg-email">ðŸ“§ Email Address *</label>
+                    <label for="reg-email">📧 Email Address *</label>
                     <input type="email" id="reg-email" name="reg_email" placeholder="your@email.com" required autocomplete="email">
                 </div>
                 <div class="auth-field">
-                    <label for="reg-password">ðŸ”’ Password *</label>
+                    <label for="reg-password">🔒 Password *</label>
                     <div class="password-wrapper">
-                        <input type="password" id="reg-password" name="reg_password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required autocomplete="new-password" minlength="6">
-                        <button type="button" class="toggle-pwd" data-target="reg-password">ðŸ‘</button>
+                        <input type="password" id="reg-password" name="reg_password" placeholder="••••••••" required autocomplete="new-password" minlength="6">
+                        <button type="button" class="toggle-pwd" data-target="reg-password">👁️</button>
                     </div>
                     <small class="field-hint">Create a password with at least 6 characters</small>
                 </div>
                 <div class="auth-field">
-                    <label for="reg-confirm-password">ðŸ”’ Confirm Password *</label>
+                    <label for="reg-confirm-password">🔒 Confirm Password *</label>
                     <div class="password-wrapper">
-                        <input type="password" id="reg-confirm-password" name="reg_confirm_password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required autocomplete="new-password">
-                        <button type="button" class="toggle-pwd" data-target="reg-confirm-password">ðŸ‘</button>
+                        <input type="password" id="reg-confirm-password" name="reg_confirm_password" placeholder="••••••••" required autocomplete="new-password">
+                        <button type="button" class="toggle-pwd" data-target="reg-confirm-password">👁️</button>
                     </div>
                 </div>
                 <?php wp_nonce_field('mytheme-register-nonce', 'mytheme_register_nonce'); ?>
                 <button type="submit" class="auth-btn auth-btn-primary auth-submit" name="mytheme_register">
-                    <span class="btn-text">Create Account â†’</span>
+                    <span class="btn-text">Create Account →</span>
                 </button>
-                <p class="auth-switch">Already have an account? <a href="#" class="switch-tab" data-tab="login">Login ðŸ”</a></p>
+                <p class="auth-switch">Already have an account? <a href="#" class="switch-tab" data-tab="login">Login 🔑</a></p>
             </form>
         </div>
 
         <!-- Social divider (optional) -->
         <div class="auth-footer-note">
-            <p>ðŸ”’ Your information is completely safe. We never share it.</p>
+            <p>🔒 Your information is completely safe. We never share it.</p>
         </div>
     </div>
 
@@ -2086,10 +2086,10 @@ function mytheme_auth_form_shortcode($atts) {
                 var inp = document.getElementById(this.dataset.target);
                 if (inp.type === 'password') {
                     inp.type = 'text';
-                    this.textContent = 'ðŸ™ˆ';
+                    this.textContent = '🙈';
                 } else {
                     inp.type = 'password';
-                    this.textContent = 'ðŸ‘';
+                    this.textContent = '👁️';
                 }
             });
         });
@@ -2107,7 +2107,7 @@ function mytheme_auth_form_shortcode($atts) {
                 regForm.querySelectorAll('.auth-error, .auth-success').forEach(function(el) { el.remove(); });
 
                 if (pwd !== cpwd) {
-                    showMsg(regForm, 'error', 'âŒ Passwords do not match!');
+                    showMsg(regForm, 'error', '❌ Passwords do not match!');
                     return;
                 }
 
@@ -2124,19 +2124,19 @@ function mytheme_auth_form_shortcode($atts) {
                 .then(function(r) { return r.json(); })
                 .then(function(res) {
                     if (res.success) {
-                        showMsg(regForm, 'success', 'âœ… ' + res.data.message);
+                        showMsg(regForm, 'success', '✅ ' + res.data.message);
                         setTimeout(function() {
                             window.location.href = res.data.redirect;
                         }, 1500);
                     } else {
-                        showMsg(regForm, 'error', 'âŒ ' + res.data.message);
-                        btn.querySelector('.btn-text').textContent = 'Create Account â†’';
+                        showMsg(regForm, 'error', '❌ ' + res.data.message);
+                        btn.querySelector('.btn-text').textContent = 'Create Account →';
                         btn.disabled = false;
                     }
                 })
                 .catch(function() {
-                    showMsg(regForm, 'error', 'âŒ Something went wrong. Please try again.');
-                    btn.querySelector('.btn-text').textContent = 'Create Account â†’';
+                    showMsg(regForm, 'error', '❌ Something went wrong. Please try again.');
+                    btn.querySelector('.btn-text').textContent = 'Create Account →';
                     btn.disabled = false;
                 });
             });
@@ -2164,20 +2164,20 @@ function mytheme_auth_form_shortcode($atts) {
                 .then(function(r) { return r.json(); })
                 .then(function(res) {
                     if (res.success) {
-                        showMsg(loginForm, 'success', 'âœ… ' + res.data.message);
+                        showMsg(loginForm, 'success', '✅ ' + res.data.message);
                         setTimeout(function() {
                             window.location.href = res.data.redirect;
                         }, 1000);
                     } else {
-                        showMsg(loginForm, 'error', 'âŒ ' + res.data.message);
-                        btn.querySelector('.btn-text').textContent = 'Login â†’';
+                        showMsg(loginForm, 'error', '❌ ' + res.data.message);
+                        btn.querySelector('.btn-text').textContent = 'Login →';
                         btn.disabled = false;
                     }
                 })
                 .catch(function() {
                     showMsg(loginForm, 'error', 'âŒ Something went wrong. Please try again.');
-                    btn.querySelector('.btn-text').textContent = 'Login â†’';
-                    btn.disabled = false;
+                    showMsg(loginForm, 'error', '❌ Something went wrong. Please try again.');
+                    btn.querySelector('.btn-text').textContent = 'Login →';
                 });
             });
         }
@@ -2367,10 +2367,10 @@ function mytheme_checkout_login_notice_script() {
         if (!$account_page) return;
         ?>
         <div id="mytheme-login-notice" style="display:none; position:fixed; bottom:20px; right:20px; z-index:9999; background:linear-gradient(135deg,#1a1a2e,#16213e); color:#fff; padding:1.25rem 1.5rem; border-radius:12px; max-width:320px; box-shadow:0 20px 60px rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); font-family:'Inter',sans-serif;">
-            <button onclick="document.getElementById('mytheme-login-notice').style.display='none'" style="position:absolute;top:8px;right:12px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:18px;cursor:pointer;">Ã—</button>
-            <p style="margin:0 0 0.5rem;font-weight:700;font-size:1rem;">ðŸ” Please Login!</p>
+            <button onclick="document.getElementById('mytheme-login-notice').style.display='none'" style="position:absolute;top:8px;right:12px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:18px;cursor:pointer;">×</button>
+            <p style="margin:0 0 0.5rem;font-weight:700;font-size:1rem;">🔍 Please Login!</p>
             <p style="margin:0 0 1rem;font-size:0.85rem;color:rgba(255,255,255,0.7);">You need an account to place an order.</p>
-            <a href="<?php echo esc_url($account_page); ?>" style="display:block;text-align:center;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;padding:0.6rem 1rem;border-radius:8px;font-weight:600;font-size:0.9rem;text-decoration:none;">Login / Register â†’</a>
+            <a href="<?php echo esc_url($account_page); ?>" style="display:block;text-align:center;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;padding:0.6rem 1rem;border-radius:8px;font-weight:600;font-size:0.9rem;text-decoration:none;">Login / Register →</a>
         </div>
         <script>
         setTimeout(function() {
@@ -2477,9 +2477,9 @@ add_action('template_redirect', function() {
     }
 });
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // CUSTOM ORDER SHIPMENT TRACKING SYSTEM WITH DYNAMIC COURIERS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 /**
  * 0. Create Courier Settings Page under WooCommerce Menu
@@ -2509,7 +2509,7 @@ function mytheme_courier_settings_page() {
     $current_couriers = get_option('mytheme_custom_couriers', $default_couriers);
     ?>
     <div class="wrap">
-        <h1>ðŸ“¦ Store Courier Settings</h1>
+        <h1>📦 Store Courier Settings</h1>
         <p>Define your courier companies and their tracking URL structure below.</p>
         <div style="background:#fff; border:1px solid #ccc; padding:15px; margin-bottom:20px;">
             <strong>Format Rule:</strong> <code>Courier Name | Tracking URL containing [NUMBER]</code><br>
@@ -2569,7 +2569,7 @@ function mytheme_add_tracking_fields($order) {
     }
 
     echo '<div style="clear:both; margin-top:20px; padding:10px; background:#f5f5f5; border:1px solid #ddd; border-radius:4px;">';
-    echo '<h4>ðŸ“¦ Shipment Tracking (Custom)</h4>';
+    echo '<h4>📦 Shipment Tracking (Custom)</h4>';
     
     woocommerce_wp_select(array(
         'id'            => '_tracking_provider',
@@ -2661,7 +2661,7 @@ function mytheme_add_tracking_to_email($order, $sent_to_admin, $plain_text) {
         }
 
         $html  = '<div style="background: linear-gradient(135deg, #1e1e2f, #1a1a2e); padding: 25px; border-radius: 12px; margin: 30px 0; border: 1px solid rgba(139, 92, 246, 0.3); text-align: center; color: #fff; font-family: Helvetica, Arial, sans-serif;">';
-        $html .= '<h2 style="color: #fff; margin-top: 0; display:flex; align-items:center; justify-content:center; gap:10px;">ðŸ“¦ Shipment Dispatched!</h2>';
+        $html .= '<h2 style="color: #fff; margin-top: 0; display:flex; align-items:center; justify-content:center; gap:10px;">📦 Shipment Dispatched!</h2>';
         $html .= '<p style="font-size: 16px; color: #cbd5e1; margin-bottom: 20px;">Your order has been shipped via <strong>' . esc_html($c_name) . '</strong>. You can track it using the details below:</p>';
         
         $html .= '<div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); display: inline-block; margin-bottom: 25px;">';
@@ -2707,7 +2707,7 @@ function mytheme_my_account_track_button($actions, $order) {
             // Insert it before other actions or just append it
             $actions['track-order'] = array(
                 'url'  => $tracking_link,
-                'name' => 'ðŸ“¦ Track',
+                'name' => '📦 Track',
             );
         }
     }

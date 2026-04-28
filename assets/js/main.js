@@ -1,24 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- Mobile Drawer Controller (Highest Priority) ---
+    // --- Mobile Drawer Controller (Highest Priority) ---
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const closeBtn = document.getElementById('mobileCloseBtn');
+    const siteNav = document.getElementById('siteNav');
+    const overlay = document.getElementById('mobileOverlay');
+
+    const openMenu = () => {
+        if (!siteNav || !overlay) return;
+        siteNav.classList.add('mobile-open');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent scroll
+    };
+
+    const closeMenu = () => {
+        if (!siteNav || !overlay) return;
+        siteNav.classList.remove('mobile-open');
+        overlay.classList.remove('active');
+        document.body.style.overflow = ''; // Restore scroll
+    };
+
     const initMobileMenu = () => {
-        const mobileBtn = document.getElementById('mobileMenuBtn');
-        const closeBtn = document.getElementById('mobileCloseBtn');
-        const siteNav = document.getElementById('siteNav');
-        const overlay = document.getElementById('mobileOverlay');
-        
         if (!mobileBtn || !siteNav || !overlay) return;
-
-        const openMenu = () => {
-            siteNav.classList.add('mobile-open');
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Prevent scroll
-        };
-
-        const closeMenu = () => {
-            siteNav.classList.remove('mobile-open');
-            overlay.classList.remove('active');
-            document.body.style.overflow = ''; // Restore scroll
-        };
 
         mobileBtn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -214,12 +217,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     const subMenu = item.querySelector(':scope > ul, :scope > .sub-menu');
                     if (!subMenu) return;
 
-                    // If the user clicked a link INSIDE the sub-menu, let it happen
-                    if (e.target.closest('ul') === subMenu) {
-                        return;
+                    // If the user clicked a link inside the sub-menu, let it navigate
+                    if (subMenu.contains(e.target) && e.target.closest('a')) {
+                        const link = e.target.closest('a');
+                        const href = link.getAttribute('href');
+                        if (href && href !== '#') {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            closeMenu();
+                            window.location.href = href;
+                            return; 
+                        }
                     }
 
-                    // Otherwise, if they clicked the header area of this LI
+                    // Otherwise, if they clicked the toggle area of this LI
                     e.preventDefault();
                     e.stopPropagation();
 
