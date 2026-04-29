@@ -369,7 +369,7 @@
             <h2 style="font-size: 2.8rem; margin-bottom: 2.5rem; letter-spacing: -0.04em; color: #fff; font-weight: 700;">
                 <?php echo esc_html(get_theme_mod('connect_title', 'Connect with Us')); ?>
             </h2>
-            <a href="<?php echo esc_url(get_theme_mod('connect_btn_link', '#')); ?>" class="btn btn-primary" style="background: #fff; color: <?php echo esc_attr($grad_start); ?>; padding: 1rem 3rem; border: none; font-weight: 600; border-radius: 4px;">
+            <a href="<?php echo esc_url(get_permalink(get_page_by_path('contact-us')) ?: home_url('/contact-us/')); ?>" class="btn btn-primary" style="background: #fff; color: <?php echo esc_attr($grad_start); ?>; padding: 1rem 3rem; border: none; font-weight: 600; border-radius: 4px;">
                 <?php echo esc_html(get_theme_mod('connect_btn_text', 'Contact Us')); ?>
             </a>
         </div>

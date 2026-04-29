@@ -4117,6 +4117,8 @@ textarea {
     .mobile-menu-btn {
         display: block;
         order: 2;
+        position: relative;
+        z-index: 1010;
     }
 
     .header-content {

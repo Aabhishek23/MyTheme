@@ -86,7 +86,7 @@ wp_nav_menu(array(
                         👤 Login
                     </a>
                 <?php endif; ?>
-                <a href="<?php echo esc_url(home_url('/contact-us/')); ?>" class="contact-btn">Contact Us</a>
+                <a href="<?php echo esc_url(get_permalink(get_page_by_path('contact-us')) ?: home_url('/contact-us/')); ?>" class="contact-btn">Contact Us</a>
             </div>
         </nav>
         <div class="mobile-overlay" id="mobileOverlay"></div>
