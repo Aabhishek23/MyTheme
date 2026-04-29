@@ -26,6 +26,12 @@ else {
 }
 ?>
         </div>
+        <?php if (class_exists('WooCommerce') && (is_woocommerce() || is_cart() || is_checkout() || is_product())) : ?>
+            <a href="<?php echo wc_get_cart_url(); ?>" class="mobile-header-cart" title="View your shopping cart">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-count"><?php echo is_object(WC()->cart) ? WC()->cart->get_cart_contents_count() : 0; ?></span>
+            </a>
+        <?php endif; ?>
         <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu">
             ☰
         </button>

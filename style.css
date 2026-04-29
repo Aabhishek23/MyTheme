@@ -200,6 +200,11 @@ a {
     color: #000;
 }
 
+/* Mobile Header Cart (Hidden on Desktop) */
+.mobile-header-cart {
+    display: none;
+}
+
 .menu-item,
 .nav-item {
     position: relative;
@@ -4125,6 +4130,40 @@ textarea {
         flex-wrap: wrap;
     }
 
+    .mobile-header-cart {
+        display: flex !important;
+        order: 1;
+        margin-left: auto;
+        margin-right: 1.5rem;
+        position: relative;
+        text-decoration: none;
+        color: var(--secondary, #333);
+        font-size: 1.4rem;
+        transition: var(--transition);
+    }
+
+    .main-header.scrolled .mobile-header-cart {
+        color: #000 !important;
+    }
+
+    .mobile-header-cart .cart-count {
+        position: absolute;
+        top: -8px;
+        right: -10px;
+        background: #ef4444;
+        color: #fff;
+        font-size: 0.7rem;
+        font-weight: 700;
+        min-width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        padding: 2px;
+        border: 1px solid rgba(255, 255, 255, 0.8);
+    }
+
     #siteNav {
         position: fixed;
         top: 0;
@@ -4589,5 +4628,87 @@ textarea {
 
     .auth-field input {
         padding: 1rem;
+    }
+
+    /* WOOCOMMERCE CART MOBILE PRICE & LAYOUT FIX */
+    .woocommerce-cart .woocommerce,
+    .wp-block-woocommerce-cart {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+        overflow-x: hidden !important;
+    }
+
+    /* Force Cart Table to behave for Mobile */
+    .wc-block-cart-items__row,
+    .woocommerce-cart .cart_item {
+        display: grid !important;
+        grid-template-columns: 80px 1fr !important;
+        grid-template-areas: 
+            "image product"
+            ". total" !important;
+        gap: 10px 15px !important;
+        padding: 1.5rem 0.5rem !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        align-items: start !important;
+        background: transparent !important;
+    }
+
+    .wc-block-cart-item__image,
+    .woocommerce-cart .product-thumbnail {
+        grid-area: image !important;
+        width: 80px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+    }
+
+    .wc-block-cart-item__product,
+    .woocommerce-cart .product-name {
+        grid-area: product !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        width: 100% !important;
+    }
+
+    /* Subtotal & Savings Badge Area */
+    .wc-block-cart-item__total,
+    .woocommerce-cart .product-subtotal {
+        grid-area: total !important;
+        display: flex !important;
+        flex-direction: row-reverse !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        border: none !important;
+    }
+
+    /* Fix for the standalone currency symbol issue */
+    .wc-block-formatted-money-amount,
+    .amount {
+        white-space: nowrap !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        font-weight: 700 !important;
+    }
+
+    /* Savings Badge Mobile Fix */
+    .wc-block-components-sale-badge,
+    [class*="discount-badge"],
+    [class*="savings"] {
+        font-size: 0.75rem !important;
+        padding: 4px 8px !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-radius: 4px !important;
+        margin: 0 !important;
+        white-space: nowrap !important;
+    }
+
+    /* Hide redundant labels that take up space */
+    .wc-block-cart-items__header,
+    .woocommerce-cart thead {
+        display: none !important;
     }
 }
