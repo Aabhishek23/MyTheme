@@ -116,6 +116,7 @@ a {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1.5rem;
 }
 
 .logo,
@@ -126,12 +127,14 @@ a {
     letter-spacing: -0.5px;
     display: flex;
     align-items: center;
+    flex-shrink: 0 !important;
 }
 
 .logo img,
 .custom-logo {
     max-height: 40px;
     width: auto;
+    flex-shrink: 0 !important;
 }
 
 .logo {
@@ -140,18 +143,19 @@ a {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    margin-right: 2rem !important; /* Safety gap between logo and menu */
 }
 
 /* --- Navigation & Menus --- */
 #siteNav {
     display: flex;
     align-items: center;
-    gap: 2.5rem;
+    gap: 1.5rem;
 }
 
 .nav-menu {
     display: flex;
-    gap: 2.5rem;
+    gap: 1.5rem;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -160,7 +164,7 @@ a {
 .header-right-actions {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .header-cart {
@@ -4175,6 +4179,7 @@ textarea {
         padding: 2.5rem 1.5rem;
         display: flex;
         flex-direction: column;
+        align-items: stretch !important; /* Force drawer content to stretch full-width */
         transform: translateX(100%);
         transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         box-shadow: -15px 0 40px rgba(0, 0, 0, 0.15);
@@ -4319,7 +4324,7 @@ textarea {
     .header-right-actions .header-logout-btn,
     .header-right-actions .header-cart,
     .header-right-actions .header-user-menu {
-        display: none;
+        display: none !important;
     }
 
     /* Move login/user actions to bottom of mobile menu */
@@ -4938,5 +4943,294 @@ textarea {
     .form-row-3 {
         grid-template-columns: 1fr;
         gap: 0;
+    }
+}
+
+/* ==========================================================================
+   Mobile Menu Drawer Enhancements (Personalized Welcome Card & Premium SVG Icons)
+   ========================================================================== */
+.mobile-welcome-card {
+    display: none; /* Hide on desktop */
+}
+
+/* Hide navigation item SVG icons on desktop */
+.mobile-menu-icon {
+    display: none !important;
+}
+
+@media (max-width: 1024px) {
+    /* Mobile Drawer Welcome Card */
+    .mobile-welcome-card {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        background: linear-gradient(135deg, #f5f3ff 0%, #fdf4ff 100%);
+        border: 1px solid rgba(124, 58, 237, 0.08);
+        border-radius: 16px;
+        padding: 1.25rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.03);
+        width: 100% !important; /* Guarantee stretch full-width of container */
+        box-sizing: border-box !important;
+        flex-shrink: 0 !important; /* Prevent it from shrinking vertically */
+        min-height: 80px !important; /* Guarantee minimum height for text visibility */
+    }
+    
+    /* Fine background waves/grid lines simulation */
+    .mobile-welcome-card::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 120px;
+        background-image: radial-gradient(circle at 100% 50%, rgba(124, 58, 237, 0.06) 0%, transparent 80%),
+                          linear-gradient(45deg, transparent 45%, rgba(124, 58, 237, 0.03) 48%, rgba(124, 58, 237, 0.03) 52%, transparent 55%);
+        background-size: 100% 100%, 15px 15px;
+        pointer-events: none;
+    }
+    
+    .mobile-welcome-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.12);
+        flex-shrink: 0;
+        overflow: hidden;
+        border: 1px solid rgba(124, 58, 237, 0.08);
+    }
+    
+    .welcome-avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .welcome-avatar-initial,
+    .welcome-avatar-logo {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        font-size: 1.4rem;
+        color: #7c3aed;
+    }
+    
+    .mobile-welcome-text {
+        z-index: 2;
+    }
+    
+    .mobile-welcome-text h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1e1b4b;
+        margin: 0 0 2px 0;
+    }
+    
+    .mobile-welcome-text p {
+        font-size: 0.8rem;
+        color: #6b7280;
+        margin: 0;
+    }
+    
+    /* Navigation Icons & Item Styling */
+    .mobile-menu-icon {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        margin-right: 14px;
+        color: #475569; /* Slate gray */
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+        vertical-align: middle;
+        transition: color 0.3s ease;
+    }
+    
+    .mobile-menu-icon svg {
+        width: 100%;
+        height: 100%;
+        stroke: currentColor;
+        stroke-width: 1.8;
+    }
+    
+    /* Mobile nav-menu list resets */
+    #siteNav .nav-menu {
+        margin: 0 0 2rem 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important; /* Stretch menu items on mobile */
+    }
+    
+    #siteNav .nav-menu > li {
+        border-bottom: 1px solid #f1f5f9;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    #siteNav .nav-menu > li:last-child {
+        border-bottom: none;
+    }
+    
+    #siteNav .nav-menu > li > a {
+        display: flex !important;
+        align-items: center;
+        justify-content: flex-start !important; /* Ensure side alignment */
+        padding: 1.1rem 0.75rem !important;
+        color: #334155 !important; /* Premium charcoal */
+        font-size: 1.05rem;
+        font-weight: 600;
+        border-left: 4px solid transparent;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+    
+    /* Active menu item styling matching screenshot */
+    #siteNav .nav-menu > li.current-menu-item > a,
+    #siteNav .nav-menu > li.current_page_item > a,
+    #siteNav .nav-menu > li.current-menu-ancestor > a {
+        background: rgba(124, 58, 237, 0.05) !important;
+        border-left-color: #7c3aed !important;
+        color: #7c3aed !important;
+        padding-left: calc(0.75rem - 4px) !important;
+    }
+    
+    #siteNav .nav-menu > li.current-menu-item > a .mobile-menu-icon,
+    #siteNav .nav-menu > li.current_page_item > a .mobile-menu-icon,
+    #siteNav .nav-menu > li.current-menu-ancestor > a .mobile-menu-icon {
+        color: #7c3aed !important;
+    }
+    
+    #siteNav .nav-menu > li > a:hover {
+        color: #7c3aed !important;
+    }
+    
+    #siteNav .nav-menu > li > a:hover .mobile-menu-icon {
+        color: #7c3aed !important;
+    }
+
+    /* Submenu Expand Chevron styling on mobile */
+    #siteNav .menu-item-has-children > a {
+        position: relative;
+    }
+    
+    #siteNav .menu-item-has-children > a::after {
+        content: "";
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-right: 2px solid #64748b;
+        border-bottom: 2px solid #64748b;
+        transform: translateY(-2px) rotate(45deg);
+        transition: transform 0.3s ease, border-color 0.3s ease;
+        margin-left: auto;
+    }
+    
+    #siteNav .menu-item-has-children.is-open > a::after {
+        transform: translateY(2px) rotate(-135deg);
+        border-color: #7c3aed;
+    }
+    
+    #siteNav .menu-item-has-children.current-menu-ancestor > a::after {
+        border-color: #7c3aed;
+    }
+    
+    /* Level 2 Submenu reset */
+    #siteNav .sub-menu li > a {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important; /* Ensure side alignment */
+        padding: 0.9rem 1rem 0.9rem 3rem !important;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #475569 !important;
+    }
+}
+
+/* User dropdown and login/logout SVG Icon styles */
+.dropdown-icon {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+    margin-right: 8px;
+    vertical-align: middle;
+    display: inline-block;
+    transition: transform 0.2s ease;
+}
+
+.header-user-dropdown a,
+.header-mobile-user-links a,
+.header-logout-btn,
+.header-login-btn {
+    display: inline-flex !important;
+    align-items: center;
+}
+
+.header-user-dropdown a:hover .dropdown-icon {
+    transform: translateX(2px);
+}
+
+/* Prevent menu links and buttons wrapping on desktop */
+.nav-menu > li > a,
+.header-user-btn,
+.header-logout-btn,
+.header-login-btn,
+.contact-btn,
+.logo a,
+.header-cart {
+    white-space: nowrap !important;
+}
+
+/* Vertical alignment check for desktop header actions */
+.main-header .container,
+.header-content,
+#siteNav,
+.nav-menu,
+.header-right-actions,
+.header-user-menu {
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Hide logout button on desktop header since it's already inside user profile dropdown */
+@media (min-width: 1025px) {
+    .header-logout-btn {
+        display: none !important;
+    }
+}
+
+/* Responsive Header spacing adjustment for desktop viewports */
+@media (min-width: 1025px) and (max-width: 1440px) {
+    #siteNav {
+        gap: 1rem !important;
+    }
+    
+    .nav-menu {
+        gap: 1rem !important;
+    }
+    
+    .menu-item > a,
+    .nav-item > a {
+        font-size: 14px !important;
+    }
+    
+    .header-right-actions {
+        gap: 0.75rem !important;
+    }
+    
+    .header-user-btn,
+    .header-logout-btn,
+    .header-login-btn,
+    .contact-btn {
+        font-size: 13.5px !important;
+        padding: 0.4rem 0.6rem !important;
     }
 }
