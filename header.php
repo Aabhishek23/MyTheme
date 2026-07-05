@@ -56,15 +56,37 @@ wp_nav_menu(array(
                 <?php if (is_user_logged_in()) : 
                     $current_user = wp_get_current_user();
                     $account_url  = get_permalink(get_option('mytheme_account_page_id')) ?: get_permalink(get_page_by_path('my-account'));
+                    
+                    // Dynamic avatar display logic
+                    $profile_photo_url = get_user_meta($current_user->ID, '_profile_photo_url', true);
+                    $avatar_html = '';
+                    if ($profile_photo_url) {
+                        $avatar_html = '<img src="' . esc_url($profile_photo_url) . '" alt="Avatar" class="header-avatar-img" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; margin-right: 6px; border: 1px solid rgba(255,255,255,0.2); vertical-align: middle;">';
+                    } else {
+                        $name_to_use = trim($current_user->first_name . ' ' . $current_user->last_name) ?: $current_user->display_name;
+                        $company_to_use = get_user_meta($current_user->ID, 'billing_company', true) ?: get_user_meta($current_user->ID, '_company_name', true);
+                        
+                        $initial = '';
+                        if ($name_to_use) {
+                            $initial = strtoupper(substr($name_to_use, 0, 1));
+                        } elseif ($company_to_use) {
+                            $initial = strtoupper(substr($company_to_use, 0, 1));
+                        } else {
+                            $initial = strtoupper(substr($current_user->user_login, 0, 1));
+                        }
+                        
+                        $avatar_html = '<span class="header-avatar-letter" style="width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #007bff, #00d2ff); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; margin-right: 6px; vertical-align: middle; font-family: \'Poppins\', sans-serif;">' . esc_html($initial) . '</span>';
+                    }
                 ?>
                     <div class="header-user-menu">
-                        <button class="header-user-btn" id="userMenuToggle">
-                            <span class="user-avatar">👤</span>
+                        <button class="header-user-btn" id="userMenuToggle" style="display: flex; align-items: center;">
+                            <?php echo $avatar_html; ?>
                             <span class="user-name"><?php echo esc_html($current_user->first_name ?: $current_user->display_name); ?></span>
-                            <span style="font-size:0.6rem;">▼</span>
+                            <span style="font-size:0.6rem; margin-left: 4px;">▼</span>
                         </button>
                         <div class="header-user-dropdown" id="userDropdown">
                             <a href="<?php echo esc_url($account_url ?: '#'); ?>">👤 My Account</a>
+                            <a href="<?php echo esc_url(home_url('/profile-wp.php')); ?>">⚙️ Edit Profile</a>
                             <?php if (class_exists('WooCommerce')) : ?>
                             <a href="<?php echo esc_url(wc_get_account_endpoint_url('orders')); ?>">📦 My Orders</a>
                             <a href="<?php echo esc_url(wc_get_checkout_url()); ?>">🛒 Checkout</a>
@@ -76,6 +98,7 @@ wp_nav_menu(array(
                     </div>
                     <div class="header-mobile-user-links">
                         <a href="<?php echo esc_url($account_url ?: '#'); ?>" class="header-user-link">👤 My Account</a>
+                        <a href="<?php echo esc_url(home_url('/profile-wp.php')); ?>" class="header-user-link">⚙️ Edit Profile</a>
                         <?php if (class_exists('WooCommerce')) : ?>
                         <a href="<?php echo esc_url(wc_get_account_endpoint_url('orders')); ?>" class="header-user-link">📦 My Orders</a>
                         <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class="header-user-link">🛒 Checkout</a>
