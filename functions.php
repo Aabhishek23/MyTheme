@@ -650,6 +650,17 @@ function mytheme_customize_register($wp_customize) {
             'type'    => 'text',
         ));
 
+        // Card Description
+        $wp_customize->add_setting("pervasive_card_desc_$i", array(
+            'default'           => '',
+            'sanitize_callback' => 'sanitize_text_field',
+        ));
+        $wp_customize->add_control("pervasive_card_desc_$i", array(
+            'label'   => sprintf(__('Card %d Description', 'mytheme'), $i),
+            'section' => 'pervasive_section',
+            'type'    => 'textarea',
+        ));
+
         // Card Link
         $wp_customize->add_setting("pervasive_card_link_$i", array(
             'default'           => '#',

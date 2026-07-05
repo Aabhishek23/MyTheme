@@ -122,15 +122,28 @@
             <!-- Image Grid Added Below Text -->
             <div class="card-grid">
                 <?php
-                $default_titles_arr = array('AIPL.ai', 'Design', 'Systems', 'Silicon Solutions');
+                $default_titles_arr = array('PCB Design', 'Rapid Prototyping', 'PCB Assembly & SMT', 'Testing & Validation');
+                $default_descs_arr = array(
+                    'PCB design is an actual organization commerce after conference sources processes and converging.',
+                    'PCB design and constraints to mobile point to out of me, stimpete pooling invaders are secretly contacts.',
+                    'Ceem monens designs leading and however testing, metrics, costing are volatile od aboogs.',
+                    'PCB is a validation template, relate bolost olomers onmanage can easy business validations.'
+                );
                 for ($i = 1; $i <= 4; $i++) :
                     $img = get_theme_mod("pervasive_card_image_$i", '');
                     $title = get_theme_mod("pervasive_card_title_$i", $default_titles_arr[$i-1]);
+                    $desc = get_theme_mod("pervasive_card_desc_$i", $default_descs_arr[$i-1]);
                     $link = get_theme_mod("pervasive_card_link_$i", '#');
                     $bg = $img ? "background-image: url('" . esc_url($img) . "');" : "background: #18181b;";
                 ?>
-                <a href="<?php echo esc_url($link); ?>" class="card-item" style="<?php echo $bg; ?>">
-                    <div class="card-item-title"><?php echo esc_html($title); ?></div>
+                <a href="<?php echo esc_url($link); ?>" class="card-item">
+                    <div class="card-item-inner">
+                        <div class="card-item-img" style="<?php echo $bg; ?>"></div>
+                        <div class="card-item-content">
+                            <h3 class="card-item-title"><?php echo esc_html($title); ?></h3>
+                            <p class="card-item-desc"><?php echo esc_html($desc); ?></p>
+                        </div>
+                    </div>
                 </a>
                 <?php endfor; ?>
             </div>
